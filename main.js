@@ -30,6 +30,7 @@ d3.json("data/" + project + "/packages.json", function(error, tree) {
 			.attr("width", function(d) { return x(d.dx); })
 			.attr("height", function(d) { return y(d.dy); })
 			.attr("fill", function(d) { return color((d.children ? d : d.parent).key); })
+			.attr("title", function(d) { return d.key;} )
 			.on("click", clicked);
 });
 
