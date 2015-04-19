@@ -19,7 +19,9 @@ var svg = d3.select("body").append("svg")
 
 var rect = svg.selectAll("rect");
 
-d3.json("data/packages.json", function(error, tree) {
+var project = location.search.substr(1) || "PMD";
+
+d3.json("data/" + project + "/packages.json", function(error, tree) {
   rect = rect
       .data(partition(tree.root))
     .enter().append("rect")
