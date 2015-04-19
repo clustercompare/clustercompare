@@ -1,0 +1,3 @@
+{
+	projects: ["Checkstyle", "Cobertura", "CruiseControl", "iText", "JabRef", "JEdit", "JFreeChart", "JFtp", "JHotDraw", "JUnit", "LWJGL", "PMD", "SQuirreL", "Stripes", "SweetHome3D", "TvBrowser", "Wicket" ]
+}
