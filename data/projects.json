@@ -1,3 +1,21 @@
 {
-	projects: ["Checkstyle", "Cobertura", "CruiseControl", "iText", "JabRef", "JEdit", "JFreeChart", "JFtp", "JHotDraw", "JUnit", "LWJGL", "PMD", "SQuirreL", "Stripes", "SweetHome3D", "TvBrowser", "Wicket" ]
+	"projects": [
+		{"id": "Checkstyle", "name": "Checkstyle"},
+		{"id": "Cobertura", "name": "Cobertura"},
+		{"id": "CruiseControl", "name": "CruiseControl"},
+		{"id": "iText", "name": "iText"},
+		{"id": "JabRef", "name": "JabRef"},
+		{"id": "JEdit", "name": "JEdit"},
+		{"id": "JFreeChart", "name": "JFreeChart"},
+		{"id": "JFtp", "name": "JFtp"},
+		{"id": "JHotDraw", "name": "JHotDraw"},
+		{"id": "JUnit", "name": "JUnit"},
+		{"id": "LWJGL", "name": "LWJGL"},
+		{"id": "PMD", "name": "PMD"},
+		{"id": "SQuirreL", "name": "SQuirreL"},
+		{"id": "Stripes", "name": "Stripes"},
+		{"id": "SweetHome3D", "name": "SweetHome3D"},
+		{"id": "TvBrowser", "name": "TvBrowser"},
+		{"id": "Wicket", "name": "Wicket"}
+	]
 }
