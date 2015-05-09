@@ -1,28 +1,23 @@
-var project = 'PMD';
-var coupling = 'packages';
+var project = location.search ? location.search.substring(1) : 'PMD';
 
-var icicle = new Icicle('#container');
-
-function update() {
+function addIcicle(coupling) {
 	d3.json("data/" + project + "/" + coupling + ".json", function(error, tree) {
-		icicle.update(tree);
+		createIcicle(tree, '#icicles');
 	});
 }
 
-update();
-
-$('#coupling').change(function() {
-	coupling = $(this).val();
-	update();
-});
+addIcicle('packages');
+addIcicle('SD.Use');
 
 $('#project').change(function() {
 	project = $(this).val();
-	update();
+	location.search = '?' + project;
+	//update();
 });
 
 $.get('data/projects.json', function(projects) {
 	$('#project').empty().append(projects.projects.map(function(project) {
 		return $('<option>').val(project.id).text(project.name)[0];
-	}))
+	}));
+	$('#project').val(project);
 });

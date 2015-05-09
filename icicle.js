@@ -1,5 +1,5 @@
-function Icicle(container) {
-	var width = 960;
+function createIcicle(tree, container) {
+	var width = 300;
 	var height = 500;
 
 	var x = d3.scale.linear()
@@ -21,34 +21,33 @@ function Icicle(container) {
 	var svg = d3.select(container)
 			.append('svg')
 			.attr("width", width)
-			.attr("height", height);
+			.attr("height", height)
+			.attr('class', 'icicle');
 
-	this.update = function(tree) {
-		var rect = svg.selectAll("rect")
-		rect = rect
-				.data(partition(tree.root))
-				.enter().append("rect")
-				.attr("x", function (d) {
-					return x(d.x);
-				})
-				.attr("y", function (d) {
-					return y(d.y);
-				})
-				.attr("width", function (d) {
-					return x(d.dx);
-				})
-				.attr("height", function (d) {
-					return y(d.dy);
-				})
-				.attr("fill", function (d) {
-					return color((d.children ? d : d.parent).key);
-				})
-				.attr("title", function (d) {
-					return d.key;
-				})
-				.on("click", clicked);
+    var rect = svg.selectAll("rect")
+    rect = rect
+            .data(partition(tree.root))
+            .enter().append("rect")
+            .attr("x", function (d) {
+                return x(d.x);
+            })
+            .attr("y", function (d) {
+                return y(d.y);
+            })
+            .attr("width", function (d) {
+                return x(d.dx);
+            })
+            .attr("height", function (d) {
+                return y(d.dy);
+            })
+            .attr("fill", function (d) {
+                return color((d.children ? d : d.parent).key);
+            })
+            .attr("title", function (d) {
+                return d.key;
+            })
+            .on("click", clicked);
 
-	};
 	function clicked(d) {
 		x.domain([d.x, d.x + d.dx]);
 		y.domain([d.y, 1]).range([d.y ? 20 : 0, height]);
