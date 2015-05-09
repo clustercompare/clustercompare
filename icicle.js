@@ -22,23 +22,23 @@ function createIcicle(tree, container) {
 			.append('svg')
 			.attr("width", width)
 			.attr("height", height)
-			.attr('class', 'icicle');
+			.attr("class", "icicle");
 
     var rect = svg.selectAll("rect")
     rect = rect
             .data(partition(tree.root))
             .enter().append("rect")
             .attr("x", function (d) {
-                return x(d.x);
+                return x(d.y);
             })
             .attr("y", function (d) {
-                return y(d.y);
+                return y(d.x);
             })
             .attr("width", function (d) {
-                return x(d.dx);
+                return x(d.dy);
             })
             .attr("height", function (d) {
-                return y(d.dy);
+                return y(d.dx);
             })
             .attr("fill", function (d) {
                 return color((d.children ? d : d.parent).key);
