@@ -1,47 +1,28 @@
-var width = 960,
-		height = 500;
+var project = 'PMD';
+var coupling = 'packages';
 
-var x = d3.scale.linear()
-		.range([0, width]);
+var icicle = new Icicle('#container');
 
-var y = d3.scale.linear()
-		.range([0, height]);
+function update() {
+	d3.json("data/" + project + "/" + coupling + ".json", function(error, tree) {
+		icicle.update(tree);
+	});
+}
 
-var color = d3.scale.category20c();
+update();
 
-var partition = d3.layout.partition()
-		.children(function(d) { return d.children; })
-		.value(function(d) { return 1; });
-
-var svg = d3.select("body").append("svg")
-		.attr("width", width)
-		.attr("height", height);
-
-var rect = svg.selectAll("rect");
-
-var project = location.search.substr(1) || "PMD";
-
-d3.json("data/" + project + "/packages.json", function(error, tree) {
-	rect = rect
-			.data(partition(tree.root))
-			.enter().append("rect")
-			.attr("x", function(d) { return x(d.x); })
-			.attr("y", function(d) { return y(d.y); })
-			.attr("width", function(d) { return x(d.dx); })
-			.attr("height", function(d) { return y(d.dy); })
-			.attr("fill", function(d) { return color((d.children ? d : d.parent).key); })
-			.attr("title", function(d) { return d.key;} )
-			.on("click", clicked);
+$('#coupling').change(function() {
+	coupling = $(this).val();
+	update();
 });
 
-function clicked(d) {
-	x.domain([d.x, d.x + d.dx]);
-	y.domain([d.y, 1]).range([d.y ? 20 : 0, height]);
+$('#project').change(function() {
+	project = $(this).val();
+	update();
+});
 
-	rect.transition()
-			.duration(750)
-			.attr("x", function(d) { return x(d.x); })
-			.attr("y", function(d) { return y(d.y); })
-			.attr("width", function(d) { return x(d.x + d.dx) - x(d.x); })
-			.attr("height", function(d) { return y(d.y + d.dy) - y(d.y); });
-}
+$.get('data/projects.json', function(projects) {
+	$('#project').empty().append(projects.projects.map(function(project) {
+		return $('<option>').val(project.id).text(project.name)[0];
+	}))
+});
