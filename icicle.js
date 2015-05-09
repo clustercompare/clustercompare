@@ -45,26 +45,5 @@ function createIcicle(tree, container) {
             })
             .attr("title", function (d) {
                 return d.key;
-            })
-            .on("click", clicked);
-
-	function clicked(d) {
-		x.domain([d.x, d.x + d.dx]);
-		y.domain([d.y, 1]).range([d.y ? 20 : 0, height]);
-
-		rect.transition()
-				.duration(750)
-				.attr("x", function (d) {
-					return x(d.x);
-				})
-				.attr("y", function (d) {
-					return y(d.y);
-				})
-				.attr("width", function (d) {
-					return x(d.x + d.dx) - x(d.x);
-				})
-				.attr("height", function (d) {
-					return y(d.y + d.dy) - y(d.y);
-				});
-	}
+            });
 }
