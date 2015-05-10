@@ -9,7 +9,7 @@ function createIcicle(tree, container, comparisonTree) {
 			.range([0, height]);
 
 	var color = d3.scale.category20c();
-    var color2 = d3.scale.linear().range('#222', '#eee');
+    var color2 = d3.scale.linear().range(['#eee', '#000']);
 
 	var partition = d3.layout.partition()
 			.children(function (d) {
