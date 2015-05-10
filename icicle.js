@@ -22,7 +22,7 @@ function createIcicle(tree, container, comparisonTree) {
     var colorFunc;
     if (comparisonTree) {
         colorFunc = function(node) {
-            return color2(nodeSimilarityToTree(node, comparisonTree.root));
+            return color2(node.getMaxSimilarity(comparisonTree.root));
         }
     } else {
         colorFunc = function(node) { return color(node.qualifiedName); }

@@ -13,7 +13,7 @@ function fetchTree(coupling, success) {
 			console.log(error);
 			return;
 		}
-		enrichTreeWithLeaveSets(tree.root);
+		tree.root = new Node(tree.root);
 		success(tree);
 	});
 }

@@ -1,55 +1,95 @@
-function enrichTreeWithLeaveSets(root) {
-	if (!root.children) {
-		root.children = [];
+function Node(data) {
+	for (key of Object.getOwnPropertyNames(data)) {
+		this[key] = data[key];
 	}
 
-	if (!root.children.length) {
-		root.leaves = [ root ];
-	} else {
-		root.leaves = flatten(children(root).map(enrichTreeWithLeaveSets));
+	this.children = this.children.map(function(childData) { return new Node(childData)});
+	this._children = this.children; // d3 likes to remove empty children properties
+}
+
+Node.prototype.getChildren = function() {
+	return this._children;
+}
+
+Node.prototype.getKey = function() {
+	return this.qualifiedName;
+};
+
+Node.prototype.getLeaveKeys = function(){
+	if (!this._leaveKeys) {
+		this._leaveKeys = this._generateLeaveKeySet();
+	}
+	return this._leaveKeys;
+};
+
+Node.prototype._generateLeaveKeySet = function() {
+	if (!this.getChildren().length) {
+		return new Set([this.getKey()]);
 	}
 
-	return root.leaves;
-}
-
-function children(node) {
-	return node.children ? node.children : [];
-}
-
-function nodesDiff(node1, node2) {
-	var intersection = intersect(node1.leaves, node2.leaves).length;
-	var totalCount = merge(node1.leaves, node2.leaves).length;
-	console.log(node1.qualifiedName + ' vs. ' + node2.qualifiedName + ': ' + intersection + ' / ' + totalCount);
-	return  intersection / totalCount;
-}
-
-function nodesInTree(root) {
-	return [root].concat(flatten(children(root).map(nodesInTree)));
-}
-
-function flatten(arr) {
-	if (!arr.length) {
-		return [];
+	var result = new Set();
+	for (var child of this.getChildren()) {
+		for (var leaveKey of child.getLeaveKeys()) {
+			result.add(leaveKey);
+		}
 	}
-	return arr.reduce(concat);
-}
+	return result;
+};
 
-function concat(a, b) {
-	return a.concat(b);
-}
+Node.prototype.getNodes = function() {
+	if (!this._nodes) {
+		this._nodes = [ this ];
+		for (var child of this.getChildren()) {
+			this._nodes = this._nodes.concat(child.getNodes());
+		}
+	}
+	return this._nodes;
+};
 
-function nodeSimilarityToTree(node, tree) {
-	return max(nodesInTree(tree).map(function(otherNode) { return nodesDiff(node, otherNode)}));
-}
+Node.prototype.getMaxSimilarity = function(otherNode) {
+	var intersection = intersect(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
 
-function max(arr) {
-	return Math.max.apply(null, arr);
-}
+	if (!intersection) {
+		//console.log('short-circuit');
+		// no way any node of this subtree could be similar to the other node
+		return 0;
+	}
+
+	var totalCount = merge(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
+	//console.log(this.getKey() + ' vs. ' + otherNode.getKey() + ': ' + intersection + ' / ' + totalCount);
+	var similarity = intersection / totalCount;
+
+	if (similarity == 1) {
+		// already max
+		return 1;
+	}
+
+	for (var child of otherNode.getChildren()) {
+		similarity = Math.max(similarity, this.getMaxSimilarity(child))
+	}
+	console.log(similarity);
+
+	return similarity;
+};
 
 function intersect(set1, set2) {
-	return set1.filter(function(a) { return set2.indexOf(a) >= 0; });
+	var result = new Set();
+	for (var value of set1) {
+		if (set2.has(value)) {
+			result.add(value);
+		}
+	}
+	return result;
 }
 
 function merge(set1, set2) {
-	return set1.concat(intersect(set1, set2));
+	var result = new Set();
+	for (var value of set1) {
+		result.add(value);
+	}
+	for (var value of set2) {
+		result.add(value);
+	}
+	return result;
 }
+
