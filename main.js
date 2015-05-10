@@ -1,13 +1,22 @@
 var project = location.search ? location.search.substring(1) : 'PMD';
 
-function addIcicle(coupling) {
+fetchTree('packages', function(packages) {
+	fetchTree('SD.Use', function(other) {
+		createIcicle(packages, '#icicles');
+		createIcicle(other, '#icicles', packages);
+	});
+});
+
+function fetchTree(coupling, success) {
 	d3.json("data/" + project + "/" + coupling + ".json", function(error, tree) {
-		createIcicle(tree, '#icicles');
+		if (error) {
+			console.log(error);
+			return;
+		}
+		enrichTreeWithLeaveSets(tree.root);
+		success(tree);
 	});
 }
-
-addIcicle('packages');
-addIcicle('SD.Use');
 
 $('#project').change(function() {
 	project = $(this).val();

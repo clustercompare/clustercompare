@@ -1,4 +1,4 @@
-function createIcicle(tree, container) {
+function createIcicle(tree, container, comparisonTree) {
 	var width = 300;
 	var height = 500;
 
@@ -9,6 +9,7 @@ function createIcicle(tree, container) {
 			.range([0, height]);
 
 	var color = d3.scale.category20c();
+    var color2 = d3.scale.linear().range('#222', '#eee');
 
 	var partition = d3.layout.partition()
 			.children(function (d) {
@@ -17,6 +18,15 @@ function createIcicle(tree, container) {
 			.value(function (d) {
 				return 1;
 			});
+
+    var colorFunc;
+    if (comparisonTree) {
+        colorFunc = function(node) {
+            return color2(nodeSimilarityToTree(node, comparisonTree.root));
+        }
+    } else {
+        colorFunc = function(node) { return color(node.qualifiedName); }
+    }
 
 	var svg = d3.select(container)
 			.append('svg')
@@ -40,9 +50,7 @@ function createIcicle(tree, container) {
             .attr("height", function (d) {
                 return y(d.dx);
             })
-            .attr("fill", function (d) {
-                return color((d.children ? d : d.parent).key);
-            })
+            .attr("fill", colorFunc)
             .attr("title", function (d) {
                 return d.key;
             });
