@@ -1,9 +1,13 @@
 var project = location.search ? location.search.substring(1) : 'PMD';
 
 fetchTree('packages', function(packages) {
-	fetchTree('SD.Use', function(other) {
-		createIcicle(packages, '#icicles');
-		createIcicle(other, '#icicles', packages);
+	createIcicle(packages, '#icicles');
+
+	var others = [ 'SD.Use', 'SD.Agg', 'CC.I' ];
+	others.forEach(function(otherName) {
+		fetchTree(otherName, function (other) {
+			createIcicle(other, '#icicles', packages);
+		});
 	});
 });
 
