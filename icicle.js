@@ -1,4 +1,4 @@
-function createIcicle(tree, container, comparisonTree) {
+function createIcicle(tree, containerSelector, comparisonTree) {
 	var width = 300;
 	var height = 500;
 
@@ -27,12 +27,14 @@ function createIcicle(tree, container, comparisonTree) {
     } else {
         colorFunc = function(node) { return color(node.qualifiedName); }
     }
+	var container = d3.select(containerSelector).append('div').attr('class', 'icicle');
 
-	var svg = d3.select(container)
+	container.append('h3').text(tree.couplingConcept);
+
+	var svg = container
 			.append('svg')
 			.attr("width", width)
-			.attr("height", height)
-			.attr("class", "icicle");
+			.attr("height", height);
 
     var rect = svg.selectAll("rect")
     rect = rect
