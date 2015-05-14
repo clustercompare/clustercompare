@@ -18,7 +18,7 @@ Node.prototype.normalizeOnlyChilds = function() {
 			this.children[i] = this.children[i].children[0];
 		}
 	}
-}
+};
 
 Node.prototype.getChildren = function() {
 	return this._children;
@@ -74,13 +74,11 @@ Node.prototype.getMaxSimilarity = function(otherNode) {
 	var intersection = intersect(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
 
 	if (!intersection) {
-		//console.log('short-circuit');
 		// no way any node of this subtree could be similar to the other node
 		return 0;
 	}
 
 	var totalCount = merge(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
-	//console.log(this.getKey() + ' vs. ' + otherNode.getKey() + ': ' + intersection + ' / ' + totalCount);
 	var similarity = intersection / totalCount;
 
 	if (similarity == 1) {
@@ -91,7 +89,6 @@ Node.prototype.getMaxSimilarity = function(otherNode) {
 	for (var child of otherNode.getChildren()) {
 		similarity = Math.max(similarity, this.getMaxSimilarity(child))
 	}
-	console.log(similarity);
 
 	return similarity;
 };
