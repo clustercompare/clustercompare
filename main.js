@@ -1,6 +1,7 @@
 var project = location.search ? location.search.substring(1) : 'PMD';
 
 fetchTree('packages', function(packages) {
+	packages.root.normalizeOnlyChilds();
 	createIcicle(packages, '#icicles');
 
 	var others = [ 'SD.Use', 'SD.Agg', 'CC.I' ];
