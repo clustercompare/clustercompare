@@ -27,6 +27,12 @@ function createIcicle(tree, containerSelector, comparisonTree) {
     } else {
         colorFunc = function(node) { return color(node.qualifiedName); }
     }
+	var realColorFunc = function(node) {
+		if (node.isLeaf()) {
+			return '#aaaaff';
+		}
+		return colorFunc(node)
+	};
 	var container = d3.select(containerSelector).append('div').attr('class', 'icicle');
 
 	container.append('h3').text(tree.couplingConcept);
@@ -60,7 +66,7 @@ function createIcicle(tree, containerSelector, comparisonTree) {
             .attr("y", nodeY)
             .attr("width", nodeW)
             .attr("height", nodeH)
-            .attr("fill", colorFunc)
+            .attr("fill", realColorFunc)
             .attr("title", function (d) {
                 return d.key;
             });
