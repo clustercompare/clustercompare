@@ -1,5 +1,5 @@
 function createIcicle(tree, containerSelector, comparisonTree) {
-	var width = 300;
+	var width = 50 * tree.root.getDepth();
 	var height = 500;
 
 	var x = d3.scale.linear()

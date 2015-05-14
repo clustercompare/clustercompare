@@ -30,6 +30,13 @@ Node.prototype.getKey = function() {
 
 Node.prototype.isLeaf = function() {
 	return !this._children.length;
+};
+
+Node.prototype.getDepth = function() {
+	if (!this.getChildren().length) {
+		return 1;
+	}
+	return 1 + Math.max.apply(null, this.getChildren().map(function(c) { return c.getDepth(); }));
 }
 
 Node.prototype.getLeaveKeys = function(){
