@@ -7,15 +7,21 @@ function Node(data) {
 		return new Node(childData)
 	});
 	this._children = this.children; // d3 likes to remove empty children properties
+	this._key = this.key
 }
 
 
 // normalize nodes with one children the child itself
 Node.prototype.normalizeOnlyChilds = function() {
 	for (var i = 0; i < this.children.length; i++) {
-		this.children[i].normalizeOnlyChilds();
-		if (this.children[i].children.length == 1) {
-			this.children[i] = this.children[i].children[0];
+		var child = this.children[i];
+		child.normalizeOnlyChilds();
+		if (child.children.length == 1) {
+			var grandchild = this.children[i].children[0];
+			if (!grandchild.isLeaf()) {
+				grandchild._key = child._key + '.' + grandchild._key;
+			}
+			this.children[i] = grandchild;
 		}
 	}
 };
@@ -31,6 +37,19 @@ Node.prototype.getKey = function() {
 Node.prototype.isLeaf = function() {
 	return !this._children.length;
 };
+
+Node.prototype.getLabel = function() {
+	if (this.isLeaf()) {
+		return this.qualifiedName;
+	}
+	if (!this.parent) {
+		return 'root';
+	}
+	if(!this.parent.parent) {
+		return this._key;
+	}
+	return this.parent.getLabel() + '.' + this._key;
+}
 
 Node.prototype.getDepth = function() {
 	if (!this.getChildren().length) {

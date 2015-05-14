@@ -67,16 +67,14 @@ function createIcicle(tree, containerSelector, comparisonTree) {
             .attr("width", nodeW)
             .attr("height", nodeH)
             .attr("fill", realColorFunc)
-            .attr("title", function (d) {
-                return d.key;
-            });
 	rect.append("rect")
 			.attr("class", "node")
 			.attr("x", nodeX)
 			.attr("y", nodeY)
 			.attr("width", nodeW)
 			.attr("height", nodeH)
-			.attr("fill", 'url(#shadow-gradient)');
+			.attr("fill", 'url(#shadow-gradient)')
+			.append('title').text(function(d) { return d.getLabel();})
 	rect.append("line")
 		.attr("x1", nodeX)
 		.attr("y1", nodeY)
