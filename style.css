@@ -13,3 +13,12 @@ body {
 	margin: 0;
 	margin-bottom: 10px;
 }
+
+.icicle svg {
+	/* avoid gaps between rects; there are also no curves to antialias */
+	shape-rendering: crispEdges;
+}
+
+.icicle .node {
+	border-right: 1px solid white;
+}

@@ -36,10 +36,20 @@ function createIcicle(tree, containerSelector, comparisonTree) {
 			.attr("width", width)
 			.attr("height", height);
 
+	var defs = svg.append('defs');
+	var gradient = defs.append('linearGradient')
+		.attr('id', 'shadow-gradient')
+		.attr('x1', '0').attr('x2', '0').attr('y1', '0').attr('y2', '1');
+	gradient.append('stop').attr('offset', '0%').attr('style', 'stop-color: rgba(0,0,0,0)');
+	gradient.append('stop').attr('offset', '80%').attr('style', 'stop-color: rgba(0,0,0,0)');
+	gradient.append('stop').attr('offset', '100%').attr('style', 'stop-color: rgba(0,0,0,0.1)');
+
+
     var rect = svg.selectAll("rect")
-    rect = rect
-            .data(partition(tree.root))
-            .enter().append("rect")
+    rect = rect .data(partition(tree.root)).enter();
+
+	rect.append("rect")
+		    .attr("class", "node")
             .attr("x", function (d) {
                 return x(d.y);
             })
@@ -56,4 +66,26 @@ function createIcicle(tree, containerSelector, comparisonTree) {
             .attr("title", function (d) {
                 return d.key;
             });
+	rect.append("rect")
+			.attr("class", "node")
+			.attr("x", function (d) {
+				return x(d.y);
+			})
+			.attr("y", function (d) {
+				return y(d.x);
+			})
+			.attr("width", function (d) {
+				return x(d.dy);
+			})
+			.attr("height", function (d) {
+				return y(d.dx);
+			})
+			.attr("fill", 'url(#shadow-gradient)');
+	rect.append("line")
+		.attr("x1", function(d) { return x(d.y);})
+		.attr("y1", function(d) { return y(d.x);})
+		.attr("x2", function(d) { return x(d.y);})
+		.attr("y2", function(d) { return y(d.x + d.dx);})
+		.attr("stroke", "white")
+		.attr("stroke-width", "1")
 }
