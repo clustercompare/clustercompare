@@ -3,13 +3,26 @@ function Node(data) {
 		this[key] = data[key];
 	}
 
-	this.children = this.children.map(function(childData) { return new Node(childData)});
+	this.children = this.children.map(function (childData) {
+		return new Node(childData)
+	});
 	this._children = this.children; // d3 likes to remove empty children properties
+}
+
+
+// normalize nodes with one children the child itself
+Node.prototype.normalizeOnlyChilds = function() {
+	for (var i = 0; i < this.children.length; i++) {
+		this.children[i].normalizeOnlyChilds();
+		if (this.children[i].children.length == 1) {
+			this.children[i] = this.children[i].children[0];
+		}
+	}
 }
 
 Node.prototype.getChildren = function() {
 	return this._children;
-}
+};
 
 Node.prototype.getKey = function() {
 	return this.qualifiedName;

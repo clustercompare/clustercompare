@@ -6,6 +6,7 @@ fetchTree('packages', function(packages) {
 	var others = [ 'SD.Use', 'SD.Agg', 'CC.I' ];
 	others.forEach(function(otherName) {
 		fetchTree(otherName, function (other) {
+			other.root.normalizeOnlyChilds();
 			createIcicle(other, '#icicles', packages);
 		});
 	});
