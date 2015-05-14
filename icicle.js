@@ -48,44 +48,34 @@ function createIcicle(tree, containerSelector, comparisonTree) {
     var rect = svg.selectAll("rect")
     rect = rect .data(partition(tree.root)).enter();
 
+	function nodeX(d) { return x(d.y); } // x and y reversed for horizontal icicle plots
+	function nodeY(d) { return y(d.x); }
+	function nodeW(d) { return x(d.dy) * (d.isLeaf() ? 0.5 : 1); }
+	function nodeH(d) { return y(d.dx); }
+	function nodeY2(d) { return nodeY(d) + nodeH(d); }
+
 	rect.append("rect")
 		    .attr("class", "node")
-            .attr("x", function (d) {
-                return x(d.y);
-            })
-            .attr("y", function (d) {
-                return y(d.x);
-            })
-            .attr("width", function (d) {
-                return x(d.dy);
-            })
-            .attr("height", function (d) {
-                return y(d.dx);
-            })
+            .attr("x", nodeX)
+            .attr("y", nodeY)
+            .attr("width", nodeW)
+            .attr("height", nodeH)
             .attr("fill", colorFunc)
             .attr("title", function (d) {
                 return d.key;
             });
 	rect.append("rect")
 			.attr("class", "node")
-			.attr("x", function (d) {
-				return x(d.y);
-			})
-			.attr("y", function (d) {
-				return y(d.x);
-			})
-			.attr("width", function (d) {
-				return x(d.dy);
-			})
-			.attr("height", function (d) {
-				return y(d.dx);
-			})
+			.attr("x", nodeX)
+			.attr("y", nodeY)
+			.attr("width", nodeW)
+			.attr("height", nodeH)
 			.attr("fill", 'url(#shadow-gradient)');
 	rect.append("line")
-		.attr("x1", function(d) { return x(d.y);})
-		.attr("y1", function(d) { return y(d.x);})
-		.attr("x2", function(d) { return x(d.y);})
-		.attr("y2", function(d) { return y(d.x + d.dx);})
+		.attr("x1", nodeX)
+		.attr("y1", nodeY)
+		.attr("x2", nodeX)
+		.attr("y2", nodeY2)
 		.attr("stroke", "white")
 		.attr("stroke-width", "1")
 }

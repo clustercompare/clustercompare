@@ -28,6 +28,10 @@ Node.prototype.getKey = function() {
 	return this.qualifiedName;
 };
 
+Node.prototype.isLeaf = function() {
+	return !this._children.length;
+}
+
 Node.prototype.getLeaveKeys = function(){
 	if (!this._leaveKeys) {
 		this._leaveKeys = this._generateLeaveKeySet();
