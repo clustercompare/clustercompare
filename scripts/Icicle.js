@@ -1,5 +1,5 @@
 define(function() {
-	function createIcicle(tree, containerSelector, comparisonTree) {
+	function createIcicle(tree, containerSelector, valueFunction) {
 		var width = 50 * tree.root.getDepth();
 		var height = 500;
 
@@ -9,8 +9,7 @@ define(function() {
 		var y = d3.scale.linear()
 				.range([0, height]);
 
-		var color = d3.scale.category20c();
-		var color2 = d3.scale.linear().range(['#eee', '#000']);
+		var colorScale = d3.scale.linear().range(['#eee', '#000']);
 
 		var partition = d3.layout.partition()
 				.children(function (d) {
@@ -20,22 +19,12 @@ define(function() {
 					return 1;
 				});
 
-		var colorFunc;
-		if (comparisonTree) {
-			colorFunc = function (node) {
-				return color2(node.getMaxSimilarity(comparisonTree.root));
-			}
-		} else {
-			colorFunc = function (node) {
-				return color(node.qualifiedName);
-			}
-		}
-		var realColorFunc = function (node) {
+		function color(node) {
 			if (node.isLeaf()) {
 				return '#aaaaff';
 			}
-			return colorFunc(node)
-		};
+			return colorScale(valueFunction(node));
+		}
 		var container = d3.select(containerSelector).append('div').attr('class', 'icicle');
 
 		container.append('h3').text(tree.couplingConcept);
@@ -82,7 +71,7 @@ define(function() {
 				.attr("y", nodeY)
 				.attr("width", nodeW)
 				.attr("height", nodeH)
-				.attr("fill", realColorFunc)
+				.attr("fill", color);
 		rect.append("rect")
 				.attr("class", "node")
 				.attr("x", nodeX)
