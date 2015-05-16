@@ -1,3 +1,8 @@
+require.config({
+	paths: {
+		"EventEmitter": "../bower_components/eventEmitter/EventEmitter"
+	}
+});
 define(['Icicle', 'Node'], function(Icicle, Node) {
 	var project = location.search ? location.search.substring(1) : 'PMD';
 
