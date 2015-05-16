@@ -1,5 +1,5 @@
 define(['Node', 'EventEmitter'], function(Node, EventEmitter) {
-	var algorithms = ['SD.Use', 'SD.Agg', 'CC.I'];
+	var algorithms = ['SD.Use', 'SD.Agg', 'CC.I', 'FO.AggE', 'CO.Bin', 'EC.Conf'];
 	var project = location.search ? location.search.substring(1) : 'PMD';
 	var trees = [];
 
