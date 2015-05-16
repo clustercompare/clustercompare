@@ -20,8 +20,18 @@ define(function() {
 		return result;
 	}
 
+	function containsAll(outer, inner) {
+		for (var value of inner) {
+			if (!outer.has(value)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	return {
 		intersect: intersect,
-		merge: merge
+		merge: merge,
+		containsAll: containsAll
 	};
 });

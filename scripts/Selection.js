@@ -1,21 +1,20 @@
-define(['EventEmitter'], function(EventEmitter) {
+define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
 	var Selection = new EventEmitter();
 
-	var selectecdObject = null;
+	var selectedKeys = new Set();
 	var hoveredObject = null;
 
 	Selection.select = function(object) {
-		selectecdObject = object;
+		selectedKeys = object.getLeaveKeys();
 		Selection.emit('change');
 	};
 
 	Selection.isSelected = function(object) {
-		if (!selectecdObject || !object) {
-			return false;
+		if (object.isLeaf()) {
+			return selectedKeys.has(object.getKey());
 		}
-
-		return object.getKey() == selectecdObject.getKey();
-	}
+		return Sets.containsAll(selectedKeys, object.getLeaveKeys());
+	};
 
 	return Selection;
 });
