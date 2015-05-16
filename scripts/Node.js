@@ -1,4 +1,4 @@
-define(function() {
+define(['Sets'], function(Sets) {
 	function Node(data) {
 		for (key of Object.getOwnPropertyNames(data)) {
 			this[key] = data[key];
@@ -93,14 +93,14 @@ define(function() {
 	};
 
 	Node.prototype.getMaxSimilarity = function (otherNode) {
-		var intersection = intersect(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
+		var intersection = Sets.intersect(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
 
 		if (!intersection) {
 			// no way any node of this subtree could be similar to the other node
 			return 0;
 		}
 
-		var totalCount = merge(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
+		var totalCount = Sets.merge(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
 		var similarity = intersection / totalCount;
 
 		if (similarity == 1) {
@@ -115,26 +115,6 @@ define(function() {
 		return similarity;
 	};
 
-	function intersect(set1, set2) {
-		var result = new Set();
-		for (var value of set1) {
-			if (set2.has(value)) {
-				result.add(value);
-			}
-		}
-		return result;
-	}
-
-	function merge(set1, set2) {
-		var result = new Set();
-		for (var value of set1) {
-			result.add(value);
-		}
-		for (var value of set2) {
-			result.add(value);
-		}
-		return result;
-	}
 
 	return Node;
 });
