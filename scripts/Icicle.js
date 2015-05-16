@@ -1,5 +1,8 @@
-define(function() {
-	function createIcicle(tree, containerSelector, valueFunction) {
+define(['EventEmitter'], function(EventEmitter) {
+	function Icicle(tree, containerSelector, valueFunction) {
+		EventEmitter.call(this);
+		var self = this;
+
 		var width = 50 * tree.root.getDepth();
 		var height = 500;
 
@@ -9,7 +12,6 @@ define(function() {
 		var y = d3.scale.linear()
 				.range([0, height]);
 
-		var colorScale = d3.scale.linear().range(['#eee', '#000']);
 
 		var partition = d3.layout.partition()
 				.children(function (d) {
@@ -19,12 +21,6 @@ define(function() {
 					return 1;
 				});
 
-		function color(node) {
-			if (node.isLeaf()) {
-				return '#aaaaff';
-			}
-			return colorScale(valueFunction(node));
-		}
 		var container = d3.select(containerSelector).append('div').attr('class', 'icicle');
 
 		container.append('h3').text(tree.couplingConcept);
@@ -43,7 +39,7 @@ define(function() {
 		gradient.append('stop').attr('offset', '100%').attr('style', 'stop-color: rgba(0,0,0,0.1)');
 
 
-		var rect = svg.selectAll("rect")
+		var rect = svg.selectAll("rect");
 		rect = rect.data(partition(tree.root)).enter();
 
 		function nodeX(d) {
@@ -66,22 +62,26 @@ define(function() {
 		}
 
 		rect.append("rect")
-				.attr("class", "node")
+				.attr("class", "node main-rect")
 				.attr("x", nodeX)
 				.attr("y", nodeY)
 				.attr("width", nodeW)
 				.attr("height", nodeH)
-				.attr("fill", color);
+				.attr("fill", function(n) { return makeColor(valueFunction(n), n.isLeaf(), false)});
 		rect.append("rect")
-				.attr("class", "node")
+				.attr("class", "node shadow-rect")
 				.attr("x", nodeX)
 				.attr("y", nodeY)
 				.attr("width", nodeW)
 				.attr("height", nodeH)
 				.attr("fill", 'url(#shadow-gradient)')
+				.on("click", function(d) {
+					console.log('test');
+					self.emit('nodeclick', d);
+				})
 				.append('title').text(function (d) {
 					return d.getLabel();
-				})
+				});
 		rect.append("line")
 				.attr("x1", nodeX)
 				.attr("y1", nodeY)
@@ -89,9 +89,26 @@ define(function() {
 				.attr("y2", nodeY2)
 				.attr("stroke", "white")
 				.attr("stroke-width", "1")
+
+		this.svg = svg;
+		this.valueFunction = valueFunction;
 	}
 
-	return {
-		create: createIcicle
+	Icicle.prototype = Object.create(EventEmitter.prototype);
+
+	Icicle.prototype.updateSelection = function(selectionFunction) {
+		var self = this;
+		this.svg.selectAll("rect.main-rect").attr("fill", function(node) {
+			return makeColor(self.valueFunction(node), node.isLeaf(), selectionFunction(node));
+		});
 	};
+
+	function makeColor(value, isLeaf, selected) {
+		var colorScale = d3.scale.linear().range([selected ? '#fdd' : '#eee', selected ? '#800' : '#000']);
+
+		var color = isLeaf ? (selected ? '#800000' : '#aaaaff') : colorScale(value);
+		return color;
+	}
+
+	return Icicle;
 });

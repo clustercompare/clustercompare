@@ -4,15 +4,28 @@ require.config({
 	}
 });
 
-define(['Icicle', 'Model'], function(Icicle, Model) {
+define(['Icicle', 'Model', 'Selection'], function(Icicle, Model, Selection) {
 	Model.on('ready', function() {
 		var packagesTree = Model.getTree('packages');
-		Icicle.create(packagesTree, '#icicles', function(node) {
+		var icicles = [];
+		icicles.push(new Icicle(packagesTree, '#icicles', function(node) {
 			return Math.max.apply(null, Model.getCouplingTrees().map(function(tree) { return node.getMaxSimilarity(tree.root); }));
-		});
+		}));
 		Model.getCouplingTrees().forEach(function(tree) {
-			Icicle.create(tree, '#icicles', function(node) { return node.getMaxSimilarity(packagesTree.root) });
+			icicles.push(new Icicle(tree, '#icicles', function(node) { return node.getMaxSimilarity(packagesTree.root) }));
 		});
+
+		icicles.forEach(function(icicle) {
+			icicle.on('nodeclick', function(node) {
+				Selection.select(node);
+			});
+		});
+
+		Selection.on('change', function() {
+			icicles.forEach(function(icicle) {
+				icicle.updateSelection(function(node) { return Selection.isSelected(node)});
+			});
+		})
 	});
 
 	// project selection
