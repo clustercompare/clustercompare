@@ -2,6 +2,8 @@ define(['EventEmitter'], function(EventEmitter) {
 	function Icicle(tree, containerSelector, valueFunction) {
 		EventEmitter.call(this);
 		var self = this;
+		this._valueCache = new Map();
+		this.valueFunction = valueFunction;
 
 		var width = 50 * tree.root.getDepth();
 		var height = 500;
@@ -67,7 +69,7 @@ define(['EventEmitter'], function(EventEmitter) {
 				.attr("y", nodeY)
 				.attr("width", nodeW)
 				.attr("height", nodeH)
-				.attr("fill", function(n) { return makeColor(valueFunction(n), n.isLeaf(), false)});
+				.attr("fill", function(n) { return makeColor(self.getValue(n), n.isLeaf(), false)});
 		rect.append("rect")
 				.attr("class", "node shadow-rect")
 				.attr("x", nodeX)
@@ -88,10 +90,9 @@ define(['EventEmitter'], function(EventEmitter) {
 				.attr("x2", nodeX)
 				.attr("y2", nodeY2)
 				.attr("stroke", "white")
-				.attr("stroke-width", "1")
+				.attr("stroke-width", "1");
 
 		this.svg = svg;
-		this.valueFunction = valueFunction;
 	}
 
 	Icicle.prototype = Object.create(EventEmitter.prototype);
@@ -99,8 +100,17 @@ define(['EventEmitter'], function(EventEmitter) {
 	Icicle.prototype.updateSelection = function(selectionFunction) {
 		var self = this;
 		this.svg.selectAll("rect.main-rect").attr("fill", function(node) {
-			return makeColor(self.valueFunction(node), node.isLeaf(), selectionFunction(node));
+			return makeColor(self.getValue(node), node.isLeaf(), selectionFunction(node));
 		});
+	};
+
+	Icicle.prototype.getValue = function(node) {
+		if (this._valueCache.has(node)) {
+			return this._valueCache.get(node);
+		}
+		var value = this.valueFunction(node);
+		this._valueCache.set(node, value);
+		return value;
 	};
 
 	function makeColor(value, isLeaf, selected) {
