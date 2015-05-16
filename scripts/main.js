@@ -7,12 +7,11 @@ require.config({
 define(['Icicle', 'Model'], function(Icicle, Model) {
 	Model.on('ready', function() {
 		var packagesTree = Model.getTree('packages');
-		Icicle.create(packagesTree, '#icicles');
-		Model.getTrees().forEach(function(tree) {
-			if (tree.couplingConcept == 'packages') {
-				return;
-			}
-			Icicle.create(tree, '#icicles', packagesTree);
+		Icicle.create(packagesTree, '#icicles', function(node) {
+			return Math.max.apply(null, Model.getCouplingTrees().map(function(tree) { return node.getMaxSimilarity(tree.root); }));
+		});
+		Model.getCouplingTrees().forEach(function(tree) {
+			Icicle.create(tree, '#icicles', function(node) { return node.getMaxSimilarity(packagesTree.root) });
 		});
 	});
 

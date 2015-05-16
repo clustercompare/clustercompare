@@ -44,6 +44,10 @@ define(['Node', 'EventEmitter'], function(Node, EventEmitter) {
 		throw new Error('Tree ' + name + ' does not exist');
 	};
 
+	Model.getCouplingTrees = function() {
+		return trees.filter(function(tree) { return tree.couplingConcept != 'packages'; });
+	};
+
 	load();
 
 	return Model;
