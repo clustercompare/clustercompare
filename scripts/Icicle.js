@@ -5,7 +5,7 @@ define(['EventEmitter'], function(EventEmitter) {
 		this._valueCache = new Map();
 		this.valueFunction = valueFunction;
 
-		var width = 50 * tree.root.getDepth();
+		var width = 25 * tree.root.getDepth();
 		var height = 500;
 
 		var x = d3.scale.linear()
@@ -52,7 +52,7 @@ define(['EventEmitter'], function(EventEmitter) {
 		}
 
 		function nodeW(d) {
-			return x(d.dy) * (d.isLeaf() ? 0.5 : 1);
+			return x(d.dy) * (d.isLeaf() ? 0.75 : 1);
 		}
 
 		function nodeH(d) {
