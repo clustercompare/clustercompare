@@ -98,6 +98,7 @@ define(['EventEmitter'], function(EventEmitter) {
 				.attr("stroke-width", "1");
 
 		svg.on('mouseleave', function() { self.emit('mouseleave', d3.event);});
+		svg.on('mousedown', function() { d3.event.preventDefault();});
 
 		this.svg = svg;
 	}
