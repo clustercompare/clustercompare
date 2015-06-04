@@ -77,6 +77,8 @@ define(['EventEmitter'], function(EventEmitter) {
 		createRect()
 				.attr("class", "node shadow-rect")
 				.attr("fill", 'url(#shadow-gradient)')
+		createRect()
+				.attr("class", "node highlight-rect")
 				.on("click", function(d) {
 					console.log('test');
 					self.emit('nodeclick', d);
