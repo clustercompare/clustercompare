@@ -30,6 +30,10 @@ define(['Icicle', 'Model', 'Selection'], function(Icicle, Model, Selection) {
 			});
 		});
 
+		$('#icicles').click(function() {
+			mainSelection.select(null);
+		});
+
 		mainSelection.on('change', function() {
 			icicles.forEach(function(icicle) {
 				icicle.updateSelection('main', mainSelection.getSelectedKeys());

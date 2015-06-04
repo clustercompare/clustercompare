@@ -84,6 +84,7 @@ define(['EventEmitter'], function(EventEmitter) {
 				})
 				.on("click", function(d) {
 					self.emit('nodeclick', d);
+					d3.event.stopPropagation();
 				})
 				.append('title').text(function (d) {
 					return d.getLabel();

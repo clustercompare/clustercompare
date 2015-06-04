@@ -8,7 +8,11 @@ define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
 	Selection.prototype = Object.create(EventEmitter.prototype);
 
 	Selection.prototype.select = function(object) {
-		this.selectedKeys = object.getLeaveKeys();
+		if (object == null) {
+			this.selectedKeys = new Set();
+		} else {
+			this.selectedKeys = object.getLeaveKeys();
+		}
 		this.emit('change');
 	};
 
