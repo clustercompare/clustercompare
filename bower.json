@@ -19,6 +19,7 @@
     "requirejs": "~2.1.17",
     "d3": "~3.5.5",
     "jquery": "~2.1.4",
-    "eventEmitter": "~4.2.11"
+    "eventEmitter": "~4.2.11",
+    "pako": "~0.2.6"
   }
 }

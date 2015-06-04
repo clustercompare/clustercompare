@@ -1,6 +1,7 @@
 require.config({
 	paths: {
-		"EventEmitter": "../bower_components/eventEmitter/EventEmitter"
+		"EventEmitter": "../bower_components/eventEmitter/EventEmitter",
+		"pako": "../bower_components/pako/dist/pako"
 	}
 });
 
