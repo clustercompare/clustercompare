@@ -80,10 +80,10 @@ define(['EventEmitter'], function(EventEmitter) {
 		createRect()
 				.attr("class", "node highlight-rect")
 				.on("mouseenter", function(d) {
-					self.emit('nodehover', d);
+					self.emit('nodehover', d, d3.event);
 				})
 				.on("click", function(d) {
-					self.emit('nodeclick', d);
+					self.emit('nodeclick', d, d3.event);
 					d3.event.stopPropagation();
 				})
 				.append('title').text(function (d) {
@@ -97,7 +97,7 @@ define(['EventEmitter'], function(EventEmitter) {
 				.attr("stroke", "white")
 				.attr("stroke-width", "1");
 
-		svg.on('mouseleave', function() { self.emit('mouseleave');});
+		svg.on('mouseleave', function() { self.emit('mouseleave', d3.event);});
 
 		this.svg = svg;
 	}

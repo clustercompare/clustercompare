@@ -16,8 +16,30 @@ define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
 		this.emit('change');
 	};
 
+	Selection.prototype.addToSelection = function(node) {
+		if (node == null) {
+			return;
+		}
+
+		this.selectedKeys = Sets.merge(this.selectedKeys, node.getLeaveKeys());
+		this.emit('change');
+	};
+
+	Selection.prototype.removeFromSelection = function(node) {
+		if (node == null) {
+			return;
+		}
+
+		this.selectedKeys = Sets.subtract(this.selectedKeys, node.getLeaveKeys());
+		this.emit('change');
+	};
+
 	Selection.prototype.getSelectedKeys = function() {
 		return this.selectedKeys;
+	};
+
+	Selection.prototype.isSelected = function(node) {
+		return Sets.containsAll(this.getSelectedKeys(), node.getLeaveKeys());
 	};
 
 	return Selection;

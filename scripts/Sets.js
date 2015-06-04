@@ -20,6 +20,28 @@ define(function() {
 		return result;
 	}
 
+	function mergeInto(setToModify, itemsToAdd) {
+		for (var value of itemsToAdd) {
+			setToModify.add(value);
+		}
+	}
+
+	function subtractFrom(setToModify, itemsToRemove) {
+		for (var value of itemsToRemove) {
+			setToModify.delete(value);
+		}
+	}
+
+	function subtract(left, right) {
+		var result = new Set();
+		for (var value of left) {
+			if (!right.has(value)) {
+				result.add(value);
+			}
+		}
+		return result;
+	}
+
 	function containsAll(outer, inner) {
 		for (var value of inner) {
 			if (!outer.has(value)) {
@@ -32,6 +54,9 @@ define(function() {
 	return {
 		intersect: intersect,
 		merge: merge,
-		containsAll: containsAll
+		containsAll: containsAll,
+		mergeInto: mergeInto,
+		subtractFrom: subtractFrom,
+		subtract: subtract
 	};
 });

@@ -25,8 +25,16 @@ define(['Icicle', 'Model', 'Selection'], function(Icicle, Model, Selection) {
 			icicle.on('mouseleave', function() {
 				hoverSelection.select(null);
 			});
-			icicle.on('nodeclick', function(node) {
-				mainSelection.select(node);
+			icicle.on('nodeclick', function(node, e) {
+				if (e.ctrlKey) {
+					if (mainSelection.isSelected(node)) {
+						mainSelection.removeFromSelection(node);
+					} else {
+						mainSelection.addToSelection(node);
+					}
+				} else  {
+					mainSelection.select(node);
+				}
 			});
 		});
 
