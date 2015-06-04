@@ -72,11 +72,11 @@ define(['EventEmitter'], function(EventEmitter) {
 		}
 
 		createRect()
-				.attr("class", function(n) { return "node main-rect node--" + n.getID(); })
+				.attr("class", function(n) { return "node main-rect node--" + n.getKey(); })
 				.attr("fill", function(n) { return makeColor(self.getValue(n), n.isLeaf(), false)});
 		createRect()
 				.attr("class", "node shadow-rect")
-				.attr("fill", 'url(#shadow-gradient)')
+				.attr("fill", 'url(#shadow-gradient)');
 		createRect()
 				.attr("class", "node highlight-rect")
 				.on("click", function(d) {
@@ -99,11 +99,18 @@ define(['EventEmitter'], function(EventEmitter) {
 
 	Icicle.prototype = Object.create(EventEmitter.prototype);
 
-	Icicle.prototype.updateSelection = function(selectionFunction) {
+	Icicle.prototype.updateSelection = function(selectedKeys) {
 		var self = this;
-		this.svg.selectAll("rect.main-rect").attr("fill", function(node) {
-			return makeColor(self.getValue(node), node.isLeaf(), selectionFunction(node));
+		this.svg.selectAll("rect.main-rect.selected").attr("fill", function(node) {
+			return makeColor(self.getValue(node), node.isLeaf(), selectedKeys.has(node.getKey()));
 		});
+		for (var key of selectedKeys) {
+			var node = this.svg.select('rect.main-rect.node--' + key);
+			node.attr('fill', function(node) {
+				return makeColor(self.getValue(node), node.isLeaf(), true);
+			});
+			node.classed('selected', true);
+		}
 	};
 
 	Icicle.prototype.getValue = function(node) {

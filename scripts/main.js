@@ -23,7 +23,7 @@ define(['Icicle', 'Model', 'Selection'], function(Icicle, Model, Selection) {
 
 		Selection.on('change', function() {
 			icicles.forEach(function(icicle) {
-				icicle.updateSelection(function(node) { return Selection.isSelected(node)});
+				icicle.updateSelection(Selection.getSelectedKeys());
 			});
 		})
 	});
