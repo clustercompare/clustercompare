@@ -23,6 +23,14 @@ body {
 	border-right: 1px solid white;
 }
 
+.icicle .root.main-rect {
+	fill: #000080;
+}
+
+.icicle .leaf.main-rect {
+	fill: #aaaaff;
+}
+
 .icicle .highlight-rect {
 	fill: transparent;
 }
@@ -31,11 +39,11 @@ body {
 	fill: rgba(255,255,255,0.1);
 }
 
-.icicle .selected-hover {
+.icicle .main-rect.selected-hover {
 	fill: rgb(255, 128, 128);
 }
 
-.icicle .selected-main {
+.icicle .main-rect.selected-main {
 	fill: red;
 }
 

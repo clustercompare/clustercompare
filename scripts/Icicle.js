@@ -84,17 +84,26 @@ define(['EventEmitter'], function(EventEmitter) {
 					.attr("x", nodeX)
 					.attr("y", nodeY)
 					.attr("width", nodeW)
-					.attr("height", nodeH);
+					.attr("height", nodeH)
+					.attr('class', function(n) { return 'node--' + n.getKey();})
+					.classed("root", function(n) { return n.isRoot(); })
+					.classed("leaf", function(n) { return n.isLeaf(); })
+					.classed("node", true);
 		}
 
 		createRect()
-				.attr("class", function(n) { return "node main-rect node--" + n.getKey(); })
-				.attr("fill", function(n) { return makeColor(self.getValue(n), n.isLeaf(), false)});
+				.classed('main-rect', true)
+				.attr("fill", function(n) {
+					if (n.isRoot() || n.isLeaf()) {
+						return null; // color set by css
+					}
+					return makeColor(self.getValue(n));
+				});
 		createRect()
-				.attr("class", "node shadow-rect")
+				.classed('shadow-rect', true)
 				.attr("fill", 'url(#shadow-gradient)');
 		createRect()
-				.attr("class", "node highlight-rect")
+				.classed('highlight-rect', true)
 				.on("mouseenter", function(d) {
 					self.emit('nodehover', d, d3.event);
 				})
@@ -140,11 +149,9 @@ define(['EventEmitter'], function(EventEmitter) {
 		return value;
 	};
 
-	function makeColor(value, isLeaf, selected) {
-		var colorScale = d3.scale.linear().range([selected ? '#fdd' : '#eee', selected ? '#800' : '#000']);
-
-		var color = isLeaf ? (selected ? '#800000' : '#aaaaff') : colorScale(value);
-		return color;
+	function makeColor(value, isLeaf) {
+		var colorScale = d3.scale.linear().range(['#eee', '#000']);
+		return colorScale(value);
 	}
 
 	return Icicle;
