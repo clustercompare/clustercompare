@@ -5,11 +5,18 @@ define(['EventEmitter'], function(EventEmitter) {
 		this._valueCache = new Map();
 		this.valueFunction = valueFunction;
 
-		var width = 25 * tree.root.getDepth();
+		var INNER_NODE_WIDTH = 25;
+		var ROOT_NODE_WIDTH = 5;
+		var LEAF_WIDTH = 15;
+		// the deepest level is guaranteed to only contain leaves
+		var depth = tree.root.getDepth();
+		var width = INNER_NODE_WIDTH * (depth - 2) + LEAF_WIDTH + ROOT_NODE_WIDTH;
 		var height = 500;
 
+		// these scales are only used for inner nodes, so map positions of first and last inner node
 		var x = d3.scale.linear()
-				.range([0, width]);
+				.domain([1 / depth, 1 - 1 / depth])
+				.range([ROOT_NODE_WIDTH, width - LEAF_WIDTH]);
 
 		var y = d3.scale.linear()
 				.range([0, height]);
@@ -45,6 +52,9 @@ define(['EventEmitter'], function(EventEmitter) {
 		rect = rect.data(partition(tree.root)).enter();
 
 		function nodeX(d) {
+			if (d.isRoot()) {
+				return 0;
+			}
 			return x(d.y);
 		} // x and y reversed for horizontal icicle plots
 		function nodeY(d) {
@@ -52,7 +62,13 @@ define(['EventEmitter'], function(EventEmitter) {
 		}
 
 		function nodeW(d) {
-			return x(d.dy) * (d.isLeaf() ? 0.75 : 1);
+			if (d.isRoot()) {
+				return ROOT_NODE_WIDTH;
+			}
+			if (d.isLeaf()) {
+				return LEAF_WIDTH;
+			}
+			return INNER_NODE_WIDTH;
 		}
 
 		function nodeH(d) {

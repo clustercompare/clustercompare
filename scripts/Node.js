@@ -50,6 +50,10 @@ define(['Utils', 'Sets'], function(Utils, Sets) {
 		return !this._children.length;
 	};
 
+	Node.prototype.isRoot = function() {
+		return !this.parent;
+	};
+
 	Node.prototype.getLabel = function () {
 		if (this.isLeaf()) {
 			return this.qualifiedName;
