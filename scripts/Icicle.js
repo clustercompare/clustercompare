@@ -63,19 +63,19 @@ define(['EventEmitter'], function(EventEmitter) {
 			return nodeY(d) + nodeH(d);
 		}
 
-		rect.append("rect")
+		function createRect() {
+			return rect.append("rect")
+					.attr("x", nodeX)
+					.attr("y", nodeY)
+					.attr("width", nodeW)
+					.attr("height", nodeH);
+		}
+
+		createRect()
 				.attr("class", function(n) { return "node main-rect node--" + n.getID(); })
-				.attr("x", nodeX)
-				.attr("y", nodeY)
-				.attr("width", nodeW)
-				.attr("height", nodeH)
 				.attr("fill", function(n) { return makeColor(self.getValue(n), n.isLeaf(), false)});
-		rect.append("rect")
+		createRect()
 				.attr("class", "node shadow-rect")
-				.attr("x", nodeX)
-				.attr("y", nodeY)
-				.attr("width", nodeW)
-				.attr("height", nodeH)
 				.attr("fill", 'url(#shadow-gradient)')
 				.on("click", function(d) {
 					console.log('test');
