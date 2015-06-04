@@ -1,28 +1,25 @@
-define(['Sets'], function(Sets) {
+define(['Utils', 'Sets'], function(Utils, Sets) {
 	function Node(data) {
-		for (key of Object.getOwnPropertyNames(data)) {
-			this[key] = data[key];
-		}
+		this.data = data;
 
-		this.children = this.children.map(function (childData) {
-			return new Node(childData)
-		});
-		this._children = this.children; // d3 likes to remove empty children properties
-		this._key = this.key
+		this._children = [];
+		this.children = this._children; // for d3 - but carefuly, might be removed by d3
+
+		this._id = Utils.generateID();
 	}
 
 
 	// normalize nodes with one children the child itself
 	Node.prototype.normalizeOnlyChilds = function () {
-		for (var i = 0; i < this.children.length; i++) {
-			var child = this.children[i];
+		for (var i = 0; i < this.getChildren().length; i++) {
+			var child = this.getChildren()[i];
 			child.normalizeOnlyChilds();
-			if (child.children.length == 1) {
-				var grandchild = this.children[i].children[0];
+			if (child.getChildren().length == 1) {
+				var grandchild = this.getChildren()[i].getChildren()[0];
 				if (!grandchild.isLeaf()) {
-					grandchild._key = child._key + '.' + grandchild._key;
+					grandchild.data.key = child.data.key + '.' + grandchild.data.key;
 				}
-				this.children[i] = grandchild;
+				this.getChildren()[i] = grandchild;
 			}
 		}
 	};
@@ -31,8 +28,22 @@ define(['Sets'], function(Sets) {
 		return this._children;
 	};
 
+	/**
+	 * Gets an identifier for this object that is unique across the entire graph. Multiple nodes may
+	 * share a key if they represent the same object
+	 */
 	Node.prototype.getKey = function () {
-		return this.qualifiedName;
+		// default implementation - should be overriden if a node can occur in multiple graphs
+		return this._id;
+	};
+
+	/**
+	 * Gets an identifier for this node that is unique across the entire graph. Nodes do NOT share
+	 * an id.
+	 * @returns {*}
+	 */
+	Node.prototype.getID = function() {
+		return this._id;
 	};
 
 	Node.prototype.isLeaf = function () {

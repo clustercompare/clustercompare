@@ -2,6 +2,7 @@ define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
 	var Selection = new EventEmitter();
 
 	var selectedKeys = new Set();
+	var selectedObjects = new Set();
 	var hoveredObject = null;
 
 	Selection.select = function(object) {

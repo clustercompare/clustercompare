@@ -1,7 +1,9 @@
-define(['Node', 'EventEmitter'], function(Node, EventEmitter) {
+define(['NodeFactory', 'EventEmitter'], function(NodeFactory, EventEmitter) {
 	var algorithms = ['SD.Use', 'SD.Agg', 'CC.I', 'FO.AggE', 'CO.Bin', 'EC.Conf'];
 	var project = location.search ? location.search.substring(1) : 'PMD';
 	var trees = [];
+	var nodes = [];
+	var nodeFactory = new NodeFactory();
 
 	function load() {
 		var treeNames = algorithms.slice(0);
@@ -22,7 +24,7 @@ define(['Node', 'EventEmitter'], function(Node, EventEmitter) {
 				console.log(error);
 				return;
 			}
-			tree.root = new Node(tree.root);
+			tree.root = nodeFactory.createNodeRecursively(tree.root);
 			tree.root.normalizeOnlyChilds();
 			success(tree);
 		});
@@ -49,6 +51,8 @@ define(['Node', 'EventEmitter'], function(Node, EventEmitter) {
 	};
 
 	load();
+
+	window.trees = trees;
 
 	return Model;
 });

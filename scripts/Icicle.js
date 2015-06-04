@@ -64,7 +64,7 @@ define(['EventEmitter'], function(EventEmitter) {
 		}
 
 		rect.append("rect")
-				.attr("class", "node main-rect")
+				.attr("class", function(n) { return "node main-rect node--" + n.getID(); })
 				.attr("x", nodeX)
 				.attr("y", nodeY)
 				.attr("width", nodeW)
