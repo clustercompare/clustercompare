@@ -20,25 +20,31 @@ define(['Icicle', 'Model', 'Selection'], function(Icicle, Model, Selection) {
 
 		icicles.forEach(function(icicle) {
 			icicle.on('nodehover', function(node) {
-				hoverSelection.select(node);
+				hoverSelection.select(node.isRoot() ? null : node);
 			});
 			icicle.on('mouseleave', function() {
 				hoverSelection.select(null);
 			});
 			icicle.on('nodeclick', function(node, e) {
 				if (e.ctrlKey) {
+					if (node.isRoot()) {
+						return;
+					}
 					if (mainSelection.isSelected(node)) {
 						mainSelection.removeFromSelection(node);
 					} else {
 						mainSelection.addToSelection(node);
 					}
-				} else  {
-					mainSelection.select(node);
+				} else {
+					mainSelection.select(node.isRoot()? null : node);
 				}
 			});
 		});
 
-		$('#icicles').click(function() {
+		$('#icicles').click(function(e) {
+			if (e.ctrlKey) {
+				return;
+			}
 			mainSelection.select(null);
 		});
 
