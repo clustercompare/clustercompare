@@ -30,3 +30,12 @@ body {
 .icicle .highlight-rect:hover {
 	fill: rgba(255,255,255,0.1);
 }
+
+.icicle .selected-hover {
+	fill: rgb(255, 128, 128);
+}
+
+.icicle .selected-main {
+	fill: red;
+}
+

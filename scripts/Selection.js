@@ -1,23 +1,19 @@
 define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
-	var Selection = new EventEmitter();
+	function Selection() {
+		EventEmitter.call(this);
 
-	var selectedKeys = new Set();
-	var hoveredObject = null;
-
-	Selection.select = function(object) {
-		selectedKeys = object.getLeaveKeys();
-		Selection.emit('change');
-	};
-
-	Selection.getSelectedKeys = function() {
-		return selectedKeys;
+		this.selectedKeys = new Set();
 	}
 
-	Selection.isSelected = function(object) {
-		if (object.isLeaf()) {
-			return selectedKeys.has(object.getKey());
-		}
-		return Sets.containsAll(selectedKeys, object.getLeaveKeys());
+	Selection.prototype = Object.create(EventEmitter.prototype);
+
+	Selection.prototype.select = function(object) {
+		this.selectedKeys = object.getLeaveKeys();
+		this.emit('change');
+	};
+
+	Selection.prototype.getSelectedKeys = function() {
+		return this.selectedKeys;
 	};
 
 	return Selection;
