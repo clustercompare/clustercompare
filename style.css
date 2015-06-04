@@ -47,3 +47,25 @@ body {
 	fill: red;
 }
 
+
+#icicles {
+	width: 70%;
+	display: inline-block;
+	overflow: auto;
+	white-space: nowrap;
+}
+
+#selection-pane {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 29%;
+	padding: 20px;
+	height: 100%;
+	overflow: auto;
+	vertical-align: top;
+	background: #eeeeee;
+}
+
+#selection-pane h3 {
+	margin: 0;
+}
