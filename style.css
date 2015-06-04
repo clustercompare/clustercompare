@@ -68,4 +68,15 @@ body {
 
 #selection-pane h3 {
 	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#selection-class-list {
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }

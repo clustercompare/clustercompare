@@ -4,6 +4,7 @@ define(['NodeFactory', 'EventEmitter', 'Sets'], function(NodeFactory, EventEmitt
 	var trees = [];
 	var nodeFactory = new NodeFactory();
 	var allLeaveKeys = new Set();
+	var nodeKeyMap = new Map();
 
 	function load() {
 		var treeNames = algorithms.slice(0);
@@ -26,8 +27,16 @@ define(['NodeFactory', 'EventEmitter', 'Sets'], function(NodeFactory, EventEmitt
 			}
 			tree.root = nodeFactory.createNodeRecursively(tree.root);
 			Sets.mergeInto(allLeaveKeys, tree.root.getLeaveKeys());
+			collectNodes(tree.root);
 			success(tree);
 		});
+	}
+
+	function collectNodes(node) {
+		nodeKeyMap.set(node.getKey(), node);
+		for (var child of node.getChildren()) {
+			collectNodes(child);
+		}
 	}
 
 	function onReady() {
@@ -52,6 +61,14 @@ define(['NodeFactory', 'EventEmitter', 'Sets'], function(NodeFactory, EventEmitt
 
 	Model.getLeaveKeys = function() {
 		return allLeaveKeys;
+	};
+
+	Model.mapKeysToNodes = function(keys) {
+		var nodes = [];
+		for (var key of keys) {
+			nodes.push(nodeKeyMap.get(key));
+		}
+		return nodes;
 	};
 
 	load();

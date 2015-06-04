@@ -5,7 +5,8 @@ require.config({
 	}
 });
 
-define(['Icicle', 'Model', 'Selection', 'SelectionHistory'], function(Icicle, Model, Selection, SelectionHistory) {
+define(['Icicle', 'Model', 'Selection', 'SelectionHistory', 'SelectionPane'],
+		function(Icicle, Model, Selection, SelectionHistory, SelectionPane) {
 	Model.on('ready', function() {
 		var mainSelection = new Selection();
 		var hoverSelection = new Selection();
@@ -55,6 +56,7 @@ define(['Icicle', 'Model', 'Selection', 'SelectionHistory'], function(Icicle, Mo
 				icicle.updateSelection('main', mainSelection.getSelectedKeys());
 			});
 			selectionHistory.push(mainSelection.getSelectedKeys());
+			SelectionPane.update(Model.mapKeysToNodes(mainSelection.getSelectedKeys()));
 		});
 		hoverSelection.on('change', function() {
 			icicles.forEach(function(icicle) {
