@@ -7,13 +7,17 @@ define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
 
 	Selection.prototype = Object.create(EventEmitter.prototype);
 
+	Selection.prototype.selectKeys = function(keys) {
+		this.selectedKeys = keys;
+		this.emit('change');
+	};
+
 	Selection.prototype.select = function(object) {
 		if (object == null) {
-			this.selectedKeys = new Set();
+			this.selectKeys(new Set());
 		} else {
-			this.selectedKeys = object.getLeaveKeys();
+			this.selectKeys(object.getLeaveKeys());
 		}
-		this.emit('change');
 	};
 
 	Selection.prototype.addToSelection = function(node) {
@@ -21,8 +25,7 @@ define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
 			return;
 		}
 
-		this.selectedKeys = Sets.merge(this.selectedKeys, node.getLeaveKeys());
-		this.emit('change');
+		this.selectKeys(Sets.merge(this.selectedKeys, node.getLeaveKeys()));
 	};
 
 	Selection.prototype.removeFromSelection = function(node) {
@@ -30,8 +33,7 @@ define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
 			return;
 		}
 
-		this.selectedKeys = Sets.subtract(this.selectedKeys, node.getLeaveKeys());
-		this.emit('change');
+		this.selectKeys(Sets.subtract(this.selectedKeys, node.getLeaveKeys()));
 	};
 
 	Selection.prototype.getSelectedKeys = function() {

@@ -51,12 +51,22 @@ define(function() {
 		return true;
 	}
 
+	function sorted(input) {
+		var array = [];
+		for (var value of input) {
+			array.push(value);
+		}
+		array.sort();
+		return new Set(array);
+	}
+
 	return {
 		intersect: intersect,
 		merge: merge,
 		containsAll: containsAll,
 		mergeInto: mergeInto,
 		subtractFrom: subtractFrom,
-		subtract: subtract
+		subtract: subtract,
+		sorted: sorted
 	};
 });

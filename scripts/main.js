@@ -5,10 +5,11 @@ require.config({
 	}
 });
 
-define(['Icicle', 'Model', 'Selection'], function(Icicle, Model, Selection) {
+define(['Icicle', 'Model', 'Selection', 'SelectionHistory'], function(Icicle, Model, Selection, SelectionHistory) {
 	Model.on('ready', function() {
 		var mainSelection = new Selection();
 		var hoverSelection = new Selection();
+		var selectionHistory = new SelectionHistory(Model.getLeaveKeys());
 
 		var packagesTree = Model.getTree('packages');
 		var icicles = [];
@@ -53,12 +54,18 @@ define(['Icicle', 'Model', 'Selection'], function(Icicle, Model, Selection) {
 			icicles.forEach(function(icicle) {
 				icicle.updateSelection('main', mainSelection.getSelectedKeys());
 			});
+			selectionHistory.push(mainSelection.getSelectedKeys());
 		});
 		hoverSelection.on('change', function() {
 			icicles.forEach(function(icicle) {
 				icicle.updateSelection('hover', hoverSelection.getSelectedKeys());
 			});
-		})
+		});
+
+		selectionHistory.on('change', function(keys) {
+			mainSelection.selectKeys(keys);
+		});
+		selectionHistory.init();
 	});
 
 	// project selection

@@ -1,9 +1,9 @@
-define(['NodeFactory', 'EventEmitter'], function(NodeFactory, EventEmitter) {
+define(['NodeFactory', 'EventEmitter', 'Sets'], function(NodeFactory, EventEmitter, Sets) {
 	var algorithms = ['SD.Use', 'SD.Agg', 'CC.I', 'FO.AggE', 'CO.Bin', 'EC.Conf'];
 	var project = location.search ? location.search.substring(1) : 'PMD';
 	var trees = [];
-	var nodes = [];
 	var nodeFactory = new NodeFactory();
+	var allLeaveKeys = new Set();
 
 	function load() {
 		var treeNames = algorithms.slice(0);
@@ -25,6 +25,7 @@ define(['NodeFactory', 'EventEmitter'], function(NodeFactory, EventEmitter) {
 				return;
 			}
 			tree.root = nodeFactory.createNodeRecursively(tree.root);
+			Sets.mergeInto(allLeaveKeys, tree.root.getLeaveKeys());
 			success(tree);
 		});
 	}
@@ -47,6 +48,10 @@ define(['NodeFactory', 'EventEmitter'], function(NodeFactory, EventEmitter) {
 
 	Model.getCouplingTrees = function() {
 		return trees.filter(function(tree) { return tree.couplingConcept != 'packages'; });
+	};
+
+	Model.getLeaveKeys = function() {
+		return allLeaveKeys;
 	};
 
 	load();
