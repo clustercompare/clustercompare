@@ -7,7 +7,8 @@ define(['Class', 'Cluster', 'Package', 'RootNode', 'StringUtils'], function(Clas
 		var self = this;
 		var clazz = NodeFactory.determineNodeClass(nodeData);
 		var node = new clazz(nodeData);
-		nodeData.children.map(function (childData) {
+		var children = unpackOnlyChilds(nodeData.children);
+		children.map(function (childData) {
 			node.getChildren().push(self.createNodeRecursively(childData));
 		});
 		return node;
@@ -28,6 +29,13 @@ define(['Class', 'Cluster', 'Package', 'RootNode', 'StringUtils'], function(Clas
 
 		return Package;
 	};
+
+	function unpackOnlyChilds(nodes) {
+		if (nodes.length == 1) {
+			return unpackOnlyChilds(nodes[0].children);
+		}
+		return nodes;
+	}
 
 	return NodeFactory;
 });

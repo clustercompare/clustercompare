@@ -11,16 +11,16 @@ define(['Utils', 'Sets'], function(Utils, Sets) {
 
 	// normalize nodes with one children the child itself
 	Node.prototype.normalizeOnlyChilds = function () {
-		for (var i = 0; i < this.getChildren().length; i++) {
-			var child = this.getChildren()[i];
-			child.normalizeOnlyChilds();
-			if (child.getChildren().length == 1) {
-				var grandchild = this.getChildren()[i].getChildren()[0];
-				if (!grandchild.isLeaf()) {
-					grandchild.data.key = child.data.key + '.' + grandchild.data.key;
-				}
-				this.getChildren()[i] = grandchild;
+		if (this.getChildren().length == 1) {
+			var onlyChild = this.getChildren()[0];
+			this.getChildren().length = 0;
+			for (var grandchild of onlyChild.getChildren()) {
+				this.getChildren().push(grandchild);
 			}
+			this._leaveKeys = null;
+		}
+		for (var child of this.getChildren()) {
+			child.normalizeOnlyChilds();
 		}
 	};
 

@@ -25,7 +25,6 @@ define(['NodeFactory', 'EventEmitter'], function(NodeFactory, EventEmitter) {
 				return;
 			}
 			tree.root = nodeFactory.createNodeRecursively(tree.root);
-			tree.root.normalizeOnlyChilds();
 			success(tree);
 		});
 	}
