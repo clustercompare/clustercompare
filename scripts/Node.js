@@ -84,10 +84,6 @@ define(['Utils', 'Sets'], function(Utils, Sets) {
 	};
 
 	Node.prototype._generateLeaveKeySet = function () {
-		if (!this.getChildren().length) {
-			return new Set([this.getKey()]);
-		}
-
 		var result = new Set();
 		for (var child of this.getChildren()) {
 			for (var leaveKey of child.getLeaveKeys()) {

@@ -13,5 +13,9 @@ define(['Node'], function(Node) {
 		return this.data.qualifiedName;
 	};
 
+	Class.prototype._generateLeaveKeySet = function() {
+		return new Set([this.getKey()]);
+	};
+
 	return Class;
 });
