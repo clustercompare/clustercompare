@@ -6,7 +6,7 @@ define(['Node'], function(Node) {
 	Class.prototype = Object.create(Node.prototype);
 
 	Class.prototype.getKey = function() {
-		return this.data.qualifiedName;
+		return this.data.qualifiedName.replace(/\./g, '_');
 	};
 
 	Class.prototype.getLabel = function() {
