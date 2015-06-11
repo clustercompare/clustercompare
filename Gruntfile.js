@@ -5,7 +5,9 @@ module.exports = function(grunt) {
 		paths: {
 			dist: 'dist',
 			app: 'app',
-			scripts: '<%= paths.app %>/src',
+			scripts: 'src',
+			statics: 'public',
+			styles: 'styles',
 			bowerComponents: 'bower_components'
 		},
 
@@ -35,8 +37,8 @@ module.exports = function(grunt) {
 		copy: {
 			statics: {
 				expand: true,
-				cwd: '<%= paths.app %>',
-				src: ['**', '!scripts'],
+				cwd: '<%= paths.statics %>',
+				src: ['**'],
 				dest: '<%= paths.dist %>'
 			}
 		},
@@ -68,13 +70,17 @@ module.exports = function(grunt) {
 				files: ['Gruntfile.js'],
 				tasks: ['build']
 			},
-			statics: {
-				files: ['<%= paths.app %>/**', '!<%= paths.scripts %>/**'],
-				tasks: ['copy']
-			},
 			scripts: {
 				files: ['<%= paths.scripts %>/**'],
 				tasks: ['browserify']
+			},
+			styles: {
+				files: ['<%= paths.styles %>/**'],
+				tasks: ['copy']
+			},
+			statics: {
+				files: ['<%= paths.statics %>/**'],
+				tasks: ['copy']
 			}
 		}
 	});
