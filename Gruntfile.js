@@ -29,7 +29,15 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
-					"dist/bundle.js": "./app/src/main.js"
+					"<%= paths.dist %>/assets/bundle.js": "<%= paths.scripts %>/main.js"
+				}
+			}
+		},
+
+		less: {
+			styles: {
+				files: {
+					'<%= paths.dist %>/assets/style.css': '<%= paths.styles %>/app.less'
 				}
 			}
 		},
@@ -76,7 +84,7 @@ module.exports = function(grunt) {
 			},
 			styles: {
 				files: ['<%= paths.styles %>/**'],
-				tasks: ['copy']
+				tasks: ['less']
 			},
 			statics: {
 				files: ['<%= paths.statics %>/**'],
@@ -86,14 +94,15 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-browserify');
+	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-symlink');
-	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.registerTask('install', ['bower', 'build']);
-	grunt.registerTask('build', ['clean', 'browserify', 'copy', 'symlink']);
+	grunt.registerTask('build', ['clean', 'browserify', 'less', 'copy', 'symlink']);
 	grunt.registerTask('webserver', ['build', 'connect', 'watch']);
 	grunt.registerTask('default', ['build']);
 };
