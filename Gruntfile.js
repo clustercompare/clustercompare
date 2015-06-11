@@ -8,7 +8,9 @@ module.exports = function(grunt) {
 			scripts: 'src',
 			statics: 'public',
 			styles: 'styles',
-			bowerComponents: 'bower_components'
+			bowerComponents: 'bower_components',
+			scriptBundle: '<%= paths.dist %>/assets/bundle.js',
+			styleBundle: '<%= paths.dist %>/assets/style.css'
 		},
 
 		pkg: grunt.file.readJSON('package.json'),
@@ -29,7 +31,7 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
-					"<%= paths.dist %>/assets/bundle.js": "<%= paths.scripts %>/main.js"
+					"<%= paths.scriptBundle %>": "<%= paths.scripts %>/main.js"
 				}
 			}
 		},
@@ -37,7 +39,7 @@ module.exports = function(grunt) {
 		less: {
 			styles: {
 				files: {
-					'<%= paths.dist %>/assets/style.css': '<%= paths.styles %>/app.less'
+					'<%= paths.styleBundle %>': '<%= paths.styles %>/app.less'
 				}
 			}
 		},
@@ -84,7 +86,16 @@ module.exports = function(grunt) {
 			},
 			styles: {
 				files: ['<%= paths.styles %>/**'],
-				tasks: ['less']
+				tasks: ['less'],
+				options: {
+					livereload: false // would cause complete page reload
+				}
+			},
+			stylesreload: {
+				files: ['<%= paths.styleBundle %>'],
+				options: {
+					livereload: true
+				}
 			},
 			statics: {
 				files: ['<%= paths.statics %>/**'],
