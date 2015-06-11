@@ -72,15 +72,15 @@ module.exports = function(grunt) {
 				livereload: true
 			},
 			gruntfile: {
-				files: 'Gruntfile.js',
+				files: ['Gruntfile.js'],
 				tasks: ['build']
 			},
 			statics: {
-				files: ['<%= paths.app %>', '!<%= paths.scripts %>'],
+				files: ['<%= paths.app %>/**', '!<%= paths.scripts %>/**'],
 				tasks: ['copy']
 			},
 			scripts: {
-				files: '<%= paths.scripts %>',
+				files: ['<%= paths.scripts %>/**'],
 				tasks: ['browserify']
 			}
 		}
