@@ -3,11 +3,20 @@ import Cluster from './Cluster';
 import Package from './Package';
 import RootNode from './RootNode';
 import * as StringUtils from './StringUtils';
-	function NodeFactory() {
+
+function unpackOnlyChilds(nodes) {
+	if (nodes.length == 1) {
+		return unpackOnlyChilds(nodes[0].children);
+	}
+	return nodes;
+}
+
+export default class NodeFactory {
+	constructor() {
 		this._nodesByKey = new Map();
 	}
 
-	NodeFactory.prototype.createNodeRecursively = function(nodeData) {
+	createNodeRecursively(nodeData) {
 		var self = this;
 		var clazz = NodeFactory.determineNodeClass(nodeData);
 		var node = new clazz(nodeData);
@@ -16,9 +25,9 @@ import * as StringUtils from './StringUtils';
 			node.getChildren().push(self.createNodeRecursively(childData));
 		});
 		return node;
-	};
+	}
 
-	NodeFactory.determineNodeClass = function(nodeData) {
+	static determineNodeClass(nodeData) {
 		if (nodeData.qualifiedName == 'root') {
 			return RootNode;
 		}
@@ -32,14 +41,5 @@ import * as StringUtils from './StringUtils';
 		}
 
 		return Package;
-	};
-
-	function unpackOnlyChilds(nodes) {
-		if (nodes.length == 1) {
-			return unpackOnlyChilds(nodes[0].children);
-		}
-		return nodes;
 	}
-
-	export default NodeFactory;
-
+}

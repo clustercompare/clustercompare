@@ -1,49 +1,46 @@
 import EventEmitter from 'node-event-emitter';
-import Sets from './Sets';
-	function Selection() {
-		EventEmitter.call(this);
+import * as Sets from './Sets';
 
+export default class Selection extends EventEmitter {
+	constructor() {
+		super();
 		this.selectedKeys = new Set();
 	}
 
-	Selection.prototype = Object.create(EventEmitter.prototype);
-
-	Selection.prototype.selectKeys = function(keys) {
+	selectKeys(keys) {
 		this.selectedKeys = keys;
 		this.emit('change');
-	};
+	}
 
-	Selection.prototype.select = function(object) {
+	select(object) {
 		if (object == null) {
 			this.selectKeys(new Set());
 		} else {
 			this.selectKeys(object.getLeaveKeys());
 		}
-	};
+	}
 
-	Selection.prototype.addToSelection = function(node) {
+	addToSelection(node) {
 		if (node == null) {
 			return;
 		}
 
 		this.selectKeys(Sets.merge(this.selectedKeys, node.getLeaveKeys()));
-	};
+	}
 
-	Selection.prototype.removeFromSelection = function(node) {
+	removeFromSelection(node) {
 		if (node == null) {
 			return;
 		}
 
 		this.selectKeys(Sets.subtract(this.selectedKeys, node.getLeaveKeys()));
-	};
+	}
 
-	Selection.prototype.getSelectedKeys = function() {
+	getSelectedKeys() {
 		return this.selectedKeys;
-	};
+	}
 
-	Selection.prototype.isSelected = function(node) {
+	isSelected(node) {
 		return Sets.containsAll(this.getSelectedKeys(), node.getLeaveKeys());
-	};
-
-	export default Selection;
-
+	}
+}

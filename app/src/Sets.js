@@ -1,72 +1,60 @@
-
-	function intersect(set1, set2) {
-		var result = new Set();
-		for (var value of set1) {
-			if (set2.has(value)) {
-				result.add(value);
-			}
-		}
-		return result;
-	}
-
-	function merge(set1, set2) {
-		var result = new Set();
-		for (var value of set1) {
+export function intersect(set1, set2) {
+	var result = new Set();
+	for (var value of set1) {
+		if (set2.has(value)) {
 			result.add(value);
 		}
-		for (var value of set2) {
+	}
+	return result;
+}
+
+export function merge(set1, set2) {
+	var result = new Set();
+	for (var value of set1) {
+		result.add(value);
+	}
+	for (var value of set2) {
+		result.add(value);
+	}
+	return result;
+}
+
+export function mergeInto(setToModify, itemsToAdd) {
+	for (var value of itemsToAdd) {
+		setToModify.add(value);
+	}
+}
+
+export function subtractFrom(setToModify, itemsToRemove) {
+	for (var value of itemsToRemove) {
+		setToModify.delete(value);
+	}
+}
+
+export function subtract(left, right) {
+	var result = new Set();
+	for (var value of left) {
+		if (!right.has(value)) {
 			result.add(value);
 		}
-		return result;
 	}
+	return result;
+}
 
-	function mergeInto(setToModify, itemsToAdd) {
-		for (var value of itemsToAdd) {
-			setToModify.add(value);
+export function containsAll(outer, inner) {
+	for (var value of inner) {
+		if (!outer.has(value)) {
+			return false;
 		}
 	}
+	return true;
+}
 
-	function subtractFrom(setToModify, itemsToRemove) {
-		for (var value of itemsToRemove) {
-			setToModify.delete(value);
-		}
+export function sorted(input) {
+	var array = [];
+	for (var value of input) {
+		array.push(value);
 	}
-
-	function subtract(left, right) {
-		var result = new Set();
-		for (var value of left) {
-			if (!right.has(value)) {
-				result.add(value);
-			}
-		}
-		return result;
-	}
-
-	function containsAll(outer, inner) {
-		for (var value of inner) {
-			if (!outer.has(value)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	function sorted(input) {
-		var array = [];
-		for (var value of input) {
-			array.push(value);
-		}
-		array.sort();
-		return new Set(array);
-	}
-
-	export default {
-		intersect: intersect,
-		merge: merge,
-		containsAll: containsAll,
-		mergeInto: mergeInto,
-		subtractFrom: subtractFrom,
-		subtract: subtract,
-		sorted: sorted
-	};
-
+	array.sort();
+	return new Set(array);
+}

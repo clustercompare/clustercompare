@@ -1,23 +1,19 @@
-
-
 import Node from './Node';
-	function Class(data) {
-		Node.call(this, data);
+
+export default class Class extends Node {
+	constructor(data) {
+		super(data);
 	}
 
-	Class.prototype = Object.create(Node.prototype);
-
-	Class.prototype.getKey = function() {
+	getKey() {
 		return this.data.qualifiedName.replace(/\./g, '_');
-	};
+	}
 
-	Class.prototype.getLabel = function() {
+	getLabel() {
 		return this.data.qualifiedName;
-	};
+	}
 
-	Class.prototype._generateLeaveKeySet = function() {
+	_generateLeaveKeySet() {
 		return new Set([this.getKey()]);
-	};
-
-	export default Class;
-
+	}
+}

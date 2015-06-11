@@ -1,81 +1,87 @@
 import NodeFactory from './NodeFactory';
 import EventEmitter from 'node-event-emitter';
-import Sets from './Sets';
-	var algorithms = ['SD.Use', 'SD.Agg', 'CC.I', 'FO.AggE', 'CO.Bin', 'EC.Conf'];
-	var project = location.search ? location.search.substring(1) : 'PMD';
-	var trees = [];
-	var nodeFactory = new NodeFactory();
-	var allLeaveKeys = new Set();
-	var nodeKeyMap = new Map();
+import * as Sets from './Sets';
 
-	function load() {
-		var treeNames = algorithms.slice(0);
-		treeNames.push('packages');
-		treeNames.forEach(function(name) {
-			fetchTree(name, function(tree) {
-				trees.push(tree);
-				if (trees.length == treeNames.length) {
-					onReady();
-				}
-			});
-		})
-	}
+var algorithms = ['SD.Use', 'SD.Agg', 'CC.I', 'FO.AggE', 'CO.Bin', 'EC.Conf'];
+var project = location.search ? location.search.substring(1) : 'PMD';
+var trees = [];
+var nodeFactory = new NodeFactory();
+var allLeaveKeys = new Set();
+var nodeKeyMap = new Map();
 
-	function fetchTree(name, success) {
-		d3.json("data/" + project + "/" + name + ".json", function (error, tree) {
-			if (error) {
-				console.log(error);
-				return;
+function load() {
+	var treeNames = algorithms.slice(0);
+	treeNames.push('packages');
+	treeNames.forEach(function (name) {
+		fetchTree(name, function (tree) {
+			trees.push(tree);
+			if (trees.length == treeNames.length) {
+				onReady();
 			}
-			tree.root = nodeFactory.createNodeRecursively(tree.root);
-			Sets.mergeInto(allLeaveKeys, tree.root.getLeaveKeys());
-			collectNodes(tree.root);
-			success(tree);
 		});
-	}
+	})
+}
 
-	function collectNodes(node) {
-		nodeKeyMap.set(node.getKey(), node);
-		for (var child of node.getChildren()) {
-			collectNodes(child);
+function fetchTree(name, success) {
+	d3.json("data/" + project + "/" + name + ".json", function (error, tree) {
+		if (error) {
+			console.log(error);
+			return;
 		}
+		tree.root = nodeFactory.createNodeRecursively(tree.root);
+		Sets.mergeInto(allLeaveKeys, tree.root.getLeaveKeys());
+		collectNodes(tree.root);
+		success(tree);
+	});
+}
+
+function collectNodes(node) {
+	nodeKeyMap.set(node.getKey(), node);
+	for (var child of node.getChildren()) {
+		collectNodes(child);
 	}
+}
 
-	function onReady() {
-		Model.emit('ready');
+function onReady() {
+	Model.emit('ready');
+}
+
+var Model = new EventEmitter();
+
+Model.getTrees = function () {
+	return trees;
+};
+
+Model.getTree = function (name) {
+	var sel = trees.filter(function (t) {
+		return t.couplingConcept == name
+	});
+	if (sel.length) {
+		return sel[0];
 	}
+	throw new Error('Tree ' + name + ' does not exist');
+};
 
-	var Model = new EventEmitter();
+Model.getCouplingTrees = function () {
+	return trees.filter(function (tree) {
+		return tree.couplingConcept != 'packages';
+	});
+};
 
-	Model.getTrees = function() { return trees; };
+Model.getLeaveKeys = function () {
+	return allLeaveKeys;
+};
 
-	Model.getTree = function(name) {
-		var sel = trees.filter(function(t) { return t.couplingConcept == name});
-		if (sel.length) {
-			return sel[0];
-		}
-		throw new Error('Tree ' + name + ' does not exist');
-	};
+Model.mapKeysToNodes = function (keys) {
+	var nodes = [];
+	for (var key of keys) {
+		nodes.push(nodeKeyMap.get(key));
+	}
+	return nodes;
+};
 
-	Model.getCouplingTrees = function() {
-		return trees.filter(function(tree) { return tree.couplingConcept != 'packages'; });
-	};
+load();
 
-	Model.getLeaveKeys = function() {
-		return allLeaveKeys;
-	};
+window.trees = trees;
 
-	Model.mapKeysToNodes = function(keys) {
-		var nodes = [];
-		for (var key of keys) {
-			nodes.push(nodeKeyMap.get(key));
-		}
-		return nodes;
-	};
-
-	load();
-
-	window.trees = trees;
-
-	export default Model;
-
+export default Model;

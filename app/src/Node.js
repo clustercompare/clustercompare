@@ -1,6 +1,8 @@
 import * as Utils from './Utils';
-import Sets from './Sets';
-	function Node(data) {
+import * as Sets from './Sets';
+
+export default class Node {
+	constructor(data) {
 		this.data = data;
 
 		this._children = [];
@@ -9,9 +11,8 @@ import Sets from './Sets';
 		this._id = Utils.generateID();
 	}
 
-
 	// normalize nodes with one children the child itself
-	Node.prototype.normalizeOnlyChilds = function () {
+	normalizeOnlyChilds() {
 		if (this.getChildren().length == 1) {
 			var onlyChild = this.getChildren()[0];
 			this.getChildren().length = 0;
@@ -23,39 +24,39 @@ import Sets from './Sets';
 		for (var child of this.getChildren()) {
 			child.normalizeOnlyChilds();
 		}
-	};
+	}
 
-	Node.prototype.getChildren = function () {
+	getChildren() {
 		return this._children;
-	};
+	}
 
 	/**
 	 * Gets an identifier for this object that is unique across the entire graph. Multiple nodes may
 	 * share a key if they represent the same object
 	 */
-	Node.prototype.getKey = function () {
+	getKey() {
 		// default implementation - should be overriden if a node can occur in multiple graphs
 		return this._id;
-	};
+	}
 
 	/**
 	 * Gets an identifier for this node that is unique across the entire graph. Nodes do NOT share
 	 * an id.
 	 * @returns {*}
 	 */
-	Node.prototype.getID = function() {
+	getID() {
 		return this._id;
-	};
+	}
 
-	Node.prototype.isLeaf = function () {
+	isLeaf() {
 		return !this._children.length;
-	};
+	}
 
-	Node.prototype.isRoot = function() {
+	isRoot() {
 		return !this.parent;
-	};
+	}
 
-	Node.prototype.getLabel = function () {
+	getLabel() {
 		if (this.isLeaf()) {
 			return this.qualifiedName;
 		}
@@ -68,7 +69,7 @@ import Sets from './Sets';
 		return this.parent.getLabel() + '.' + this._key;
 	}
 
-	Node.prototype.getDepth = function () {
+	getDepth() {
 		if (!this.getChildren().length) {
 			return 1;
 		}
@@ -77,14 +78,14 @@ import Sets from './Sets';
 				}));
 	}
 
-	Node.prototype.getLeaveKeys = function () {
+	getLeaveKeys() {
 		if (!this._leaveKeys) {
 			this._leaveKeys = this._generateLeaveKeySet();
 		}
 		return this._leaveKeys;
-	};
+	}
 
-	Node.prototype._generateLeaveKeySet = function () {
+	_generateLeaveKeySet() {
 		var result = new Set();
 		for (var child of this.getChildren()) {
 			for (var leaveKey of child.getLeaveKeys()) {
@@ -92,9 +93,9 @@ import Sets from './Sets';
 			}
 		}
 		return result;
-	};
+	}
 
-	Node.prototype.getNodes = function () {
+	getNodes() {
 		if (!this._nodes) {
 			this._nodes = [this];
 			for (var child of this.getChildren()) {
@@ -102,9 +103,9 @@ import Sets from './Sets';
 			}
 		}
 		return this._nodes;
-	};
+	}
 
-	Node.prototype.getMaxSimilarity = function (otherNode) {
+	getMaxSimilarity(otherNode) {
 		var intersection = Sets.intersect(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
 
 		if (!intersection) {
@@ -125,8 +126,5 @@ import Sets from './Sets';
 		}
 
 		return similarity;
-	};
-
-
-	export default Node;
-
+	}
+}
