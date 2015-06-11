@@ -1,4 +1,6 @@
-define(['Node'], function(Node) {
+
+
+import Node from './Node';
 	function Class(data) {
 		Node.call(this, data);
 	}
@@ -17,5 +19,5 @@ define(['Node'], function(Node) {
 		return new Set([this.getKey()]);
 	};
 
-	return Class;
-});
+	export default Class;
+

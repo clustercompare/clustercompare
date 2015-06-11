@@ -1,4 +1,5 @@
-define(function() {
+import $ from 'jquery';
+
 	function update(selectedLeaves) {
 		$('#selection-heading').text(makeSelectionHeading(selectedLeaves));
 
@@ -20,7 +21,7 @@ define(function() {
 		return leaves.length + " classes selected";
 	}
 
-	return {
+	export default {
 		update: update
 	}
-});
+

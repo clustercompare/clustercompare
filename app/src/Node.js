@@ -1,4 +1,5 @@
-define(['Utils', 'Sets'], function(Utils, Sets) {
+import * as Utils from './Utils';
+import Sets from './Sets';
 	function Node(data) {
 		this.data = data;
 
@@ -127,5 +128,5 @@ define(['Utils', 'Sets'], function(Utils, Sets) {
 	};
 
 
-	return Node;
-});
+	export default Node;
+

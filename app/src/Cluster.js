@@ -1,9 +1,9 @@
-define(['InnerNode'], function(InnerNode) {
+import InnerNode from './InnerNode';
 	function Cluster(data) {
 		InnerNode.call(this, data);
 	}
 
 	Cluster.prototype = Object.create(InnerNode.prototype);
 
-	return Cluster;
-});
+	export default Cluster;
+

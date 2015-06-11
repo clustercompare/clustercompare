@@ -1,9 +1,9 @@
-define(['Node'], function(Node) {
+import Node from './Node';
 	function InnerNode(data) {
 		Node.call(this, data);
 	}
 
 	InnerNode.prototype = Object.create(Node.prototype);
 
-	return InnerNode;
-});
+	export default InnerNode;
+

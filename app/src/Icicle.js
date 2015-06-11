@@ -1,4 +1,6 @@
-define(['EventEmitter'], function(EventEmitter) {
+import EventEmitter from 'node-event-emitter';
+import d3 from 'd3'
+
 	function Icicle(tree, containerSelector, valueFunction) {
 		EventEmitter.call(this);
 		var self = this;
@@ -154,5 +156,5 @@ define(['EventEmitter'], function(EventEmitter) {
 		return colorScale(value);
 	}
 
-	return Icicle;
-});
+	export default Icicle;
+

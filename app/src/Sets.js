@@ -1,4 +1,4 @@
-define(function() {
+
 	function intersect(set1, set2) {
 		var result = new Set();
 		for (var value of set1) {
@@ -60,7 +60,7 @@ define(function() {
 		return new Set(array);
 	}
 
-	return {
+	export default {
 		intersect: intersect,
 		merge: merge,
 		containsAll: containsAll,
@@ -69,4 +69,4 @@ define(function() {
 		subtract: subtract,
 		sorted: sorted
 	};
-});
+

@@ -1,5 +1,4 @@
-define({
-	generateID: function() {
+	export function generateID() {
 		var text = "";
 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		var length = 32;
@@ -10,4 +9,3 @@ define({
 
 		return text;
 	}
-});

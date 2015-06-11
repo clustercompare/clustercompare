@@ -1,4 +1,6 @@
-define(['Sets', 'pako', 'EventEmitter'], function(Sets, pako, EventEmitter) {
+import Sets from './Sets';
+import pako from 'pako';
+import EventEmitter from 'node-event-emitter';
 	function SelectionHistory(leaveKeys) {
 		EventEmitter.call(this);
 		this.leaveKeys = Sets.sorted(leaveKeys);
@@ -59,5 +61,5 @@ define(['Sets', 'pako', 'EventEmitter'], function(Sets, pako, EventEmitter) {
 		return keys;
 	};
 
-	return SelectionHistory;
-});
+	export default SelectionHistory;
+

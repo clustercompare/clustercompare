@@ -1,4 +1,4 @@
-define(['Node'], function(Node) {
+import Node from './Node';
 	function RootNode(data) {
 		Node.call(this, data);
 	}
@@ -9,5 +9,5 @@ define(['Node'], function(Node) {
 		return 'root';
 	}
 
-	return RootNode;
-});
+	export default RootNode;
+

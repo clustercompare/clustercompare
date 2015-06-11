@@ -1,4 +1,8 @@
-define(['Class', 'Cluster', 'Package', 'RootNode', 'StringUtils'], function(Class, Cluster, Package, RootNode, StringUtils) {
+import Class from './Class';
+import Cluster from './Cluster';
+import Package from './Package';
+import RootNode from './RootNode';
+import * as StringUtils from './StringUtils';
 	function NodeFactory() {
 		this._nodesByKey = new Map();
 	}
@@ -37,5 +41,5 @@ define(['Class', 'Cluster', 'Package', 'RootNode', 'StringUtils'], function(Clas
 		return nodes;
 	}
 
-	return NodeFactory;
-});
+	export default NodeFactory;
+

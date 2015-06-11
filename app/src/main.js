@@ -1,12 +1,16 @@
-require.config({
+/*require.config({
 	paths: {
-		"EventEmitter": "../bower_components/eventEmitter/EventEmitter",
-		"pako": "../bower_components/pako/dist/pako"
+		"EventEmitter": "../../bower_components/eventEmitter/EventEmitter",
+		"pako": "../../bower_components/pako/dist/pako"
 	}
-});
+});*/
 
-define(['Icicle', 'Model', 'Selection', 'SelectionHistory', 'SelectionPane'],
-		function(Icicle, Model, Selection, SelectionHistory, SelectionPane) {
+import Icicle from './Icicle.js';
+import Model from './Model.js';
+import Selection from './Selection.js';
+import SelectionHistory from './SelectionHistory.js';
+import SelectionPane from './SelectionPane.js';
+import $ from 'jquery';
 	Model.on('ready', function() {
 		var mainSelection = new Selection();
 		var hoverSelection = new Selection();
@@ -84,4 +88,4 @@ define(['Icicle', 'Model', 'Selection', 'SelectionHistory', 'SelectionPane'],
 		}));
 		$('#project').val(project);
 	});
-});
+

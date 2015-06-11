@@ -1,4 +1,6 @@
-define(['NodeFactory', 'EventEmitter', 'Sets'], function(NodeFactory, EventEmitter, Sets) {
+import NodeFactory from './NodeFactory';
+import EventEmitter from 'node-event-emitter';
+import Sets from './Sets';
 	var algorithms = ['SD.Use', 'SD.Agg', 'CC.I', 'FO.AggE', 'CO.Bin', 'EC.Conf'];
 	var project = location.search ? location.search.substring(1) : 'PMD';
 	var trees = [];
@@ -75,5 +77,5 @@ define(['NodeFactory', 'EventEmitter', 'Sets'], function(NodeFactory, EventEmitt
 
 	window.trees = trees;
 
-	return Model;
-});
+	export default Model;
+

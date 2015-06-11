@@ -1,4 +1,5 @@
-define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
+import EventEmitter from 'node-event-emitter';
+import Sets from './Sets';
 	function Selection() {
 		EventEmitter.call(this);
 
@@ -44,5 +45,5 @@ define(['EventEmitter', 'Sets'], function(EventEmitter, Sets) {
 		return Sets.containsAll(this.getSelectedKeys(), node.getLeaveKeys());
 	};
 
-	return Selection;
-});
+	export default Selection;
+
