@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 		paths: {
 			dist: 'dist',
 			app: 'app',
-			scripts: '<%= paths.app %>/scripts',
+			scripts: '<%= paths.app %>/src',
 			bowerComponents: 'bower_components'
 		},
 
