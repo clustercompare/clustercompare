@@ -18,13 +18,6 @@ module.exports = function(grunt) {
 			dist: [ '<%= paths.dist %>/**' ]
 		},
 
-		bower: {
-			install: {
-				options: {
-					copy: false
-				}
-			}
-		},
 		browserify: {
 			options: {
 				transform: [["babelify", {"stage": 0}]],
@@ -87,12 +80,10 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	//grunt.loadNpmTasks('grunt-babel');
-	grunt.loadNpmTasks('grunt-browserify');
-	grunt.loadNpmTasks('grunt-bower-task');
-	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-symlink');
+	grunt.loadNpmTasks('grunt-browserify');
+	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.registerTask('install', ['bower', 'build']);
