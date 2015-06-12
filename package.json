@@ -4,7 +4,7 @@
   "description": "Visual Comparison of Software Modularizations to Multiple Clustering Results",
   "main": "Gruntfile.js",
   "scripts": {
-    "postinstall": "node_modules/.bin/grunt install"
+    "postinstall": "node_modules/.bin/grunt build"
   },
   "repository": {
     "type": "git",
