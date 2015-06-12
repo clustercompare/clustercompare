@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import ace from 'brace';
 import hljs from 'highlight.js'
 
 export function showForClass(clazz) {
