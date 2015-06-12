@@ -29,6 +29,8 @@ function fetchTree(name, success) {
 			return;
 		}
 		tree.root = nodeFactory.createNodeRecursively(tree.root);
+		tree.root.clustering = name;
+		tree.root.project = project;
 		Sets.mergeInto(allLeaveKeys, tree.root.getLeaveKeys());
 		collectNodes(tree.root);
 		success(tree);

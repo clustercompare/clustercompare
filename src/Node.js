@@ -78,6 +78,17 @@ export default class Node {
 				}));
 	}
 
+	getParent() {
+		return this.parent;
+	}
+
+	getRoot() {
+		if (this.isRoot()) {
+			return this;
+		}
+		return this.getParent().getRoot();
+	}
+
 	getLeaveKeys() {
 		if (!this._leaveKeys) {
 			this._leaveKeys = this._generateLeaveKeySet();

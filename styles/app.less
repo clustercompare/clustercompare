@@ -1,3 +1,5 @@
+@import (less) '../node_modules/highlight.js/styles/default.css';
+
 body {
 	font-family: sans-serif;
 }
@@ -48,11 +50,33 @@ body {
 }
 
 
-#icicles {
+#icicles,
+#source-browser {
 	width: 70%;
 	display: inline-block;
+}
+
+#icicles {
 	overflow: auto;
 	white-space: nowrap;
+}
+
+#source-browser {
+	position: relative;
+
+	.source {
+		white-space: pre;
+		overflow: auto;
+		font-family: monospace;
+		font-size: 12px;
+		height: 500px;
+	}
+
+	#close-source-button {
+		position: absolute;
+		right: 20px;
+		top: 0;
+	}
 }
 
 #selection-pane {
@@ -79,4 +103,17 @@ body {
 	overflow-x: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	padding: 0;
+
+	li {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		cursor: pointer;
+		padding: 2px;
+
+		&:hover {
+			background: rgba(0, 0, 0, 0.1);
+		}
+	}
 }

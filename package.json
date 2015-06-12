@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "d3": "^3.5.5",
+    "highlight.js": "^8.6.0",
     "jquery": "^2.1.4",
     "node-event-emitter": "0.0.1",
     "pako": "^0.2.7"
