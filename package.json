@@ -29,6 +29,7 @@
     "grunt-contrib-watch": "^0.6.1"
   },
   "dependencies": {
+    "babel": "^5.5.8",
     "d3": "^3.5.5",
     "highlight.js": "^8.6.0",
     "jquery": "^2.1.4",

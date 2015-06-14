@@ -31,6 +31,7 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
+					"<%= paths.dist %>/assets/polyfill.js": require.resolve('babel/polyfill'),
 					"<%= paths.scriptBundle %>": "<%= paths.scripts %>/main.js"
 				}
 			}
