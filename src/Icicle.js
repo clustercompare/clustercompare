@@ -104,6 +104,7 @@ export default class Icicle extends EventEmitter {
 					this.emit('nodeclick', d, d3.event);
 					d3.event.stopPropagation();
 				})
+				.on("mousemove", d => d3.event.stopPropagation())
 				.append('title').text(d => d.getLabel());
 		rect.append("line")
 				.attr("x1", nodeX)

@@ -43,6 +43,7 @@ export function update(data) {
 				$('<li>')
 					.text(text)
 					.mouseenter(() => { hoverSelection.select(info.node); })
+					.mousemove(e => e.stopPropagation())
 					.click(() => { mainSelection.select(info.node); }));
 	}
 }

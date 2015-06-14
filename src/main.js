@@ -59,6 +59,10 @@ Model.on('ready', function () {
 		mainSelection.select(null);
 	});
 
+	$('body').mousemove(function() {
+		hoverSelection.select(null);
+	});
+
 	mainSelection.on('change', function () {
 		icicles.forEach(function (icicle) {
 			icicle.updateSelection('main', mainSelection.getSelectedKeys());
