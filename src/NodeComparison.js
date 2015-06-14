@@ -16,18 +16,18 @@ export function getMaxSimilarityInfoOfLeaveSetToNode(leaveSet, node) {
 
 	if (!intersection) {
 		// no way any node of this subtree could be similar to the other node
-		return { similarity: 0, node: null };
+		return { similarity: 0, node: null, totalCount: 0, intersection: 0 };
 	}
 
 	var totalCount = Sets.merge(leaveSet, node.getLeaveKeys()).size;
 	var similarity = intersection / totalCount;
 
+	var info = { similarity: similarity, node: node, totalCount: totalCount, intersection: intersection };
 	if (similarity == 1) {
 		// already max
-		return { similarity: 1, node: node };
+		return info;
 	}
 
-	var info = { similarity: similarity, node: node };
 	for (var child of node.getChildren()) {
 		var childInfo = getMaxSimilarityInfoOfLeaveSetToNode(leaveSet, child);
 		if (childInfo.similarity > info.similarity) {
