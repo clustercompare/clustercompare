@@ -10,6 +10,12 @@ Model.on('ready', function () {
 	var hoverSelection = new Selection();
 	var selectionHistory = new SelectionHistory(Model.getLeaveKeys());
 
+	SelectionPane.init({
+		mainSelection: mainSelection,
+		hoverSelection: hoverSelection,
+		trees: Model.getTrees()
+	});
+
 	var packagesTree = Model.getTree('packages');
 	var icicles = [];
 	icicles.push(new Icicle(packagesTree, '#icicles', function (node) {
@@ -58,7 +64,10 @@ Model.on('ready', function () {
 			icicle.updateSelection('main', mainSelection.getSelectedKeys());
 		});
 		selectionHistory.push(mainSelection.getSelectedKeys());
-		SelectionPane.update(Model.mapKeysToNodes(mainSelection.getSelectedKeys()));
+		SelectionPane.update({
+			selectedLeaves: Model.mapKeysToNodes(mainSelection.getSelectedKeys()),
+			selectedLeaveKeys: mainSelection.getSelectedKeys()
+		});
 	});
 	hoverSelection.on('change', function () {
 		icicles.forEach(function (icicle) {
