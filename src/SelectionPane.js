@@ -17,13 +17,15 @@ export function update(data) {
 	$('#selection-heading').text(makeSelectionHeading(data.selectedLeaves));
 
 	$('#selection-class-list').empty();
-	data.selectedLeaves.forEach(function (clazz) {
+	var classes = Array.from(data.selectedLeaves);
+	classes.sort((a, b) => a.getLabel() < b.getLabel());
+	for (let clazz of classes) {
 		$('#selection-class-list').append(
 				$('<li>')
 						.text(clazz.getLabel())
 						.click(() => SourceBrowser.showForClass(clazz))
 		);
-	});
+	}
 
 	var similarityInfos = [];
 	for (var tree of trees) {
