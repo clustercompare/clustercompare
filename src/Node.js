@@ -1,5 +1,6 @@
 import * as Utils from './Utils';
 import * as Sets from './Sets';
+import * as NodeComparison from './NodeComparison';
 
 export default class Node {
 	constructor(data) {
@@ -117,25 +118,6 @@ export default class Node {
 	}
 
 	getMaxSimilarity(otherNode) {
-		var intersection = Sets.intersect(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
-
-		if (!intersection) {
-			// no way any node of this subtree could be similar to the other node
-			return 0;
-		}
-
-		var totalCount = Sets.merge(this.getLeaveKeys(), otherNode.getLeaveKeys()).size;
-		var similarity = intersection / totalCount;
-
-		if (similarity == 1) {
-			// already max
-			return 1;
-		}
-
-		for (var child of otherNode.getChildren()) {
-			similarity = Math.max(similarity, this.getMaxSimilarity(child))
-		}
-
-		return similarity;
+		return NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(this.getLeaveKeys(), otherNode).similarity;
 	}
 }
