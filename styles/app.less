@@ -25,12 +25,30 @@ body {
 	border-right: 1px solid white;
 }
 
-.icicle .root.main-rect {
-	fill: #000080;
-}
+@leaf-color: #FAEB9E;
+@selection-color: rgb(64, 64, 192);
+@highlight-darkening: 20%;
 
-.icicle .leaf.main-rect {
-	fill: #aaaaff;
+.icicle .main-rect {
+	&.root {
+		fill: #000080;
+	}
+
+	&.leaf {
+		fill: @leaf-color;
+
+		&.selected-hover {
+			fill: darken(@leaf-color, @highlight-darkening);
+		}
+
+		&.selected-main {
+			fill: @selection-color;
+		}
+
+		&.selected-main.selected-hover {
+			fill: darken(@selection-color, @highlight-darkening);
+		}
+	}
 }
 
 .icicle .highlight-rect {
@@ -38,20 +56,9 @@ body {
 }
 
 .icicle .highlight-rect:hover {
-	fill: rgba(255,255,255,0.1);
+	fill: rgba(0,0,0,0.1);
 }
 
-.icicle .main-rect.selected-hover {
-	fill: rgb(255, 128, 128);
-}
-
-.icicle .main-rect.selected-main {
-	fill: red;
-}
-
-.icicle .main-rect.selected-hover.selected-main {
-	fill: rgb(128, 0, 0);
-}
 
 
 #icicles,
