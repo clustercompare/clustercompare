@@ -1,5 +1,6 @@
 import EventEmitter from 'node-event-emitter';
 import d3 from 'd3'
+import * as TextUtils from './TextUtils';
 
 export default class Icicle extends EventEmitter {
 	constructor(tree, containerSelector, valueFunction) {
@@ -15,6 +16,7 @@ export default class Icicle extends EventEmitter {
 		var depth = tree.root.getDepth();
 		var width = INNER_NODE_WIDTH * (depth - 2) + LEAF_WIDTH + ROOT_NODE_WIDTH;
 		var height = 500;
+		var VERTICAL_LABEL_PADDING = 3;
 
 		// these scales are only used for inner nodes, so map positions of first and last inner node
 		var x = d3.scale.linear()
@@ -124,6 +126,15 @@ export default class Icicle extends EventEmitter {
 				.attr("y2", nodeY2)
 				.attr("stroke", "white")
 				.attr("stroke-width", "1");
+
+		rect
+				.append("text")
+				.attr("transform", d => `translate(${nodeX(d) + 10}, ${nodeY(d) + VERTICAL_LABEL_PADDING}) rotate(90)`)
+				.attr("text-anchor", "start")
+				.filter(d => d.getShortLabel())
+				.classed("node-text", true)
+				.text(d => TextUtils.truncate(d.getShortLabel(), nodeH(d) - VERTICAL_LABEL_PADDING, "node-text"));
+
 		createRect()
 				.classed('highlight-rect', true)
 				.attr('filter', 'url(#drop-shadow-filter)')
