@@ -58,9 +58,7 @@ export default class Model extends EventEmitter {
 	}
 
 	getTree(name) {
-		var sel = this._trees.filter(function (t) {
-			return t.couplingConcept == name
-		});
+		var sel = this._trees.filter(t => t.couplingConcept == name);
 		if (sel.length) {
 			return sel[0];
 		}
@@ -68,9 +66,7 @@ export default class Model extends EventEmitter {
 	}
 
 	get couplingTrees() {
-		return this._trees.filter(function (tree) {
-			return tree.couplingConcept != 'packages';
-		});
+		return this._trees.filter(tree => tree.couplingConcept != 'packages');
 	}
 
 	get leaveKeys() {
