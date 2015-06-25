@@ -46,6 +46,25 @@ export default class Icicle extends EventEmitter {
 		gradient.append('stop').attr('offset', '80%').attr('style', 'stop-color: rgba(0,0,0,0)');
 		gradient.append('stop').attr('offset', '100%').attr('style', 'stop-color: rgba(0,0,0,0.1)');
 
+		var filter = defs.append('filter')
+				.attr('id', 'drop-shadow-filter')
+				.attr('width', '200%')
+				.attr('height', '200%');
+
+		filter.append("feOffset")
+				.attr("in", "SourceGraphic")
+				.attr("dx", 1)
+				.attr("dy", 1)
+				.attr("result", "offset");
+		filter.append("feGaussianBlur")
+				.attr("in", "offset")
+				.attr("stdDeviation", 2)
+				.attr("result", "blur");
+		filter.append("feComposite")
+				.attr("in", "blur")
+				.attr("in2", "SourceGraphic")
+				.attr("operator", "out")
+				.attr("result", "diff");
 
 		var rect = svg.selectAll("rect");
 		rect = rect.data(partition(tree.root)).enter();
@@ -96,16 +115,8 @@ export default class Icicle extends EventEmitter {
 				.attr("fill", n => n.isRoot() || n.isLeaf() ? null : makeColor(this.getValue(n)));
 		createRect()
 				.classed('shadow-rect', true)
-				.attr("fill", 'url(#shadow-gradient)');
-		createRect()
-				.classed('highlight-rect', true)
-				.on("mouseenter", d => this.emit('nodehover', d, d3.event))
-				.on("click", d => {
-					this.emit('nodeclick', d, d3.event);
-					d3.event.stopPropagation();
-				})
-				.on("mousemove", d => d3.event.stopPropagation())
-				.append('title').text(d => d.getLabel());
+				.attr("fill", 'url(#shadow-gradient)')
+				.attr('filter', 'url(#drop-shadow-filter)');
 		rect.append("line")
 				.attr("x1", nodeX)
 				.attr("y1", nodeY)
@@ -113,6 +124,16 @@ export default class Icicle extends EventEmitter {
 				.attr("y2", nodeY2)
 				.attr("stroke", "white")
 				.attr("stroke-width", "1");
+		createRect()
+				.classed('highlight-rect', true)
+				.attr('filter', 'url(#drop-shadow-filter)')
+				.on("mouseenter", d => this.emit('nodehover', d, d3.event))
+				.on("click", d => {
+					this.emit('nodeclick', d, d3.event);
+					d3.event.stopPropagation();
+				})
+				.on("mousemove", d => d3.event.stopPropagation())
+				.append('title').text(d => d.getLabel());
 
 		svg.on('mouseleave', () => this.emit('mouseleave', d3.event));
 		svg.on('mousedown', () => d3.event.preventDefault());
