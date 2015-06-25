@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import * as SourceBrowser from './SourceBrowser';
 import * as NodeComparison from './NodeComparison';
-import Package from './Package';
 
 var mainSelection;
 var hoverSelection;
@@ -37,7 +36,10 @@ export function update(data) {
 	similarityInfos.sort((a, b) => a.similarity < b.similarity); // sort reverse
 	$('#selection-similarity-list').empty();
 	for (let info of similarityInfos) {
-		var title = info.node instanceof Package ? info.node.label : info.node.root.clustering;
+		let title = info.node.label;
+		if (info.node.root.clustering != 'packages') {
+			title += ` of ${info.node.root.clustering}`;
+		}
 		var percent = Math.round(info.similarity * 100);
 		var text = `${title}: ${percent}% (${info.intersection} of ${info.totalCount})`;
 
