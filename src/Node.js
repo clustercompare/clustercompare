@@ -3,31 +3,16 @@ import * as Sets from './Sets';
 import * as NodeComparison from './NodeComparison';
 
 export default class Node {
-	constructor(data) {
+	constructor(data, parent = null) {
 		this.data = data;
+		this._parent = parent;
 
 		this._children = [];
-		this.children = this._children; // for d3 - but carefuly, might be removed by d3
 
 		this._id = Utils.generateID();
 	}
 
-	// normalize nodes with one children the child itself
-	normalizeOnlyChilds() {
-		if (this.getChildren().length == 1) {
-			var onlyChild = this.getChildren()[0];
-			this.getChildren().length = 0;
-			for (var grandchild of onlyChild.getChildren()) {
-				this.getChildren().push(grandchild);
-			}
-			this._leaveKeys = null;
-		}
-		for (var child of this.getChildren()) {
-			child.normalizeOnlyChilds();
-		}
-	}
-
-	getChildren() {
+	get children() {
 		return this._children;
 	}
 
@@ -35,7 +20,7 @@ export default class Node {
 	 * Gets an identifier for this object that is unique across the entire graph. Multiple nodes may
 	 * share a key if they represent the same object
 	 */
-	getKey() {
+	get key() {
 		// default implementation - should be overriden if a node can occur in multiple graphs
 		return this._id;
 	}
@@ -45,47 +30,45 @@ export default class Node {
 	 * an id.
 	 * @returns {*}
 	 */
-	getID() {
+	get id() {
 		return this._id;
 	}
 
-	isLeaf() {
-		return !this._children.length;
+	get parent() {
+		return this._parent;
 	}
 
-	isRoot() {
+	get isLeaf() {
+		return !this.children.length;
+	}
+
+	get isRoot() {
 		return !this.parent;
 	}
 
-	getLabel() {
+	get label() {
 		return '';
 	}
 
-	getShortLabel() {
-		return this.getLabel();
+	get shortLabel() {
+		return this.label;
 	}
 
-	getDepth() {
-		if (!this.getChildren().length) {
+	get height() {
+		if (!this.children.length) {
 			return 1;
 		}
-		return 1 + Math.max.apply(null, this.getChildren().map(function (c) {
-					return c.getDepth();
-				}));
+		return 1 + Math.max.apply(null, this.children.map(c => c.height));
 	}
 
-	getParent() {
-		return this.parent;
-	}
-
-	getRoot() {
-		if (this.isRoot()) {
+	get root() {
+		if (this.isRoot) {
 			return this;
 		}
-		return this.getParent().getRoot();
+		return this.parent.root;
 	}
 
-	getLeaveKeys() {
+	get leaveKeys() {
 		if (!this._leaveKeys) {
 			this._leaveKeys = this._generateLeaveKeySet();
 		}
@@ -94,25 +77,25 @@ export default class Node {
 
 	_generateLeaveKeySet() {
 		var result = new Set();
-		for (var child of this.getChildren()) {
-			for (var leaveKey of child.getLeaveKeys()) {
+		for (var child of this.children) {
+			for (var leaveKey of child.leaveKeys) {
 				result.add(leaveKey);
 			}
 		}
 		return result;
 	}
 
-	getNodes() {
+	get nodes() {
 		if (!this._nodes) {
 			this._nodes = [this];
-			for (var child of this.getChildren()) {
-				this._nodes = this._nodes.concat(child.getNodes());
+			for (var child of this.children) {
+				this._nodes = this._nodes.concat(child.nodes);
 			}
 		}
 		return this._nodes;
 	}
 
 	getMaxSimilarity(otherNode) {
-		return NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(this.getLeaveKeys(), otherNode).similarity;
+		return NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(this.leaveKeys, otherNode).similarity;
 	}
 }

@@ -1,17 +1,17 @@
 import InnerNode from './InnerNode';
 
 export default class Cluster extends InnerNode {
-	getLabel() {
-		return "Cluster " + this.getCompleteKey();
+	get label() {
+		return "Cluster " + this.completeKey;
 	}
 	
-	getShortLabel() {
+	get shortLabel() {
 		return this.data.key;
 	}
 
-	getCompleteKey() {
-		if (this.getParent() instanceof Cluster) {
-			return this.getParent().data.key + '.' + this.data.key;
+	get completeKey() {
+		if (this.parent instanceof Cluster) {
+			return this.parent.data.key + '.' + this.data.key;
 		}
 		return this.data.key;
 	}

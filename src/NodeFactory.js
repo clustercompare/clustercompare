@@ -20,14 +20,13 @@ export default class NodeFactory {
 		this._nodesByKey = new Map();
 	}
 
-	createNodeRecursively(nodeData) {
-		var self = this;
+	createNodeRecursively(nodeData, parent = null) {
 		var clazz = NodeFactory.determineNodeClass(nodeData);
-		var node = new clazz(nodeData);
+		var node = new clazz(nodeData, parent);
 		var children = unpackOnlyChilds(nodeData.children);
-		children.map(function (childData) {
-			node.getChildren().push(self.createNodeRecursively(childData));
-		});
+		for (let childData of children) {
+			node.children.push(this.createNodeRecursively(childData, node));
+		}
 		return node;
 	}
 

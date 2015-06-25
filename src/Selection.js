@@ -4,11 +4,11 @@ import * as Sets from './Sets';
 export default class Selection extends EventEmitter {
 	constructor() {
 		super();
-		this.selectedKeys = new Set();
+		this._selectedKeys = new Set();
 	}
 
 	selectKeys(keys) {
-		this.selectedKeys = keys;
+		this._selectedKeys = keys;
 		this.emit('change');
 	}
 
@@ -16,7 +16,7 @@ export default class Selection extends EventEmitter {
 		if (object == null) {
 			this.selectKeys(new Set());
 		} else {
-			this.selectKeys(object.getLeaveKeys());
+			this.selectKeys(object.leaveKeys);
 		}
 	}
 
@@ -25,7 +25,7 @@ export default class Selection extends EventEmitter {
 			return;
 		}
 
-		this.selectKeys(Sets.merge(this.selectedKeys, node.getLeaveKeys()));
+		this.selectKeys(Sets.merge(this.selectedKeys, node.leaveKeys));
 	}
 
 	removeFromSelection(node) {
@@ -33,14 +33,14 @@ export default class Selection extends EventEmitter {
 			return;
 		}
 
-		this.selectKeys(Sets.subtract(this.selectedKeys, node.getLeaveKeys()));
+		this.selectKeys(Sets.subtract(this.selectedKeys, node.leaveKeys));
 	}
 
-	getSelectedKeys() {
-		return this.selectedKeys;
+	get selectedKeys() {
+		return this._selectedKeys;
 	}
 
 	isSelected(node) {
-		return Sets.containsAll(this.getSelectedKeys(), node.getLeaveKeys());
+		return Sets.containsAll(this.selectedKeys, node.leaveKeys);
 	}
 }

@@ -12,14 +12,14 @@ export function getSimilarityOfLeaves(leaveSet1, leaveSet2) {
 }
 
 export function getMaxSimilarityInfoOfLeaveSetToNode(leaveSet, node) {
-	var intersection = Sets.intersect(leaveSet, node.getLeaveKeys()).size;
+	var intersection = Sets.intersect(leaveSet, node.leaveKeys).size;
 
 	if (!intersection) {
 		// no way any node of this subtree could be similar to the other node
 		return { similarity: 0, node: null, totalCount: 0, intersection: 0 };
 	}
 
-	var totalCount = Sets.merge(leaveSet, node.getLeaveKeys()).size;
+	var totalCount = Sets.merge(leaveSet, node.leaveKeys).size;
 	var similarity = intersection / totalCount;
 
 	var info = { similarity: similarity, node: node, totalCount: totalCount, intersection: intersection };
@@ -28,7 +28,7 @@ export function getMaxSimilarityInfoOfLeaveSetToNode(leaveSet, node) {
 		return info;
 	}
 
-	for (var child of node.getChildren()) {
+	for (var child of node.children) {
 		var childInfo = getMaxSimilarityInfoOfLeaveSetToNode(leaveSet, child);
 		if (childInfo.similarity > info.similarity) {
 			info = childInfo;

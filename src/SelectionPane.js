@@ -18,18 +18,18 @@ export function update(data) {
 
 	$('#selection-class-list').empty();
 	var classes = Array.from(data.selectedLeaves);
-	classes.sort((a, b) => a.getLabel() < b.getLabel());
+	classes.sort((a, b) => a.label < b.label);
 	for (let clazz of classes) {
 		$('#selection-class-list').append(
 				$('<li>')
-						.text(clazz.getLabel())
+						.text(clazz.label)
 						.click(() => SourceBrowser.showForClass(clazz))
 		);
 	}
 
 	var similarityInfos = [];
 	for (var tree of trees) {
-		var info = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(data.selectedLeaveKeys, tree.root);
+		let info = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(data.selectedLeaveKeys, tree.root);
 		if (info.similarity > 0) {
 			similarityInfos.push(info);
 		}
@@ -37,7 +37,7 @@ export function update(data) {
 	similarityInfos.sort((a, b) => a.similarity < b.similarity); // sort reverse
 	$('#selection-similarity-list').empty();
 	for (let info of similarityInfos) {
-		var title = info.node instanceof Package ? info.node.getLabel() : info.node.getRoot().clustering;
+		var title = info.node instanceof Package ? info.node.label : info.node.root.clustering;
 		var percent = Math.round(info.similarity * 100);
 		var text = `${title}: ${percent}% (${info.intersection} of ${info.totalCount})`;
 
@@ -55,7 +55,7 @@ function makeSelectionHeading(leaves) {
 		return "Nothing selected";
 	}
 	if (leaves.length == 1) {
-		return leaves[0].getLabel();
+		return leaves[0].label;
 	}
 	return leaves.length + " classes selected";
 }

@@ -1,11 +1,11 @@
 import Node from './Node';
 
 export default class RootNode extends Node {
-	getLabel() {
+	get label() {
 		return 'root';
 	}
 
-	getShortLabel() {
+	get shortLabel() {
 		return '';
 	}
 }

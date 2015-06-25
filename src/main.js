@@ -5,25 +5,27 @@ import SelectionHistory from './SelectionHistory.js';
 import * as SelectionPane from './SelectionPane.js';
 import $ from 'jquery';
 
-Model.on('ready', function () {
+var model = new Model();
+window.model = model;
+model.on('ready', function () {
 	var mainSelection = new Selection();
 	var hoverSelection = new Selection();
-	var selectionHistory = new SelectionHistory(Model.getLeaveKeys());
+	var selectionHistory = new SelectionHistory(model.leaveKeys);
 
 	SelectionPane.init({
 		mainSelection: mainSelection,
 		hoverSelection: hoverSelection,
-		trees: Model.getTrees()
+		trees: model.trees
 	});
 
-	var packagesTree = Model.getTree('packages');
+	var packagesTree = model.getTree('packages');
 	var icicles = [];
 	icicles.push(new Icicle(packagesTree, '#icicles', function (node) {
-		return Math.max.apply(null, Model.getCouplingTrees().map(function (tree) {
+		return Math.max.apply(null, model.couplingTrees.map(function (tree) {
 			return node.getMaxSimilarity(tree.root);
 		}));
 	}));
-	Model.getCouplingTrees().forEach(function (tree) {
+	model.couplingTrees.forEach(function (tree) {
 		icicles.push(new Icicle(tree, '#icicles', function (node) {
 			return node.getMaxSimilarity(packagesTree.root)
 		}));
@@ -31,14 +33,14 @@ Model.on('ready', function () {
 
 	icicles.forEach(function (icicle) {
 		icicle.on('nodehover', function (node) {
-			hoverSelection.select(node.isRoot() ? null : node);
+			hoverSelection.select(node.isRoot ? null : node);
 		});
 		icicle.on('mouseleave', function () {
 			hoverSelection.select(null);
 		});
 		icicle.on('nodeclick', function (node, e) {
 			if (e.ctrlKey) {
-				if (node.isRoot()) {
+				if (node.isRoot) {
 					return;
 				}
 				if (mainSelection.isSelected(node)) {
@@ -47,7 +49,7 @@ Model.on('ready', function () {
 					mainSelection.addToSelection(node);
 				}
 			} else {
-				mainSelection.select(node.isRoot() ? null : node);
+				mainSelection.select(node.isRoot ? null : node);
 			}
 		});
 	});
@@ -65,17 +67,17 @@ Model.on('ready', function () {
 
 	mainSelection.on('change', function () {
 		icicles.forEach(function (icicle) {
-			icicle.updateSelection('main', mainSelection.getSelectedKeys());
+			icicle.updateSelection('main', mainSelection.selectedKeys);
 		});
-		selectionHistory.push(mainSelection.getSelectedKeys());
+		selectionHistory.push(mainSelection.selectedKeys);
 		SelectionPane.update({
-			selectedLeaves: Model.mapKeysToNodes(mainSelection.getSelectedKeys()),
-			selectedLeaveKeys: mainSelection.getSelectedKeys()
+			selectedLeaves: model.mapKeysToNodes(mainSelection.selectedKeys),
+			selectedLeaveKeys: mainSelection.selectedKeys
 		});
 	});
 	hoverSelection.on('change', function () {
 		icicles.forEach(function (icicle) {
-			icicle.updateSelection('hover', hoverSelection.getSelectedKeys());
+			icicle.updateSelection('hover', hoverSelection.selectedKeys);
 		});
 	});
 

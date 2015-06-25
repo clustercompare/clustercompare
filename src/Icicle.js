@@ -13,7 +13,7 @@ export default class Icicle extends EventEmitter {
 		var ROOT_NODE_WIDTH = 5;
 		var LEAF_WIDTH = 15;
 		// the deepest level is guaranteed to only contain leaves
-		var depth = tree.root.getDepth();
+		var depth = tree.root.height;
 		var width = INNER_NODE_WIDTH * (depth - 2) + LEAF_WIDTH + ROOT_NODE_WIDTH;
 		var height = 500;
 		var VERTICAL_LABEL_PADDING = 3;
@@ -28,7 +28,7 @@ export default class Icicle extends EventEmitter {
 
 
 		var partition = d3.layout.partition()
-				.children(d => d.children)
+				.children(d => d._children)
 				.value(d => 1);
 
 		var container = d3.select(containerSelector).append('div').attr('class', 'icicle');
@@ -72,7 +72,7 @@ export default class Icicle extends EventEmitter {
 		rect = rect.data(partition(tree.root)).enter();
 
 		function nodeX(d) {
-			if (d.isRoot()) {
+			if (d.isRoot) {
 				return 0;
 			}
 			return x(d.y);
@@ -82,10 +82,10 @@ export default class Icicle extends EventEmitter {
 		}
 
 		function nodeW(d) {
-			if (d.isRoot()) {
+			if (d.isRoot) {
 				return ROOT_NODE_WIDTH;
 			}
-			if (d.isLeaf()) {
+			if (d.isLeaf) {
 				return LEAF_WIDTH;
 			}
 			return INNER_NODE_WIDTH;
@@ -105,16 +105,16 @@ export default class Icicle extends EventEmitter {
 					.attr("y", nodeY)
 					.attr("width", nodeW)
 					.attr("height", nodeH)
-					.attr('class', n => 'node--' + n.getKey())
-					.classed("root", n => n.isRoot())
-					.classed("leaf", n => n.isLeaf())
+					.attr('class', n => 'node--' + n.key)
+					.classed("root", n => n.isRoot)
+					.classed("leaf", n => n.isLeaf)
 					.classed("node", true);
 		}
 
 		createRect()
 				.classed('main-rect', true)
 				// color is set by css for leaves and roots
-				.attr("fill", n => n.isRoot() || n.isLeaf() ? null : makeColor(this.getValue(n)));
+				.attr("fill", n => n.isRoot || n.isLeaf ? null : makeColor(this.getValue(n)));
 		createRect()
 				.classed('shadow-rect', true)
 				.attr("fill", 'url(#shadow-gradient)')
@@ -131,9 +131,9 @@ export default class Icicle extends EventEmitter {
 				.append("text")
 				.attr("transform", d => `translate(${nodeX(d) + 10}, ${nodeY(d) + VERTICAL_LABEL_PADDING}) rotate(90)`)
 				.attr("text-anchor", "start")
-				.filter(d => d.getShortLabel())
+				.filter(d => d.shortLabel)
 				.classed("node-text", true)
-				.text(d => TextUtils.truncate(d.getShortLabel(), nodeH(d) - VERTICAL_LABEL_PADDING, "node-text"));
+				.text(d => TextUtils.truncate(d.shortLabel, nodeH(d) - VERTICAL_LABEL_PADDING, "node-text"));
 
 		createRect()
 				.classed('highlight-rect', true)
@@ -144,7 +144,7 @@ export default class Icicle extends EventEmitter {
 					d3.event.stopPropagation();
 				})
 				.on("mousemove", d => d3.event.stopPropagation())
-				.append('title').text(d => d.getLabel());
+				.append('title').text(d => d.label);
 
 		svg.on('mouseleave', () => this.emit('mouseleave', d3.event));
 		svg.on('mousedown', () => d3.event.preventDefault());

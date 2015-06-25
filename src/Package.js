@@ -2,14 +2,14 @@ import InnerNode from './InnerNode';
 import * as StringUtils from './StringUtils';
 
 export default class Package extends InnerNode {
-	getLabel() {
+	get label() {
 		return this.data.qualifiedName;
 	}
 
-	getShortLabel() {
-		if (this.getParent().isRoot()) {
-			return StringUtils.getSubstringAfterLastOccurrence(this.getLabel(), '.');
+	get shortLabel() {
+		if (this.parent.isRoot) {
+			return StringUtils.getSubstringAfterLastOccurrence(this.label, '.');
 		}
-		return this.getLabel().substr(this.getParent().getLabel().length + 1);
+		return this.label.substr(this.parent.label.length + 1);
 	}
 }
