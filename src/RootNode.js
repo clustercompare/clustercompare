@@ -4,4 +4,8 @@ export default class RootNode extends Node {
 	getLabel() {
 		return 'root';
 	}
+
+	getShortLabel() {
+		return '';
+	}
 }

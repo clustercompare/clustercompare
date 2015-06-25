@@ -4,6 +4,10 @@ export default class Cluster extends InnerNode {
 	getLabel() {
 		return "Cluster " + this.getCompleteKey();
 	}
+	
+	getShortLabel() {
+		return this.data.key;
+	}
 
 	getCompleteKey() {
 		if (this.getParent() instanceof Cluster) {

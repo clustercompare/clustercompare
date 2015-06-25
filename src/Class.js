@@ -13,6 +13,10 @@ export default class Class extends Node {
 		return this.data.qualifiedName;
 	}
 
+	getShortLabel() {
+		return '';//this.getLabel().substr(this.getLabel().lastIndexOf('.') + 1);
+	}
+
 	_generateLeaveKeySet() {
 		return new Set([this.getKey()]);
 	}

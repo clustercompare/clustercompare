@@ -58,16 +58,11 @@ export default class Node {
 	}
 
 	getLabel() {
-		if (this.isLeaf()) {
-			return this.qualifiedName;
-		}
-		if (!this.parent) {
-			return 'root';
-		}
-		if (!this.parent.parent) {
-			return this._key;
-		}
-		return this.parent.getLabel() + '.' + this._key;
+		return '';
+	}
+
+	getShortLabel() {
+		return this.getLabel();
 	}
 
 	getDepth() {
