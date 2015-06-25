@@ -6,7 +6,11 @@ import * as StringUtils from './StringUtils';
 
 function unpackOnlyChilds(nodes) {
 	if (nodes.length == 1) {
-		return unpackOnlyChilds(nodes[0].children);
+		var node = nodes[0];
+		for (var child of nodes[0].children) {
+			child.key = node.key + '.' + child.key;
+		}
+		return unpackOnlyChilds(node.children);
 	}
 	return nodes;
 }
@@ -33,13 +37,12 @@ export default class NodeFactory {
 		}
 
 		if (nodeData.qualifiedName) {
+			if (nodeData.children.length) {
+				return Package;
+			}
 			return Class;
 		}
 
-		if (StringUtils.isNumeric(nodeData.key)) {
-			return Cluster;
-		}
-
-		return Package;
+		return Cluster;
 	}
 }
