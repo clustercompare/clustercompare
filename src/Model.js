@@ -35,7 +35,7 @@ export default class Model extends EventEmitter {
 			}
 			tree.root = this._nodeFactory.createNodeRecursively(tree.root);
 			tree.root.clustering = name;
-			tree.root.project = project;
+			tree.root.project = this._project;
 			Sets.mergeInto(this._allLeaveKeys, tree.root.leaveKeys);
 			this._collectNodes(tree.root);
 			success(tree);
