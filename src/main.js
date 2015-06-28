@@ -1,4 +1,4 @@
-import Icicle from './Icicle.js';
+import BoundIcicle from './BoundIcicle.js';
 import ViewModel from './ViewModel.js';
 import SelectionHistory from './SelectionHistory.js';
 import * as SelectionPane from './SelectionPane.js';
@@ -12,41 +12,7 @@ viewModel.on('ready', function () {
 
 	SelectionPane.init(viewModel);
 
-	var packagesTree = model.getTree('packages');
-	var icicles = [];
-	icicles.push(new Icicle(packagesTree, '#icicles', function (node) {
-		return Math.max.apply(null, model.couplingTrees.map(function (tree) {
-			return node.getMaxSimilarity(tree.root);
-		}));
-	}));
-	model.couplingTrees.forEach(function (tree) {
-		icicles.push(new Icicle(tree, '#icicles', function (node) {
-			return node.getMaxSimilarity(packagesTree.root)
-		}));
-	});
-
-	icicles.forEach(function (icicle) {
-		icicle.on('nodehover', function (node) {
-			viewModel.hoverSelection.select(node.isRoot ? null : node);
-		});
-		icicle.on('mouseleave', function () {
-			viewModel.hoverSelection.select(null);
-		});
-		icicle.on('nodeclick', function (node, e) {
-			if (e.ctrlKey) {
-				if (node.isRoot) {
-					return;
-				}
-				if (viewModel.mainSelection.isSelected(node)) {
-					viewModel.mainSelection.removeFromSelection(node);
-				} else {
-					viewModel.mainSelection.addToSelection(node);
-				}
-			} else {
-				viewModel.mainSelection.select(node.isRoot ? null : node);
-			}
-		});
-	});
+	var icicles = model.trees.map(tree => new BoundIcicle(tree, '#icicles', viewModel));
 
 	$('#icicles').click(function (e) {
 		if (e.ctrlKey) {
@@ -60,18 +26,10 @@ viewModel.on('ready', function () {
 	});
 
 	viewModel.mainSelection.on('change', function () {
-		icicles.forEach(function (icicle) {
-			icicle.updateSelection('main', viewModel.mainSelection.selectedKeys);
-		});
 		selectionHistory.push(viewModel.mainSelection.selectedKeys);
 		SelectionPane.update({
 			selectedLeaves: model.mapKeysToNodes(viewModel.mainSelection.selectedKeys),
 			selectedLeaveKeys: viewModel.mainSelection.selectedKeys
-		});
-	});
-	viewModel.hoverSelection.on('change', function () {
-		icicles.forEach(function (icicle) {
-			icicle.updateSelection('hover', viewModel.hoverSelection.selectedKeys);
 		});
 	});
 

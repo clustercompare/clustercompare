@@ -69,6 +69,10 @@ export default class Model extends EventEmitter {
 		return this._trees.filter(tree => tree.couplingConcept != 'packages');
 	}
 
+	get packagesTree() {
+		return this._trees.filter(tree => tree.couplingConcept == 'packages')[0];
+	}
+
 	get leaveKeys() {
 		return this._allLeaveKeys;
 	}
