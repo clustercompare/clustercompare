@@ -6,10 +6,10 @@ var mainSelection;
 var hoverSelection;
 var trees;
 
-export function init(data) {
-	mainSelection = data.mainSelection;
-	hoverSelection = data.hoverSelection;
-	trees = data.trees;
+export function init(viewModel) {
+	mainSelection = viewModel.mainSelection;
+	hoverSelection = viewModel.hoverSelection;
+	trees = viewModel.model.trees;
 }
 
 export function update(data) {
