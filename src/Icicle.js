@@ -31,11 +31,7 @@ export default class Icicle extends EventEmitter {
 				.children(d => d._children)
 				.value(d => 1);
 
-		var container = d3.select(containerSelector).append('div').attr('class', 'icicle');
-
-		container.append('h3').text(tree.couplingConcept);
-
-		var svg = container
+		var svg = d3.select(containerSelector)
 				.append('svg')
 				.attr("width", width)
 				.attr("height", height);

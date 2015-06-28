@@ -1,4 +1,4 @@
-import BoundIcicle from './BoundIcicle.js';
+import VizItem from './VizItem.js';
 import ViewModel from './ViewModel.js';
 import SelectionHistory from './SelectionHistory.js';
 import * as SelectionPane from './SelectionPane.js';
@@ -12,7 +12,7 @@ viewModel.on('ready', function () {
 
 	SelectionPane.init(viewModel);
 
-	var icicles = model.trees.map(tree => new BoundIcicle(tree, '#icicles', viewModel));
+	var vizItems = model.trees.map(tree => new VizItem(tree, '#icicles', viewModel));
 
 	$('#icicles').click(function (e) {
 		if (e.ctrlKey) {
