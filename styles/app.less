@@ -3,18 +3,42 @@
 
 body {
 	font-family: sans-serif;
+	font-size: 14px;
+}
+
+@border-color: #eee;
+
+#icicles {
+	padding: 20px;
 }
 
 .viz-item {
-    margin: 10px;
+    margin-right: 10px;
 	display: inline-block;
-	border: 1px solid #eee;
-	padding: 5px;
+	border: 1px solid @border-color;
+	border-radius: 5px;
+	vertical-align: top;
+	background: white;
+}
+
+.viz-item.placeholder {
+	border-color: transparent;
+}
+
+.viz-item.dragging {
+	position: absolute;
+	z-index: 10;
+	box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
 }
 
 .viz-item h3 {
-	margin: 0;
-	margin-bottom: 10px;
+	padding: 5px;
+	background: @border-color;
+	cursor: move;
+}
+
+.icicle {
+	padding: 5px;
 }
 
 .icicle svg {
