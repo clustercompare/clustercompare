@@ -1,4 +1,4 @@
-import VizItem from './VizItem.js';
+import VizContainer from './VizContainer';
 import ViewModel from './ViewModel.js';
 import SelectionHistory from './SelectionHistory.js';
 import * as SelectionPane from './SelectionPane.js';
@@ -11,15 +11,7 @@ viewModel.on('ready', function () {
 	var selectionHistory = new SelectionHistory(model.leaveKeys);
 
 	SelectionPane.init(viewModel);
-
-	var vizItems = model.trees.map(tree => new VizItem(tree, '#icicles', viewModel));
-
-	$('#icicles').click(function (e) {
-		if (e.ctrlKey) {
-			return;
-		}
-		viewModel.mainSelection.select(null);
-	});
+	var vizContainer = new VizContainer(viewModel, '#icicles');
 
 	$('body').mousemove(function() {
 		viewModel.hoverSelection.select(null);
