@@ -6,7 +6,8 @@ body {
 	font-size: 14px;
 }
 
-@border-color: #eee;
+@light-color: #eee;
+@dark-color: #999;
 
 #icicles {
 	padding: 20px;
@@ -16,7 +17,7 @@ body {
 .viz-item {
     margin-right: 10px;
 	display: inline-block;
-	border: 1px solid @border-color;
+	border: 1px solid @light-color;
 	border-radius: 5px;
 	vertical-align: top;
 	background: white;
@@ -35,7 +36,7 @@ body {
 
 .viz-item h3 {
 	padding: 5px;
-	background: @border-color;
+	background: @light-color;
 	cursor: move;
 }
 
@@ -160,4 +161,18 @@ body {
 			background: rgba(0, 0, 0, 0.1);
 		}
 	}
+}
+
+.tiny-barchart {
+	display: inline-block;
+	border: 1px solid @dark-color;
+	height: 12px;
+	width: 80px;
+	margin-right: 5px;
+}
+
+.tiny-barchart .bar {
+	display: inline-block;
+	height: 100%;
+	background: @dark-color;
 }

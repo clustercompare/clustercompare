@@ -43,9 +43,12 @@ export function update(data) {
 		var percent = Math.round(info.similarity * 100);
 		var text = `${title}: ${percent}% (${info.intersection} of ${info.totalCount})`;
 
+		var bar = $('<span class="bar">').css('width', percent + '%');
+		var barchart = $('<span class="tiny-barchart">').append(bar);
+
 		$('#selection-similarity-list').append(
 				$('<li>')
-					.text(text)
+					.append(barchart, $('<span>').text(text))
 					.mouseenter(() => { hoverSelection.select(info.node); })
 					.mousemove(e => e.stopPropagation())
 					.click(() => { mainSelection.select(info.node); }));
