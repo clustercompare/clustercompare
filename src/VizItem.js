@@ -10,9 +10,11 @@ export default class VizItem extends EventEmitter {
 	_placeholder = null;
 	_dragCursorStartX;
 	_dragtElementStartX;
+	_tree;
 
 	constructor(tree, containerSelector, viewModel) {
 		super();
+		this._tree = tree;
 		this._element =  $('<div>').addClass('viz-item').appendTo($(containerSelector));
 		this._heading = $('<h3>').text(tree.couplingConcept);
 		this._element.append(this._heading);
@@ -20,6 +22,14 @@ export default class VizItem extends EventEmitter {
 		this._icicle = new BoundIcicle(tree, icicleContainer[0], viewModel);
 
 		this._heading.on('mousedown', e => this._startDrag(e));
+	}
+
+	get element() {
+		return this._element[0];
+	}
+
+	get tree() {
+		return this._tree;
 	}
 
 	_startDrag(e) {
@@ -51,13 +61,18 @@ export default class VizItem extends EventEmitter {
 
 		var diff = e.pageX - this._dragCursorStartX;
 		this._element.css({left: this._dragElementStartX + diff});
-		this.emit('drag', { centerX: this._dragElementStartX + diff + this._element.width()});
+		this.emit('drag', {
+			centerX: this._dragElementStartX + diff + this._element.width() / 2,
+			moveBefore: elem => this._placeholder.insertBefore(elem),
+			moveAfter: elem => this._placeholder.insertAfter(elem)
+		});
 	}
 
 	_endDrag(e) {
 		if (!this._dragging) {
 			return;
 		}
+		this._element.insertBefore(this._placeholder);
 		this._placeholder.remove();
 		this._element.removeClass('dragging');
 		this._dragging = false;
