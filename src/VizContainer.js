@@ -7,7 +7,7 @@ export default class VizContainer {
 	_items;
 
 	constructor(viewModel, containerSelector) {
-		this._element = $('div').addClass('viz-container');
+		this._element = $('<div>').addClass('viz-container');
 		this._items = model.trees.map(tree => new VizItem(tree, '#icicles', viewModel));
 		$(containerSelector).click(function (e) {
 			if (e.ctrlKey) {
