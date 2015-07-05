@@ -2,6 +2,7 @@ import NodeFactory from './NodeFactory';
 import EventEmitter from 'node-event-emitter';
 import * as Sets from './Sets';
 import clusterings from './clusterings.json';
+import * as StringUtils from './StringUtils';
 
 export default class Model extends EventEmitter {
 	_trees = [];
@@ -51,6 +52,7 @@ export default class Model extends EventEmitter {
 	}
 
 	_onReady() {
+		this._trees.sort((a, b) => StringUtils.compare(a.couplingConcept, b.couplingConcept));
 		this.emit('ready');
 	}
 

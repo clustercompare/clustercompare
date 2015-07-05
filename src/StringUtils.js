@@ -9,3 +9,7 @@ export function getSubstringAfterLastOccurrence(string, deliminiter) {
 	}
 	return string.substr(index + 1);
 }
+
+export function compare(a, b) {
+	return a < b ? -1 : a > b ? 1 : 0;
+}
