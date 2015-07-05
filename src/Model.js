@@ -52,7 +52,16 @@ export default class Model extends EventEmitter {
 	}
 
 	_onReady() {
-		this._trees.sort((a, b) => StringUtils.compare(a.couplingConcept, b.couplingConcept));
+		function compare(a, b) {
+			if (a == 'packages') {
+				return -1;
+			}
+			if (b == 'packages') {
+				return 1;
+			}
+			return StringUtils.compare(a, b);
+		}
+		this._trees.sort((a, b) => compare(a.couplingConcept, b.couplingConcept));
 		this.emit('ready');
 	}
 
