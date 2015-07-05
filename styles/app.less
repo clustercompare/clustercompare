@@ -6,14 +6,47 @@ body {
 	font-size: 14px;
 }
 
+body, html {
+	height: 100%;
+}
+
+#header {
+	height: 50px;
+	background: @light-color;
+}
+
+#main {
+	position: absolute;
+	top: 50px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	box-sizing: border-box;
+}
+
 @light-color: #eee;
 @middle-color: #bbb;
 @dark-color: #999;
 
 #icicles {
-	padding: 20px;
 	box-sizing: border-box;
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
 }
+
+.viz-container {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 20px;
+}
+
+@viz-item-heading-height: 27px;
 
 .viz-item {
     margin-right: 10px;
@@ -22,6 +55,9 @@ body {
 	border-radius: 5px;
 	vertical-align: top;
 	background: white;
+	height: 100%;
+	box-sizing: border-box;
+	padding-top: @viz-item-heading-height;
 }
 
 .viz-item.placeholder {
@@ -45,10 +81,16 @@ body {
 	padding: 5px;
 	background: @light-color;
 	cursor: move;
+	margin-top: -@viz-item-heading-height;
+	height: @viz-item-heading-height;
+	box-sizing: border-box;
+	text-align: center;
 }
 
 .icicle {
 	padding: 5px;
+	height: 100%;
+	box-sizing: border-box;
 }
 
 .icicle svg {
@@ -126,6 +168,10 @@ body {
 }
 
 #selection-pane {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	top: 0;
 	display: inline-block;
 	box-sizing: border-box;
 	width: 29%;

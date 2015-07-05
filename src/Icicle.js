@@ -34,7 +34,7 @@ export default class Icicle extends EventEmitter {
 		var svg = d3.select(containerSelector)
 				.append('svg')
 				.attr("width", width)
-				.attr("height", height);
+				.attr("height", '100%');
 
 		var defs = svg.append('defs');
 		var gradient = defs.append('linearGradient')
@@ -144,6 +144,16 @@ export default class Icicle extends EventEmitter {
 
 		svg.on('mouseleave', () => this.emit('mouseleave', d3.event));
 		svg.on('mousedown', () => d3.event.preventDefault());
+
+		this.updateHeight = function() {
+			height = parseInt(svg.style('height'));
+			y.range([0, height]);
+			svg.selectAll('.node').attr('y', nodeY).attr('height', nodeH);
+			svg.selectAll('line').attr('y1', nodeY).attr('y2', nodeY2);
+			svg.selectAll('.node-text').attr("transform", d => `translate(${nodeX(d) + 10}, ${nodeY(d) + VERTICAL_LABEL_PADDING}) rotate(90)`);
+		};
+
+		window.addEventListener('resize', this.updateHeight, true);
 
 		this.svg = svg;
 	}
