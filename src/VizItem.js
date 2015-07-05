@@ -1,6 +1,7 @@
 import EventEmitter from 'node-event-emitter';
 import BoundIcicle from './BoundIcicle';
 import $ from 'jquery';
+import * as ColorGenerator from './ColorGenerator';
 
 /**
  * The frame around an icicle that can be rearranged
@@ -16,7 +17,9 @@ export default class VizItem extends EventEmitter {
 		super();
 		this._tree = tree;
 		this._element =  $('<div>').addClass('viz-item').appendTo($(containerSelector));
-		this._heading = $('<h3>').text(tree.couplingConcept);
+		var color = ColorGenerator.colorForClustering(tree.couplingConcept);
+		this._element.css('border-color', color);
+		this._heading = $('<h3>').text(tree.couplingConcept).css('background-color', color);
 		this._element.append(this._heading);
 		var icicleContainer = $('<div>').addClass('icicle').appendTo(this._element);
 		this._icicle = new BoundIcicle(tree, icicleContainer[0], viewModel);
