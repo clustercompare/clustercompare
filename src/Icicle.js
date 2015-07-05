@@ -154,6 +154,7 @@ export default class Icicle extends EventEmitter {
 		};
 
 		window.addEventListener('resize', this.updateHeight, true);
+		setTimeout(this.updateHeight, 0); // height may only be available at next tick
 
 		this.svg = svg;
 	}
