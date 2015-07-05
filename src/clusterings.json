@@ -1,0 +1,19 @@
+[
+	"CC.I",
+	"CC.II",
+	"CO.Bin",
+	"CO.Prop",
+	"EC.Conf",
+	"EC.Sup",
+	"FO.AggE",
+	"FO.AggI",
+	"FO.InhE",
+	"FO.InhI",
+	"FO.UseE",
+	"FO.UseI",
+	"SD.Agg",
+	"SD.Inh",
+	"SD.Use",
+	"SS.LSI",
+	"SS.Tfidf"
+]

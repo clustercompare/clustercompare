@@ -1,13 +1,14 @@
 import NodeFactory from './NodeFactory';
 import EventEmitter from 'node-event-emitter';
 import * as Sets from './Sets';
+import clusterings from './clusterings.json';
 
 export default class Model extends EventEmitter {
 	_trees = [];
 	constructor() {
 		super();
 		this._project = location.search ? location.search.substring(1) : 'PMD';
-		this._algorithms = ['SD.Use', 'SD.Agg', 'CC.I', 'FO.AggE', 'CO.Bin', 'EC.Conf'];
+		this._algorithms = clusterings;//['SD.Use', 'SD.Agg', 'CC.I', 'FO.AggE', 'CO.Bin', 'EC.Conf'];
 		this._nodeKeyMap = new Map();
 		this._nodeFactory = new NodeFactory();
 		this._allLeaveKeys = new Set();
