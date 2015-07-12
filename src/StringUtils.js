@@ -13,3 +13,17 @@ export function getSubstringAfterLastOccurrence(string, deliminiter) {
 export function compare(a, b) {
 	return a < b ? -1 : a > b ? 1 : 0;
 }
+
+export function repeat(string, count) {
+	return Array(count + 1).join(string);
+}
+
+// A, B, ..., Z, ZA, ZB, ... ZZ, ZZA, ZZB, ... (0 = A)
+export function numberToBase26(number) {
+	let zs = Math.floor(number / 26);
+	let lastDigit = number % 26;
+	let lastLetter = String.fromCharCode('A'.charCodeAt(0) + lastDigit);
+	return repeat('Z', zs) + lastLetter;
+}
+
+window.numberToBase26 = numberToBase26;
