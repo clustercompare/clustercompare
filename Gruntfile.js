@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 
 		browserify: {
 			options: {
-				transform: [["babelify", {"stage": 0}]],
+				transform: [["babelify", {"stage": 0}], [ "browserify-handlebars"]],
 				browserifyOptions: {
 					debug: true // generates source maps
 				}
