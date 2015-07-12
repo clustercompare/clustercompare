@@ -46,12 +46,17 @@ export default class VizItem extends EventEmitter {
 		e.preventDefault();
 		this._dragging = true;
 		var offset = this._element.offset();
+		var height = this._element.css('height');
 		this._placeholder = $('<div>').addClass('viz-item placeholder')
 				.width(this._element.width())
 				.height(this._element.height())
 				.insertBefore(this._element);
 		this._element.addClass('dragging');
-		this._element.css({left: offset.left, top: offset.top});
+		this._element.css({
+			left: offset.left,
+			top: offset.top - this._element.parent().offset().top,
+			height: height
+		});
 		this._dragCursorStartX = e.pageX;
 		this._dragElementStartX = offset.left;
 		this._endDragFn = e => this._endDrag(e);
@@ -82,6 +87,7 @@ export default class VizItem extends EventEmitter {
 		this._element.insertBefore(this._placeholder);
 		this._placeholder.remove();
 		this._element.removeClass('dragging');
+		this._element.css({height: '100%'});
 		this._dragging = false;
 		$(document).off('mouseup', this._endDragFn);
 		$(document).off('mousemove', this._dragFn);
