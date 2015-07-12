@@ -33,7 +33,7 @@ export function update(data) {
 			similarityInfos.push(info);
 		}
 	}
-	similarityInfos.sort((a, b) => a.similarity < b.similarity); // sort reverse
+	similarityInfos.sort((a, b) => b.similarity - a.similarity); // sort reverse
 	$('#selection-similarity-list').empty();
 	for (let info of similarityInfos) {
 		let title = info.node.label;
