@@ -24,6 +24,10 @@ export default class VizItem extends EventEmitter {
 		var icicleContainer = $('<div>').addClass('icicle').appendTo(this._element);
 		this._icicle = new BoundIcicle(tree, icicleContainer[0], viewModel);
 
+		viewModel.hoverSelection.on('changeclustering', () => {
+			this._element.toggleClass('hover', viewModel.hoverSelection.selectedClustering == tree.root)
+		});
+
 		this._heading.on('mousedown', e => this._startDrag(e));
 	}
 

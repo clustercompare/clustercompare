@@ -39,8 +39,8 @@
 				<span class="intersection-size"><span>{{intersection}}</span></span>
 				<span class="union-size"><span>{{totalCount}}</span></span>
 				<span class="node-title">
+					{{#if clustering}}<span style="font-weight: bold; color: {{clusteringColor}}">{{clustering}}</span> &raquo; {{/if}}
 					{{node.label}}
-					{{#if clustering}} of {{clustering}}{{/if}}
 				</span>
 				<span class="cluster-size">
 					{{clusterSize}}

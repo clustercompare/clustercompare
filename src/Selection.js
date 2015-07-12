@@ -5,17 +5,31 @@ export default class Selection extends EventEmitter {
 	constructor() {
 		super();
 		this._selectedKeys = new Set();
+		this._selectedClustering = null;
 	}
 
 	selectKeys(keys) {
+		if (Sets.equal(this._selectedKeys, keys)) {
+			return;
+		}
 		this._selectedKeys = keys;
 		this.emit('change');
 	}
 
-	select(object) {
+	_selectClustering(node) {
+		if (node == this._selectedClustering) {
+			return;
+		}
+		this._selectedClustering = node;
+		this.emit('changeclustering');
+	}
+
+	select(object, options = {}) {
 		if (object == null) {
+			this._selectClustering(null);
 			this.selectKeys(new Set());
 		} else {
+			this._selectClustering(options.selectClustering ? object.root : null);
 			this.selectKeys(object.leaveKeys);
 		}
 	}
@@ -38,6 +52,10 @@ export default class Selection extends EventEmitter {
 
 	get selectedKeys() {
 		return this._selectedKeys;
+	}
+
+	get selectedClustering() {
+		return this._selectedClustering;
 	}
 
 	isSelected(node) {

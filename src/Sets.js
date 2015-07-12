@@ -58,3 +58,7 @@ export function sorted(input) {
 	array.sort();
 	return new Set(array);
 }
+
+export function equal(a, b) {
+	return containsAll(a, b) && containsAll(b, a);
+}
