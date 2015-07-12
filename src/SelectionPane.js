@@ -6,11 +6,13 @@ import selectionTemplate from './templates/selection.hbs';
 var mainSelection;
 var hoverSelection;
 var trees;
+var model;
 
 export function init(viewModel) {
 	mainSelection = viewModel.mainSelection;
 	hoverSelection = viewModel.hoverSelection;
 	trees = viewModel.model.trees;
+	model = viewModel.model;
 }
 
 export function update(data) {
@@ -39,37 +41,21 @@ export function update(data) {
 		}))
 	};
 
-	$('#selection-pane').html(selectionTemplate(viewData));
+	let pane = $('#selection-pane');
+	pane.html(selectionTemplate(viewData));
 
-	return;
+	pane.find('.class-item').click(function() {
+		SourceBrowser.showForClass(model.getNodeByKey($(this).data('node')));
+	});
 
-	for (let clazz of classes) {
-		$('#selection-class-list').append(
-				$('<li>')
-						.text(clazz.label)
-						.click(() => SourceBrowser.showForClass(clazz))
-		);
-	}
-
-	$('#selection-similarity-list').empty();
-	for (let info of similarityInfos) {
-		let title = info.node.label;
-		if (info.node.root.clustering != 'packages') {
-			title += ` of ${info.node.root.clustering}`;
-		}
-		var percent = Math.round(info.similarity * 100);
-		var text = `${title}: ${percent}% (${info.intersection} of ${info.totalCount})`;
-
-		var bar = $('<span class="bar">').css('width', percent + '%');
-		var barchart = $('<span class="tiny-barchart">').append(bar);
-
-		$('#selection-similarity-list').append(
-				$('<li>')
-					.append(barchart, $('<span>').text(text))
-					.mouseenter(() => { hoverSelection.select(info.node); })
-					.mousemove(e => e.stopPropagation())
-					.click(() => { mainSelection.select(info.node); }));
-	}
+	pane.find('.cluster-item')
+			.mouseenter(function() {
+				hoverSelection.select(model.getNodeByKey($(this).data('node')));
+			})
+			.mousemove(e => e.stopPropagation())
+			.click(function() {
+				mainSelection.select(model.getNodeByKey($(this).data('node')));
+			});
 }
 
 function makeSelectionHeading(leaves) {

@@ -13,7 +13,7 @@
 {{#if selection}}
 	<ul id="selection-class-list">
 		{{#each selection}}
-			<li>
+			<li class="class-item" data-node="{{key}}">
 				{{label}}
 			</li>
 		{{/each}}
@@ -29,7 +29,7 @@
 			<span class="cluster-size" title="Size of cluster"></span>
 		</li>
 		{{#each clusters}}
-			<li>
+			<li class="cluster-item" data-node="{{node.key}}">
 				<span class="percentage-indicator">
 					<span class="tiny-barchart">
 						<span class="bar" style="width: {{percent}}%;"></span>

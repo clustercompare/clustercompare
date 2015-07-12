@@ -96,4 +96,8 @@ export default class Model extends EventEmitter {
 		}
 		return nodes;
 	}
+
+	getNodeByKey(key) {
+		return this._nodeKeyMap.get(key);
+	}
 }
