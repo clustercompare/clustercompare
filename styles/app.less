@@ -213,14 +213,97 @@ body, html {
 		&:hover {
 			background: rgba(0, 0, 0, 0.1);
 		}
+
+	}
+}
+
+#selection-similarity-list {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+
+	li {
+		display: table-row;
+		border-bottom: 1px solid transparent;
+
+		> span {
+			display: table-cell;
+			border-bottom: 1px solid transparent;
+			height: 1.3em;
+			vertical-align: middle;
+		}
+
+		.percentage-indicator {
+			width: 80px;
+		}
+
+		.intersection-size:before {
+			content: ' = ';
+		}
+
+		.union-size:before {
+			content: ' / ';
+		}
+
+		.intersection-size,
+		.union-size {
+			width: 40px;
+			padding-left: 5px;
+
+			span {
+				display: inline-block;
+				width: 30px;
+				text-align: center;
+			}
+
+			.node-title {
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+
+		.cluster-size {
+			width: 40px;
+			text-align: right;
+		}
+
+		.node-title {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		&.header {
+			cursor: default;
+
+			&:hover {
+				background: none;
+			}
+
+			.union-size span {
+				background: url(../images/union.png) no-repeat center center;
+				height: 100%;
+			}
+			.intersection-size span {
+				background: url(../images/intersection.png) no-repeat center center;
+				height: 100%;
+			}
+			.intersection-size:before {
+				color: transparent; /* no layout change */
+			}
+			.cluster-size:after {
+				content: '#';
+				font-weight: bold;
+			}
+		}
 	}
 }
 
 .tiny-barchart {
+	position: relative;
 	display: inline-block;
 	border: 1px solid @dark-color;
-	height: 12px;
-	width: 80px;
+	height: 100%;
+	width: 100%;
 	margin-right: 5px;
 }
 
@@ -228,4 +311,16 @@ body, html {
 	display: inline-block;
 	height: 100%;
 	background: @dark-color;
+}
+
+.tiny-barchart .label {
+	position: absolute;
+	display: block;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	color: black;
+	text-align: center;
+	vertical-align: middle;
 }

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import * as SourceBrowser from './SourceBrowser';
 import * as NodeComparison from './NodeComparison';
+import selectionTemplate from './templates/selection.hbs';
 
 var mainSelection;
 var hoverSelection;
@@ -13,11 +14,35 @@ export function init(viewModel) {
 }
 
 export function update(data) {
-	$('#selection-heading').text(makeSelectionHeading(data.selectedLeaves));
-
-	$('#selection-class-list').empty();
-	var classes = Array.from(data.selectedLeaves);
+	let classes = Array.from(data.selectedLeaves);
 	classes.sort((a, b) => a.label < b.label);
+
+	let similarityInfos = [];
+	for (let tree of trees) {
+		let info = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(data.selectedLeaveKeys, tree.root);
+		if (info.similarity > 0) {
+			similarityInfos.push(info);
+		}
+	}
+	similarityInfos.sort((a, b) => b.similarity - a.similarity); // sort reverse
+
+	let viewData = {
+		selection: classes,
+		singleSelection: classes.length == 1 ? classes[0] : null,
+		clusters: similarityInfos.map(info => ({
+			node: info.node,
+			percent: Math.round(info.similarity * 100),
+			clustering: info.node.root.clustering == 'packages' ? '' : info.node.root.clustering,
+			intersection: info.intersection,
+			totalCount: info.totalCount,
+			clusterSize: info.node.leaveKeys.size
+		}))
+	};
+
+	$('#selection-pane').html(selectionTemplate(viewData));
+
+	return;
+
 	for (let clazz of classes) {
 		$('#selection-class-list').append(
 				$('<li>')
@@ -26,14 +51,6 @@ export function update(data) {
 		);
 	}
 
-	var similarityInfos = [];
-	for (var tree of trees) {
-		let info = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(data.selectedLeaveKeys, tree.root);
-		if (info.similarity > 0) {
-			similarityInfos.push(info);
-		}
-	}
-	similarityInfos.sort((a, b) => b.similarity - a.similarity); // sort reverse
 	$('#selection-similarity-list').empty();
 	for (let info of similarityInfos) {
 		let title = info.node.label;

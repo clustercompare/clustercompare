@@ -1,0 +1,51 @@
+<h3 id="selection-heading">
+	{{#if singleSelection}}
+		{{singleSelection.label}}
+	{{else}}
+		{{#if selection}}
+			{{selection.length}} classes selected
+		{{else}}
+			Nothing selected
+		{{/if}}
+	{{/if}}
+</h3>
+
+{{#if selection}}
+	<ul id="selection-class-list">
+		{{#each selection}}
+			<li>
+				{{label}}
+			</li>
+		{{/each}}
+	</ul>
+
+	<h3>Most similar clusters:</h3>
+	<ul id="selection-similarity-list">
+		<li class="header">
+			<span class="percentage-indicator"></span>
+			<span class="intersection-size" title="Intersection of selection and cluster"><span></span></span>
+			<span class="union-size" title="Union of selection and cluster"><span></span></span>
+			<span class="node-title"></span>
+			<span class="cluster-size" title="Size of cluster"></span>
+		</li>
+		{{#each clusters}}
+			<li>
+				<span class="percentage-indicator">
+					<span class="tiny-barchart">
+						<span class="bar" style="width: {{percent}}%;"></span>
+						<span class="label">{{percent}}%</span>
+					</span>
+				</span>
+				<span class="intersection-size"><span>{{intersection}}</span></span>
+				<span class="union-size"><span>{{totalCount}}</span></span>
+				<span class="node-title">
+					{{node.label}}
+					{{#if clustering}} of {{clustering}}{{/if}}
+				</span>
+				<span class="cluster-size">
+					{{clusterSize}}
+				</span>
+			</li>
+		{{/each}}
+	</ul>
+{{/if}}
