@@ -52,6 +52,12 @@ export default class Model extends EventEmitter {
 	}
 
 	_onReady() {
+		this.packagesTree.root.calculateGlobalIndices();
+		for (let tree of this.couplingTrees) {
+			tree.root.recursiveHierarchySort(this.packagesTree.root);
+			tree.root.calculateGlobalIndices();
+		}
+
 		function compare(a, b) {
 			if (a == 'packages') {
 				return -1;

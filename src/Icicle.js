@@ -29,7 +29,8 @@ export default class Icicle extends EventEmitter {
 
 		var partition = d3.layout.partition()
 				.children(d => d._children)
-				.value(d => 1);
+				.value(d => d.sortOrder)
+				.sort((a,b) => a.sortOrder - b.sortOrder);
 
 		var svg = d3.select(containerSelector)
 				.append('svg')
