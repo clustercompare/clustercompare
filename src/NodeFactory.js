@@ -3,17 +3,7 @@ import Cluster from './Cluster';
 import Package from './Package';
 import RootNode from './RootNode';
 import * as StringUtils from './StringUtils';
-
-function unpackOnlyChilds(nodes) {
-	if (nodes.length == 1) {
-		var node = nodes[0];
-		for (var child of nodes[0].children) {
-			child.key = node.key + '.' + child.key;
-		}
-		return unpackOnlyChilds(node.children);
-	}
-	return nodes;
-}
+import * as TreeUtils from './TreeUtils';
 
 export default class NodeFactory {
 	constructor() {
@@ -23,7 +13,7 @@ export default class NodeFactory {
 	createNodeRecursively(nodeData, parent = null) {
 		var clazz = NodeFactory.determineNodeClass(nodeData);
 		var node = new clazz(nodeData, parent);
-		var children = unpackOnlyChilds(nodeData.children);
+		var children = TreeUtils.unpackOnlyChilds(nodeData.children);
 		for (let childData of children) {
 			node.children.push(this.createNodeRecursively(childData, node));
 		}
