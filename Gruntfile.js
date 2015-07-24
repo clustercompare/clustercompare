@@ -6,10 +6,13 @@ module.exports = function(grunt) {
 			dist: 'dist',
 			app: 'app',
 			scripts: 'src',
+			specs: 'test/specs',
 			statics: 'public',
 			styles: 'styles',
 			bowerComponents: 'bower_components',
 			scriptBundle: '<%= paths.dist %>/assets/bundle.js',
+			polyfillBundle: '<%= paths.dist %>/assets/polyfill.js',
+			testBundle: '<%= paths.dist %>/assets/test.js',
 			styleBundle: '<%= paths.dist %>/assets/style.css'
 		},
 
@@ -29,10 +32,19 @@ module.exports = function(grunt) {
 					debug: true // generates source maps
 				}
 			},
-			dist: {
+			main: {
 				files: {
-					"<%= paths.dist %>/assets/polyfill.js": require.resolve('babel/polyfill'),
 					"<%= paths.scriptBundle %>": "<%= paths.scripts %>/main.js"
+				}
+			},
+			polyfill: {
+				files: {
+					"<%= paths.polyfillBundle %>": require.resolve('babel/polyfill')
+				}
+			},
+			test: {
+				files: {
+					"<%= paths.testBundle %>": "<%= paths.specs %>/**.js"
 				}
 			}
 		},
@@ -61,6 +73,13 @@ module.exports = function(grunt) {
 			}
 		},
 
+		jasmine: {
+			src: ['<%= paths.polyfillBundle %>', '<%= paths.scriptBundle %>'],
+			options: {
+				specs: '<%= paths.testBundle %>'
+			}
+		},
+
 		connect: {
 			options: {
 				base: '<%= paths.dist %>',
@@ -83,7 +102,7 @@ module.exports = function(grunt) {
 			},
 			scripts: {
 				files: ['<%= paths.scripts %>/**'],
-				tasks: ['browserify']
+				tasks: ['browserify:main']
 			},
 			styles: {
 				files: ['<%= paths.styles %>/**'],
@@ -101,6 +120,14 @@ module.exports = function(grunt) {
 			statics: {
 				files: ['<%= paths.statics %>/**'],
 				tasks: ['copy']
+			},
+			testbuild: {
+				files: ['<%= paths.specs %>/**'],
+				tasks: ['browserify:test']
+			},
+			test: {
+				files: ['<%= paths.testBundle %>', '<%= paths.scriptBundle %>'],
+				tasks: ['jasmine']
 			}
 		}
 	});
@@ -112,9 +139,12 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-symlink');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-jasmine');
+	grunt.loadNpmTasks('grunt-concurrent');
 
 	grunt.registerTask('install', ['bower', 'build']);
 	grunt.registerTask('build', ['clean', 'browserify', 'less', 'copy', 'symlink']);
 	grunt.registerTask('webserver', ['build', 'connect', 'watch']);
 	grunt.registerTask('default', ['build']);
+	grunt.registerTask('test', ['build', 'jasmine', 'watch']);
 };
