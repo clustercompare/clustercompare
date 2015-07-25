@@ -11,21 +11,17 @@ export default class NodeFactory {
 	}
 
 	createNodeRecursively(nodeData, parent = null) {
-		var clazz = NodeFactory.determineNodeClass(nodeData);
+		nodeData = TreeUtils.unpackOnlyChild(nodeData);
+		var clazz = parent ? NodeFactory.determineNodeClass(nodeData) : RootNode;
 		var node = new clazz(nodeData, parent);
 		var children = nodeData.children;
 		for (let childData of children) {
-			childData = TreeUtils.unpackOnlyChild(childData);
 			node.children.push(this.createNodeRecursively(childData, node));
 		}
 		return node;
 	}
 
 	static determineNodeClass(nodeData) {
-		if (nodeData.qualifiedName == 'root') {
-			return RootNode;
-		}
-
 		if (nodeData.qualifiedName) {
 			if (nodeData.children.length) {
 				return Package;
