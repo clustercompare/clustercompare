@@ -13,8 +13,9 @@ export default class NodeFactory {
 	createNodeRecursively(nodeData, parent = null) {
 		var clazz = NodeFactory.determineNodeClass(nodeData);
 		var node = new clazz(nodeData, parent);
-		var children = TreeUtils.unpackOnlyChilds(nodeData.children);
+		var children = nodeData.children;
 		for (let childData of children) {
+			childData = TreeUtils.unpackOnlyChild(childData);
 			node.children.push(this.createNodeRecursively(childData, node));
 		}
 		return node;
