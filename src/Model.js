@@ -1,7 +1,7 @@
 import NodeFactory from './NodeFactory';
 import EventEmitter from 'node-event-emitter';
 import * as Sets from './Sets';
-import clusterings from './clusterings.json';
+import Clusterings from './Clusterings';
 import * as StringUtils from './StringUtils';
 
 export default class Model extends EventEmitter {
@@ -9,7 +9,8 @@ export default class Model extends EventEmitter {
 	constructor() {
 		super();
 		this._project = location.search ? location.search.substring(1) : 'PMD';
-		this._algorithms = clusterings;//['SD.Use', 'SD.Agg', 'CC.I', 'FO.AggE', 'CO.Bin', 'EC.Conf'];
+		this._clusterings = new Clusterings();
+		this._algorithms = this._clusterings.instanceKeys;
 		this._nodeKeyMap = new Map();
 		this._nodeFactory = new NodeFactory();
 		this._allLeaveKeys = new Set();
@@ -105,5 +106,9 @@ export default class Model extends EventEmitter {
 
 	getNodeByKey(key) {
 		return this._nodeKeyMap.get(key);
+	}
+
+	get clusterings() {
+		return this._clusterings;
 	}
 }

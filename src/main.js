@@ -2,6 +2,7 @@ import VizContainer from './VizContainer';
 import ViewModel from './ViewModel.js';
 import SelectionHistory from './SelectionHistory.js';
 import * as SelectionPane from './SelectionPane.js';
+import * as ClusteringSelector from './ClusteringSelector.js';
 import $ from 'jquery';
 
 var viewModel = new ViewModel();
@@ -29,6 +30,8 @@ viewModel.on('ready', function () {
 		viewModel.mainSelection.selectKeys(keys);
 	});
 	selectionHistory.init();
+
+	ClusteringSelector.init(model);
 });
 
 // project selection
@@ -44,4 +47,8 @@ $.get('data/projects.json', function (projects) {
 		return $('<option>').val(project.id).text(project.name)[0];
 	}));
 	$('#project').val(project);
+});
+
+$('#clusterings-button').click(function() {
+	ClusteringSelector.toggle();
 });

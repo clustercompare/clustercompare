@@ -30,6 +30,8 @@ body, html {
 	padding: 0 15px;
 	display: inline-block;
 	line-height: 50px;
+	position: absolute;
+	right: 0;
 
 	&:hover {
 		background: rgba(255,255,255,0.2);
@@ -193,7 +195,7 @@ body, html {
 	}
 }
 
-#selection-pane {
+.sidebar {
 	position: absolute;
 	right: 0;
 	bottom: 0;
@@ -208,7 +210,7 @@ body, html {
 	background: #dadff2;
 }
 
-#selection-pane h3 {
+.sidebar h3 {
 	margin: 1em 0  0.5em;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -216,7 +218,7 @@ body, html {
 	font-weight: bold;
 }
 
-#selection-pane h3:first-child {
+.sidebar h3:first-child {
 	margin-top: 0;
 }
 

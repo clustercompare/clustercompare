@@ -1,19 +1,100 @@
-[
-	"CC.I",
-	"CC.II",
-	"CO.Bin",
-	"CO.Prop",
-	"EC.Conf",
-	"EC.Sup",
-	"FO.AggE",
-	"FO.AggI",
-	"FO.InhE",
-	"FO.InhI",
-	"FO.UseE",
-	"FO.UseI",
-	"SD.Agg",
-	"SD.Inh",
-	"SD.Use",
-	"SS.LSI",
-	"SS.Tfidf"
-]
+{
+  "CC": {
+    "title": "Code Clones",
+    "instances": {
+      "I": {
+        "title": "Type I",
+        "description": "Two classes are coupled (unidirected) if they share Type I clones. The coupling weight is the clone coverage µCC."
+      },
+      "II": {
+        "title": "Type II",
+        "description": "Two classes are coupled (unidirected) if they share Type II clones. The coupling weight is the clone coverage µCC."
+      }
+    }
+  },
+  "CO": {
+    "title": "Code Ownership",
+    "instances": {
+      "Bin": {
+        "title": "Binary",
+        "description": "Two classes are coupled (undirected) if they share common authors. The coupling weight is the cosine similarity of the binary ownership vectors."
+      },
+      "Prop": {
+        "title": "Proportional",
+        "description": "Two classes are coupled (undirected) if they share common authors. The coupling weight is the cosine similarity of the proportional ownership vectors."
+      }
+    }
+  },
+  "EC": {
+    "title": "Evolutionary Coding",
+    "instances": {
+      "Conf": {
+        "title": "Conficence",
+        "description": "Two classes are coupled (undirected) if they were changed together during development. The coupling weight reflects the number of common changes (support)."
+      },
+      "Sup": {
+        "title": "Support",
+        "description": "Two classes are coupled (directed) if they were changed together during development. The coupling weight reflects the number of common changes relative to the number of changes of the first compared class (confidence)."
+      }
+    }
+  },
+  "FO": {
+    "title": "Fan-Out Similarity",
+    "instances": {
+      "InhE": {
+        "title": "Inheritance, External",
+        "description": "Two classes are coupled (undirected) if they extend the same class or implement a similar set of interfaces. The coupling weight is the cosine similarity of the inheritance feature vectors."
+      },
+      "InhI": {
+        "title": "Inheritance, Internal",
+        "description": "Two classes are coupled (undirected) if they extend the same class or implement a similar set of interfaces. The coupling weight is the cosine similarity of the inheritance feature vectors."
+      },
+      "AggE": {
+        "title": "Aggregation, External",
+        "description": "Two classes are coupled (undirected) if they aggregate a similar set of classes. The coupling weight is the cosine similarity of the aggregation feature vectors."
+      },
+      "AggI": {
+        "title": "Aggregation, Internal",
+        "description": "Two classes are coupled (undirected) if they aggregate a similar set of classes. The coupling weight is the cosine similarity of the aggregation feature vectors."
+      },
+      "UseE": {
+        "title": "Usage, External",
+        "description": "Two classes are coupled (undirected) if they use a similar set of classes. The coupling weight is the cosine similarity of the usage feature vectors."
+      },
+      "UseI": {
+        "title": "Usage, Internal",
+        "description": "Two classes are coupled (undirected) if they use a similar set of classes. The coupling weight is the cosine similarity of the usage feature vectors."
+      }
+    }
+  },
+  "SD": {
+    "title": "Structural Dependencies",
+    "instances": {
+      "Inh": {
+        "title": "Inheritance",
+        "description": "Two classes are coupled (directed) if one class extends the other class. If coupled, the coupling weight is 1."
+      },
+      "Agg": {
+        "title": "Aggregation",
+        "description": "Two classes are coupled (directed) if one class aggregates another by having class variables using the other class. The coupling weight is the number of class variables relying on the other class."
+      },
+      "Use": {
+        "title": "Usage",
+        "description": "Two classes are coupled (directed) if one class uses the other class in a method as a local variable, a method parameter, or by calling a method of the other class. The coupling weight is the number of methods using the other class."
+      }
+    }
+  },
+  "SS": {
+    "title": "Semantic Similarity",
+    "instances": {
+      "Tfidf": {
+        "title": "tf-idf",
+        "description": "Two classes are coupled (undirected) if they share a similar vocabulary. The coupling weight is the cosine similarity of the tf-idf document vectors."
+      },
+      "LSI": {
+        "title": "LSI",
+        "description": "Two classes are coupled (undirected) if they share a similar vocabulary. The coupling weight is the cosine similarity of the LSI document vectors."
+      }
+    }
+  }
+}

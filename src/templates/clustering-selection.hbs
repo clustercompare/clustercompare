@@ -1,0 +1,16 @@
+<h2>Select Clusterings</h2>
+
+{{#each groups}}
+	<h3 style="color: {{color}};">{{title}}</h3>
+	<ul>
+		{{#each instances}}
+			<li>
+				<label>
+                    <input type="checkbox" {{#if checked}}checked{{/if}}">
+                	<span style="color: {{color}};">{{key}}: {{title}}</span>
+				</label>
+				<p>{{description}}</p>
+			</li>
+		{{/each}}
+	</ul>
+{{/each}}
