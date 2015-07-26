@@ -1,7 +1,11 @@
 import EventEmitter from 'node-event-emitter';
 import * as Sets from './Sets';
 
+const DEBOUNCE_DELAY = 100;
+
 export default class Selection extends EventEmitter {
+	_changeTimeout = null;
+
 	constructor() {
 		super();
 		this._selectedKeys = new Set();
@@ -13,7 +17,17 @@ export default class Selection extends EventEmitter {
 			return;
 		}
 		this._selectedKeys = keys;
-		this.emit('change');
+		this._onChange();
+	}
+
+	_onChange() {
+		if (this._changeTimeout) {
+			clearTimeout(this._changeTimeout);
+		}
+		this._changeTimeout = setTimeout(() => {
+			this.emit('change');
+			this._changeTimeout = null;
+		}, DEBOUNCE_DELAY);
 	}
 
 	_selectClustering(node) {
