@@ -130,7 +130,7 @@ export default class Icicle extends EventEmitter {
 				.attr("text-anchor", "start")
 				.filter(d => d.shortLabel)
 				.classed("node-text", true)
-				.text(d => TextUtils.truncate(d.shortLabel, nodeH(d) - VERTICAL_LABEL_PADDING, "node-text"));
+				.text(d => TextUtils.truncate(d.shortLabel, nodeH(d) - VERTICAL_LABEL_PADDING * 2, "node-text"));
 
 		createRect()
 				.classed('highlight-rect', true)
@@ -151,7 +151,9 @@ export default class Icicle extends EventEmitter {
 			y.range([0, height]);
 			svg.selectAll('.node').attr('y', nodeY).attr('height', nodeH);
 			svg.selectAll('line').attr('y1', nodeY).attr('y2', nodeY2);
-			svg.selectAll('.node-text').attr("transform", d => `translate(${nodeX(d) + 10}, ${nodeY(d) + VERTICAL_LABEL_PADDING}) rotate(90)`);
+			svg.selectAll('.node-text')
+				.attr("transform", d => `translate(${nodeX(d) + 10}, ${nodeY(d) + VERTICAL_LABEL_PADDING}) rotate(90)`)
+				.text(d => TextUtils.truncate(d.shortLabel, nodeH(d) - VERTICAL_LABEL_PADDING * 2, "node-text"));
 		};
 
 		window.addEventListener('resize', this.updateHeight, true);
