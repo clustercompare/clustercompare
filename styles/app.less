@@ -2,7 +2,7 @@
 @import './reset';
 
 body {
-	font-family: sans-serif;
+	font-family: 'Open Sans',sans-serif;
 	font-size: 14px;
 }
 
@@ -12,7 +12,29 @@ body, html {
 
 #header {
 	height: 50px;
-	background: @light-color;
+	background: #435cb9;
+	color: white;
+	line-height: 50px;
+}
+
+#header h1 {
+	display: inline-block;
+	font-size: 16px;
+	padding: 0 15px;
+}
+
+#clusterings-button {
+	background: none;
+	border: none;
+	color: white;
+	padding: 0 15px;
+	display: inline-block;
+	line-height: 50px;
+
+	&:hover {
+		background: rgba(255,255,255,0.2);
+		cursor:pointer;
+	}
 }
 
 #main {
@@ -183,7 +205,7 @@ body, html {
 	height: 100%;
 	overflow: auto;
 	vertical-align: top;
-	background: #eeeeee;
+	background: #dadff2;
 }
 
 #selection-pane h3 {

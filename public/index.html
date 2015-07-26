@@ -2,15 +2,18 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Visual Comparison of Software Modularizations to Multiple Clustering Results</title>
+		<title>ClusterCompare</title>
 
 		<link rel="stylesheet" href="assets/style.css">
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
 		<div id="header">
-			<h1>Visual Comparison of Software Modularizations to Multiple Clustering Results</h1>
+			<h1>ClusterCompare</h1>
 
-			<select size="1" id="project"> </select>
+			<select size="1" id="project" class="ui dropdown"> </select>
+
+			<button id="clusterings-button">Select Clusterings</button>
 		</div>
 
 		<div id="main">
@@ -24,6 +27,9 @@
 
 			<div id="selection-pane">
 				<h3 id="selection-heading">Nothing selected</h3>
+			</div>
+
+			<div id="clustering-selection-pane">
 			</div>
 		</div>
 
