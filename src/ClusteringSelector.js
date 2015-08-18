@@ -4,7 +4,9 @@ import template from './templates/clustering-selection.hbs';
 var visible = false;
 
 export function init(model) {
-    $('#clustering-selection-pane').html(template(model.clusterings));
+    $('#clustering-selection-pane')
+        .html(template(model.clusterings))
+        .addClass('with-footer');
     hide();
 }
 

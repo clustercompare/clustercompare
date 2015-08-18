@@ -10,9 +10,12 @@ body, html {
 	height: 100%;
 }
 
+@sidebar-color: #dadff2;
+@header-color: #435cb9;
+
 #header {
 	height: 50px;
-	background: #435cb9;
+	background: @header-color;
 	color: white;
 	line-height: 50px;
 }
@@ -195,6 +198,8 @@ body, html {
 	}
 }
 
+@sidebar-footer-height: 35px;
+
 .sidebar {
 	position: absolute;
 	right: 0;
@@ -203,11 +208,27 @@ body, html {
 	display: inline-block;
 	box-sizing: border-box;
 	width: 29%;
-	padding: 20px;
-	height: 100%;
-	overflow: auto;
 	vertical-align: top;
-	background: #dadff2;
+	background: @sidebar-color;
+
+	&.with-footer {
+		padding-bottom: @sidebar-footer-height;
+	}
+}
+
+.sidebar-body {
+	padding: 20px;
+	overflow: auto;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.sidebar-footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: @sidebar-footer-height;
 }
 
 .sidebar h3 {
@@ -351,4 +372,31 @@ body, html {
 	color: black;
 	text-align: center;
 	vertical-align: middle;
+}
+
+
+.two-buttons-pane {
+	button {
+		display: inline-block;
+		width: 49%;
+		box-sizing: border-box;
+		height: 100%;
+		color: white;
+		border: 0;
+		border-right: 1px solid @sidebar-color;
+		background: @header-color;
+		padding: 0;
+
+		&:hover {
+			background: lighten(@header-color, 10%);
+		}
+
+		&:hover:active {
+			background: darken(@header-color, 10%);
+		}
+
+		&:last-child {
+			border-right: 0;
+		}
+	}
 }
