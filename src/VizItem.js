@@ -39,6 +39,10 @@ export default class VizItem extends EventEmitter {
 		return this._tree;
 	}
 
+	get key() {
+		return this.tree.couplingConcept;
+	}
+
 	_startDrag(e) {
 		if (this._dragging) {
 			return;
@@ -93,5 +97,6 @@ export default class VizItem extends EventEmitter {
 		$(document).off('mousemove', this._dragFn);
 		this._endDragFn = null;
 		this._dragFn = null;
+		this.emit('drop');
 	}
 }

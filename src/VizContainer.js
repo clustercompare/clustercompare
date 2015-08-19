@@ -5,26 +5,51 @@ export default class VizContainer {
 	_element;
 	_viewModel;
 	_items;
+	_itemsByKey = [];
 
 	constructor(viewModel, containerSelector) {
+		this._viewModel = viewModel;
 		this._element = $('<div>').addClass('viz-container').appendTo($(containerSelector));
-		this._items = model.trees.map(tree => new VizItem(tree, this._element[0], viewModel));
+		viewModel.selectedClusterings.on('change', () => this._reload());
+		this._reload();
+
 		$(containerSelector).click(function (e) {
 			if (e.ctrlKey) {
 				return;
 			}
 			viewModel.mainSelection.select(null);
 		});
-		for (let vizItem of this._items) {
-			vizItem.on("drag", e => {
-				var hoveredItem = this._findItemAtPos(e.centerX, vizItem);
-				if (hoveredItem) {
-					e.moveBefore(hoveredItem.element);
-				} else {
-					e.moveAfter(this._element.children().filter(":not(.dragging):not(.placeholder)").last()[0]);
-				}
-			});
+	}
+
+	_reload() {
+		this._element.children().detach(); // remove, but preserve event handlers
+		this._items = this._viewModel.selectedClusterings.items.map(key => this._getOrCreateItem(key));
+		for (let item of this._items) {
+			this._element.append(item.element);
 		}
+	}
+
+	_getOrCreateItem(key) {
+		if (key in this._itemsByKey) {
+			return this._itemsByKey[key];
+		}
+		let item = new VizItem(this._viewModel.model.getTree(key), this._element[0], this._viewModel);
+		item.on("drag", e => {
+			this._viewModel.selectedClusterings.beginUpdate();
+			var hoveredItem = this._findItemAtPos(e.centerX, item);
+			if (hoveredItem) {
+				e.moveBefore(hoveredItem.element);
+				this._viewModel.selectedClusterings.moveBefore(key, hoveredItem.key);
+			} else {
+				e.moveAfter(this._element.children().filter(":not(.dragging):not(.placeholder)").last()[0]);
+				this._viewModel.selectedClusterings.moveToEnd(key);
+			}
+		});
+		item.on("drop", e => {
+			this._viewModel.selectedClusterings.endUpdate();
+		});
+		this._itemsByKey[key] = item;
+		return item;
 	}
 
 	_findItemAtPos(x, excluding) {

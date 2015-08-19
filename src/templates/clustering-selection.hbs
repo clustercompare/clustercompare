@@ -7,7 +7,7 @@
 			{{#each instances}}
 				<li>
 					<label>
-						<input type="checkbox" {{#if checked}}checked{{/if}}">
+						<input type="checkbox" class="clustering-checkbox" data-clustering="{{key}}" {{#if checked}}checked{{/if}}">
 						<span style="color: {{color}};">{{key}}: {{title}}</span>
 					</label>
 					<p>{{description}}</p>

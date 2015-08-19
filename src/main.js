@@ -31,7 +31,7 @@ viewModel.on('ready', function () {
 	});
 	selectionHistory.init();
 
-	ClusteringSelector.init(model);
+	ClusteringSelector.init(viewModel);
 });
 
 // project selection

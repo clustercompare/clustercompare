@@ -1,51 +1,53 @@
-<h3 id="selection-heading">
-	{{#if singleSelection}}
-		{{singleSelection.label}}
-	{{else}}
-		{{#if selection}}
-			{{selection.length}} classes selected
-		{{else}}
-			Nothing selected
-		{{/if}}
-	{{/if}}
-</h3>
+<div class="sidebar-body">
+    <h3 id="selection-heading">
+        {{#if singleSelection}}
+            {{singleSelection.label}}
+        {{else}}
+            {{#if selection}}
+                {{selection.length}} classes selected
+            {{else}}
+                Nothing selected
+            {{/if}}
+        {{/if}}
+    </h3>
 
-{{#if selection}}
-	<ul id="selection-class-list">
-		{{#each selection}}
-			<li class="class-item" data-node="{{key}}">
-				{{label}}
-			</li>
-		{{/each}}
-	</ul>
+    {{#if selection}}
+        <ul id="selection-class-list">
+            {{#each selection}}
+                <li class="class-item" data-node="{{key}}">
+                    {{label}}
+                </li>
+            {{/each}}
+        </ul>
 
-	<h3>Most similar clusters:</h3>
-	<ul id="selection-similarity-list">
-		<li class="header">
-			<span class="percentage-indicator"></span>
-			<span class="intersection-size" title="Intersection of selection and cluster"><span></span></span>
-			<span class="union-size" title="Union of selection and cluster"><span></span></span>
-			<span class="node-title"></span>
-			<span class="cluster-size" title="Size of cluster"></span>
-		</li>
-		{{#each clusters}}
-			<li class="cluster-item" data-node="{{node.key}}">
-				<span class="percentage-indicator">
-					<span class="tiny-barchart">
-						<span class="bar" style="width: {{percent}}%;"></span>
-						<span class="label">{{percent}}%</span>
-					</span>
-				</span>
-				<span class="intersection-size"><span>{{intersection}}</span></span>
-				<span class="union-size"><span>{{totalCount}}</span></span>
-				<span class="node-title">
-					{{#if clustering}}<span style="font-weight: bold; color: {{clusteringColor}}">{{clustering}}</span> &raquo; {{/if}}
-					{{node.label}}
-				</span>
-				<span class="cluster-size">
-					{{clusterSize}}
-				</span>
-			</li>
-		{{/each}}
-	</ul>
-{{/if}}
+        <h3>Most similar clusters:</h3>
+        <ul id="selection-similarity-list">
+            <li class="header">
+                <span class="percentage-indicator"></span>
+                <span class="intersection-size" title="Intersection of selection and cluster"><span></span></span>
+                <span class="union-size" title="Union of selection and cluster"><span></span></span>
+                <span class="node-title"></span>
+                <span class="cluster-size" title="Size of cluster"></span>
+            </li>
+            {{#each clusters}}
+                <li class="cluster-item" data-node="{{node.key}}">
+                    <span class="percentage-indicator">
+                        <span class="tiny-barchart">
+                            <span class="bar" style="width: {{percent}}%;"></span>
+                            <span class="label">{{percent}}%</span>
+                        </span>
+                    </span>
+                    <span class="intersection-size"><span>{{intersection}}</span></span>
+                    <span class="union-size"><span>{{totalCount}}</span></span>
+                    <span class="node-title">
+                        {{#if clustering}}<span style="font-weight: bold; color: {{clusteringColor}}">{{clustering}}</span> &raquo; {{/if}}
+                        {{node.label}}
+                    </span>
+                    <span class="cluster-size">
+                        {{clusterSize}}
+                    </span>
+                </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+</div>
