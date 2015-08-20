@@ -71,7 +71,8 @@ body, html {
 @middle-color: #bbb;
 @dark-color: #999;
 
-#icicles {
+#icicles,
+#source-browser {
 	box-sizing: border-box;
 	position: absolute;
 	bottom: 0;
@@ -197,19 +198,21 @@ body, html {
 }
 
 #source-browser {
-	position: relative;
+	padding: 20px;
 
 	.source {
+		overflow: auto;
+		max-height: 100%;
 		white-space: pre;
 		overflow: auto;
 		font-family: monospace;
 		font-size: 12px;
-		height: 500px;
+		background: transparent;
 	}
 
 	#close-source-button {
 		position: absolute;
-		right: 20px;
+		right: 0;
 		top: 0;
 	}
 }
