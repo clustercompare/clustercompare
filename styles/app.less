@@ -40,6 +40,22 @@ body, html {
 		background: rgba(255,255,255,0.2);
 		cursor:pointer;
 	}
+
+	&.active {
+		background: rgba(255,255,255,0.2);
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			width: 0;
+			height: 0;
+			top: 50px;
+			right: 50%;
+			border: 10px solid transparent;
+			border-top-color: lighten(@header-color, 10%);
+			z-index: 20;
+		}
+	}
 }
 
 #main {

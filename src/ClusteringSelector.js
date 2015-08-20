@@ -18,11 +18,13 @@ export function init(viewModel_) {
 export function show() {
     $('#selection-pane').hide();
     $('#clustering-selection-pane').show();
+    $('#clusterings-button').toggleClass('active', true);
 }
 
 export function hide() {
     $('#selection-pane').show();
     $('#clustering-selection-pane').hide();
+    $('#clusterings-button').toggleClass('active', false);
 }
 
 export function toggle() {
