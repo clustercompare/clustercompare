@@ -14,6 +14,10 @@ export default class ObservableList extends EventEmitter {
         this._items = value;
         this._onChange();
     }
+
+    contains(value) {
+        return this._items.indexOf(value) >= 0;
+    }
     
     selectItemsPreserveOrder(items) {
         let newItems = [];

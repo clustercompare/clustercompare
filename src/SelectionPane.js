@@ -8,8 +8,10 @@ var mainSelection;
 var hoverSelection;
 var trees;
 var model;
+var viewModel;
 
-export function init(viewModel) {
+export function init(viewModel_) {
+	viewModel = viewModel_;
 	mainSelection = viewModel.mainSelection;
 	hoverSelection = viewModel.hoverSelection;
 	trees = viewModel.model.trees;
@@ -22,6 +24,10 @@ export function update(data) {
 
 	let similarityInfos = [];
 	for (let tree of trees) {
+		if (tree.couplingConcept != 'packages' && !viewModel.selectedClusterings.contains(tree.couplingConcept)) {
+			continue;
+		}
+
 		let info = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(data.selectedLeaveKeys, tree.root);
 		if (info.similarity > 0) {
 			similarityInfos.push(info);
