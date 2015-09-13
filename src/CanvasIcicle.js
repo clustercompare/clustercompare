@@ -120,13 +120,54 @@ export default class CanvasIcicle extends EventEmitter {
             context.translate(0.5, 0.5);
             for (let i = 1; i <= depth; i++) {
                 let xx = x(i / depth);
-                console.log(xx);
                 context.beginPath();
                 context.moveTo(xx, 0);
                 context.lineTo(xx, height);
                 context.stroke();
             }
         };
+
+        canvas.addEventListener('mousemove', e => {
+            let node = findNodeAtPosition(e.offsetX, e.offsetY);
+            if (node) {
+                this.emit('nodehover', node, e);
+                e.stopPropagation();
+            } else {
+                this.emit('mouseleave', e);
+            }
+        });
+
+        canvas.addEventListener('click', e => {
+            let node = findNodeAtPosition(e.offsetX, e.offsetY);
+            if (node) {
+                this.emit('nodeclick', node, e);
+                e.stopPropagation();
+            }
+        });
+        canvas.addEventListener('mousedown', e => e.stopPropagation());
+        canvas.addEventListener('mouseleave', e => this.emit('mouseleave', e));
+
+        function findNodeAtPosition(posX, posY) {
+            let xx = Math.floor(x.invert(posX) * depth);
+            let yy = y.invert(posY);
+            let node = tree.root;
+            for (let i = 0; i < xx; i++) {
+                // find the child at the correct vertical position (icicles are rotated, thus x)
+                let child = null;
+                for (let j = 0; j < node.children.length; j++) {
+                    if (node.children[j].x + node.children[j].dx >= yy) {
+                        child = node.children[j];
+                        break;
+                    }
+                }
+                if (child) {
+                    node = child;
+                } else {
+                    return null;
+                }
+            }
+            return node;
+        }
 
         window.addEventListener('resize', () => this.updateHeight(), true);
         setTimeout(() => this.updateHeight(), 0); // height may only be available at next tick
