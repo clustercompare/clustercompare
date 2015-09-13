@@ -61,7 +61,7 @@ export default class VizItem extends EventEmitter {
 		this._element.addClass('dragging');
 		this._element.css({
 			left: offset.left,
-			top: offset.top - this._element.parent().offset().top,
+			top: offset.top,
 			height: height
 		});
 		this._dragCursorStartX = e.pageX;
