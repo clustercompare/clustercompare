@@ -50,6 +50,10 @@ export default class CanvasIcicle extends EventEmitter {
         $(canvas).css({width: width + 'px', height: '100%'});
         context.imageSmoothingEnabled = false;
 
+        var gradient = context.createLinearGradient(0, 0, 0, 5);
+        gradient.addColorStop(0, 'rgba(0,0,0,0.0)');
+        gradient.addColorStop(1, 'rgba(0,0,0,0.1)');
+
         function nodeX(d) {
             if (d.isRoot) {
                 return 0;
@@ -89,16 +93,19 @@ export default class CanvasIcicle extends EventEmitter {
             return makeColor(self.getValue(d));
         }
 
-        this._drawNode = function(d) {
+        this._drawNode = function(d, options) {
             let x = nodeX(d);
             let y = nodeY(d);
-            let w = nodeW(d);
+            let w = nodeW(d) - 1 /* vertical spacing */;
             let h = nodeH(d);
             let y2 = y + h;
+            let yRounded = Math.round(y);
+            let y2Rounded = Math.round(y2);
+            let hRounded = y2Rounded - yRounded;
 
             // main color
             context.fillStyle = nodeColor(d);
-            context.fillRect(x, Math.round(y), w - 1 /* white spacing */, Math.round(y2) - Math.round(y));
+            context.fillRect(x, yRounded, w, hRounded);
 
             // labels
             if (!d.isLeaf) {
@@ -108,6 +115,16 @@ export default class CanvasIcicle extends EventEmitter {
                 context.font = '"OpenSans" 12px';
                 context.fillStyle = 'white';
                 context.fillText(TextUtils.truncate(d.shortLabel, h - VERTICAL_LABEL_PADDING * 2), 0, 0);
+                context.restore();
+            }
+
+            // inset shadow at bottom
+            if (!d.isLeaf && hRounded > 2) {
+                context.fillStyle = gradient;
+                let gradientHeight = Math.min(5, hRounded);
+                context.save();
+                context.translate(x, y2Rounded - gradientHeight);
+                context.fillRect(0, 0, w, gradientHeight);
                 context.restore();
             }
         };
