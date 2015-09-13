@@ -122,17 +122,6 @@ export default class CanvasIcicle extends EventEmitter {
             for (let d of elements) {
                 this._drawNode(d);
             }
-
-            /*// separating vertical line
-            context.strokeStyle = 'white';
-            context.translate(0.5, 0.5);
-            for (let i = 1; i <= depth; i++) {
-                let xx = x(i / depth);
-                context.beginPath();
-                context.moveTo(xx, 0);
-                context.lineTo(xx, height);
-                context.stroke();
-            }*/
         };
 
         canvas.addEventListener('mousemove', e => {
