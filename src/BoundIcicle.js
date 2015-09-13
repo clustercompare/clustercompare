@@ -1,4 +1,4 @@
-import Icicle from './Icicle';
+import Icicle from './CanvasIcicle';
 
 export default class BoundIcicle extends Icicle {
 	constructor(tree, containerSelector, viewModel) {
