@@ -12,7 +12,7 @@ export default class ViewModel extends EventEmitter {
 	constructor() {
 		super();
 		this._model.on('ready', () => this.emit('ready'));
-		this._selectedClusterings.items = [ 'CC.I', 'CO.Bin', 'EC.Conf', 'SD.Agg', 'SS.LSI' ];
+		this._selectedClusterings.items = [ 'SD.Agg', 'SD.Use', 'SD.Inh', 'FO.UseI', 'FO.UseE', 'CC.I', 'CO.Bin', 'EC.Conf', 'SS.LSI' ];
 	}
 
 	get mainSelection() {
