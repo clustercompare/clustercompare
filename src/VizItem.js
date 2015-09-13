@@ -13,7 +13,7 @@ export default class VizItem extends EventEmitter {
 	_dragtElementStartX;
 	_tree;
 
-	constructor(tree, containerSelector, viewModel) {
+	constructor(tree, containerSelector, viewModel, options) {
 		super();
 		this._tree = tree;
 		this._element =  $('<div>').addClass('viz-item').appendTo($(containerSelector));
@@ -28,7 +28,10 @@ export default class VizItem extends EventEmitter {
 			this._element.toggleClass('hover', viewModel.hoverSelection.selectedClustering == tree.root)
 		});
 
-		this._heading.on('mousedown', e => this._startDrag(e));
+		if (options.enableDragging) {
+			this._heading.on('mousedown', e => this._startDrag(e));
+			this._element.addClass('draggable');
+		}
 	}
 
 	get element() {

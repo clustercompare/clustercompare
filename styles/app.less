@@ -88,6 +88,13 @@ body, html {
 	left: 0;
 	right: 0;
 	padding: 20px;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 @viz-item-heading-height: 27px;
@@ -128,11 +135,15 @@ body, html {
 .viz-item h3 {
 	padding: 5px;
 	background: @light-color;
-	cursor: move;
 	margin-top: -@viz-item-heading-height;
 	height: @viz-item-heading-height;
 	box-sizing: border-box;
 	text-align: center;
+  cursor: default;
+}
+
+.viz-item.draggable h3 {
+  cursor: move;
 }
 
 .icicle {
@@ -184,6 +195,18 @@ body, html {
 .node-text {
 	font-size: 12px;
 	fill: white;
+}
+
+.label-tooltip {
+  position: fixed;
+  background: rgba(0,0,0,0.9);
+  color: white;
+  padding: 4px 6px;
+  border: 1px solid white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  z-index: 5;
+  margin-left: 3px;
 }
 
 #icicles,
