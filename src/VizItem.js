@@ -55,8 +55,8 @@ export default class VizItem extends EventEmitter {
 		var offset = this._element.offset();
 		var height = this._element.css('height');
 		this._placeholder = $('<div>').addClass('viz-item placeholder')
-				.width(this._element.width())
-				.height(this._element.height())
+				.width(this._element.outerWidth())
+				.height(this._element.outerHeight())
 				.insertBefore(this._element);
 		this._element.addClass('dragging');
 		this._element.css({
