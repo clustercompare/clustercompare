@@ -1,7 +1,7 @@
 import EventEmitter from 'node-event-emitter';
 import * as Sets from './Sets';
 
-const DEBOUNCE_DELAY = 100;
+const DEBOUNCE_DELAY = 10;
 
 export default class Selection extends EventEmitter {
 	_changeTimeout = null;
