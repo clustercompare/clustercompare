@@ -90,11 +90,30 @@ export default class CanvasIcicle extends EventEmitter {
             height = canvas.clientHeight;
             y.range([0, height]);
             canvas.height = height;
-            canvas.width = canvas.clientWidth;
+            canvas.width = width;
+            context.clearRect(0, 0, width, height);
 
             for (let d of elements) {
+                let x = nodeX(d);
+                let y = nodeY(d);
+                let w = nodeW(d);
+                let h = nodeH(d);
+
+                // main color
                 context.fillStyle = nodeColor(d);
-                context.fillRect(nodeX(d), nodeY(d), nodeW(d), nodeH(d));
+                context.fillRect(x, y, w, h);
+            }
+
+            // separating vertical line
+            context.strokeStyle = 'white';
+            context.translate(0.5, 0.5);
+            for (let i = 1; i <= depth; i++) {
+                let xx = x(i / depth);
+                console.log(xx);
+                context.beginPath();
+                context.moveTo(xx, 0);
+                context.lineTo(xx, height);
+                context.stroke();
             }
         };
 
