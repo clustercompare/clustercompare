@@ -83,11 +83,8 @@ export default class CanvasIcicle extends EventEmitter {
                 return '#000080';
             }
             if (d.isLeaf) {
-                let color = d3.rgb(d.selections.main ? 'rgb(64, 64, 192)' : '#FAEB9E');
-                if (d.selections.hover) {
-                    color = color.darker();
-                }
-                return color.toString();
+                let colors = [['#FAEB9E', '#f3cd0d'], ['#4040c0', '#1a1a4d']];
+                return colors[d.selections.main ? 1 : 0][d.selections.hover ? 1 : 0];
             }
             return makeColor(self.getValue(d));
         }
