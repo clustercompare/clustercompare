@@ -96,7 +96,6 @@ body, html {
   -ms-user-select: none;
   user-select: none;
 }
-}
 
 @viz-item-heading-height: 27px;
 
@@ -136,11 +135,15 @@ body, html {
 .viz-item h3 {
 	padding: 5px;
 	background: @light-color;
-	cursor: move;
 	margin-top: -@viz-item-heading-height;
 	height: @viz-item-heading-height;
 	box-sizing: border-box;
 	text-align: center;
+  cursor: default;
+}
+
+.viz-item.draggable h3 {
+  cursor: move;
 }
 
 .icicle {

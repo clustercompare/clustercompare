@@ -34,7 +34,8 @@ export default class VizContainer {
 		if (key in this._itemsByKey) {
 			return this._itemsByKey[key];
 		}
-		let item = new VizItem(this._viewModel.model.getTree(key), this._element[0], this._viewModel);
+		let item = new VizItem(this._viewModel.model.getTree(key), this._element[0], this._viewModel,
+			{ enableDragging: key != 'packages'});
 		item.on("drag", e => {
 			this._viewModel.selectedClusterings.beginUpdate();
 			var hoveredItem = this._findItemAtPos(e.centerX, item);
