@@ -27,6 +27,20 @@ describe('ObservableList', () => {
 		expect(list.items).toEqual([0, 1, 4, 2, 3, 5]);
 	});
 
+	it('supports moving items forwards', () => {
+		let list = new ObservableList();
+		list.items = [0, 1, 2, 3, 4, 5];
+		list.moveBefore(1, 4);
+		expect(list.items).toEqual([0, 2, 3, 1, 4, 5]);
+	});
+
+	it('does nothing when moveBefore gets two neighbors as parameters', () => {
+		let list = new ObservableList();
+		list.items = [0, 1, 2, 3, 4, 5];
+		list.moveBefore(2, 3);
+		expect(list.items).toEqual([0, 1, 2, 3, 4, 5]);
+	});
+
 	it('supports moving items to the end', () => {
 		let list = new ObservableList();
 		list.items = [0, 1, 2, 3, 4, 5];

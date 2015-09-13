@@ -60,6 +60,11 @@ export default class ObservableList extends EventEmitter {
         if (newPos < 0 || oldPos < 0) {
             throw new Error('either new or old pos not found');
         }
+        // moving forwards means inserting at the index *before* the other item
+        // moving backwards means inserting *at* the index of the other item
+        if (newPos > oldPos) {
+            newPos--;
+        }
         moveInArray(this._items, oldPos, newPos);
         this._onChange();
     }
