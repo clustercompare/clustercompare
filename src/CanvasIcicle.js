@@ -2,6 +2,7 @@ import EventEmitter from 'node-event-emitter';
 import d3 from 'd3';
 import $ from 'jquery';
 import * as TextUtils from './TextUtils';
+import * as Sets from './Sets';
 
 export default class CanvasIcicle extends EventEmitter {
     constructor(tree, containerSelector, valueFunction) {
@@ -33,8 +34,13 @@ export default class CanvasIcicle extends EventEmitter {
             .value(d => d.sortOrder)
             .sort((a,b) => a.sortOrder - b.sortOrder);
         var elements = partition(tree.root);
+        this.leafElementByKey = {};
+        this.previousSelections = {};
         for (let element of elements) {
             element.selections = {};
+            if (element.isLeaf) {
+                this.leafElementByKey[element.key] = element;
+            }
         }
         this.elements = elements;
 
@@ -86,6 +92,28 @@ export default class CanvasIcicle extends EventEmitter {
             return makeColor(self.getValue(d));
         }
 
+        this._drawNode = function(d) {
+            let x = nodeX(d);
+            let y = nodeY(d);
+            let w = nodeW(d);
+            let h = nodeH(d);
+
+            // main color
+            context.fillStyle = nodeColor(d);
+            context.fillRect(x, y, w - 1 /* white spacing */, h);
+
+            // labels
+            if (!d.isLeaf) {
+                context.save();
+                context.translate(x + 10, y + VERTICAL_LABEL_PADDING);
+                context.rotate(Math.PI / 2);
+                context.font = '"OpenSans" 12px';
+                context.fillStyle = 'white';
+                context.fillText(TextUtils.truncate(d.shortLabel, h - VERTICAL_LABEL_PADDING * 2), 0, 0);
+                context.restore();
+            }
+        };
+
         this.updateHeight = function() {
             height = canvas.clientHeight;
             y.range([0, height]);
@@ -94,28 +122,10 @@ export default class CanvasIcicle extends EventEmitter {
             context.clearRect(0, 0, width, height);
 
             for (let d of elements) {
-                let x = nodeX(d);
-                let y = nodeY(d);
-                let w = nodeW(d);
-                let h = nodeH(d);
-
-                // main color
-                context.fillStyle = nodeColor(d);
-                context.fillRect(x, y, w, h);
-
-                // labels
-                if (!d.isLeaf) {
-                    context.save();
-                    context.translate(x + 10, y + VERTICAL_LABEL_PADDING);
-                    context.rotate(Math.PI / 2);
-                    context.font = '"OpenSans" 12px';
-                    context.fillStyle = 'white';
-                    context.fillText(TextUtils.truncate(d.shortLabel, h - VERTICAL_LABEL_PADDING * 2), 0, 0);
-                    context.restore();
-                }
+                this._drawNode(d);
             }
 
-            // separating vertical line
+            /*// separating vertical line
             context.strokeStyle = 'white';
             context.translate(0.5, 0.5);
             for (let i = 1; i <= depth; i++) {
@@ -124,7 +134,7 @@ export default class CanvasIcicle extends EventEmitter {
                 context.moveTo(xx, 0);
                 context.lineTo(xx, height);
                 context.stroke();
-            }
+            }*/
         };
 
         canvas.addEventListener('mousemove', e => {
@@ -174,6 +184,26 @@ export default class CanvasIcicle extends EventEmitter {
     }
 
     updateSelection(selectionName, selectedKeys) {
+        let previousSelection = this.previousSelections[selectionName];
+        if (!previousSelection) {
+            previousSelection = new Set();
+        }
+        this.previousSelections[selectionName] = selectedKeys;
+
+        let additions = Sets.subtract(selectedKeys, previousSelection);
+        let removals = Sets.subtract(previousSelection, selectedKeys);
+
+        for (let key of additions) {
+            let element = this.leafElementByKey[key];
+            element.selections[selectionName] = true;
+            this._drawNode(element);
+        }
+
+        for (let key of removals) {
+            let element = this.leafElementByKey[key];
+            element.selections[selectionName] = false;
+            this._drawNode(element);
+        }
     }
 
     getValue(node) {
