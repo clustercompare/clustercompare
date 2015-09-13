@@ -58,6 +58,9 @@ export default class VizContainer {
 			if (item == excluding) {
 				continue;
 			}
+			if (item.tree.couplingConcept == 'packages') {
+				continue;
+			}
 			if ($(item.element).offset().left + $(item.element).width() / 2 >= x) {
 				return item;
 			}
