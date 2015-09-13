@@ -94,10 +94,11 @@ export default class CanvasIcicle extends EventEmitter {
             let y = nodeY(d);
             let w = nodeW(d);
             let h = nodeH(d);
+            let y2 = y + h;
 
             // main color
             context.fillStyle = nodeColor(d);
-            context.fillRect(x, y, w - 1 /* white spacing */, h);
+            context.fillRect(x, Math.round(y), w - 1 /* white spacing */, Math.round(y2) - Math.round(y));
 
             // labels
             if (!d.isLeaf) {
