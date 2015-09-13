@@ -20,6 +20,7 @@ export default class CanvasIcicle extends EventEmitter {
         var width = INNER_NODE_WIDTH * (depth - 2) + LEAF_WIDTH + ROOT_NODE_WIDTH;
         var height = 500;
         var VERTICAL_LABEL_PADDING = 3;
+        var TOOLTIP_HEIGHT = 20;
 
         // these scales are only used for inner nodes, so map positions of first and last inner node
         var x = d3.scale.linear()
@@ -49,6 +50,8 @@ export default class CanvasIcicle extends EventEmitter {
         $(containerSelector).append(canvas);
         $(canvas).css({width: width + 'px', height: '100%'});
         context.imageSmoothingEnabled = false;
+        this.canvas = canvas;
+        this.context = context;
 
         var gradient = context.createLinearGradient(0, 0, 0, 5);
         gradient.addColorStop(0, 'rgba(0,0,0,0.0)');
@@ -183,8 +186,38 @@ export default class CanvasIcicle extends EventEmitter {
             return node;
         }
 
+        this._showLabelTooltip = (node) => {
+            if (!this._labelTooltip) {
+                this._labelTooltip = document.createElement('span');
+                this._labelTooltip.setAttribute('class', 'label-tooltip');
+                $(this._labelTooltip).insertAfter(this.canvas);
+            }
+            this._labelTooltip.textContent = node.label;
+            var canvasOffset = $(canvas).offset();
+            this._labelTooltip.style.left = canvasOffset.left + nodeX(node) + nodeW(node) + 'px';
+            this._labelTooltip.style.top = canvasOffset.top + nodeY(node) - TOOLTIP_HEIGHT / 2 + 'px';
+            $(this._labelTooltip).show();
+            $(this._labelTooltip).click(() => this._hideLabelTooltip());
+        };
+
+        this._hideLabelTooltip = () => {
+            if (this._labelTooltip) {
+                $(this._labelTooltip).hide();
+            }
+        }
+
         window.addEventListener('resize', () => this.updateHeight(), true);
         setTimeout(() => this.updateHeight(), 0); // height may only be available at next tick
+
+        this.on('nodehover', node => {
+            if (true || node.isLeaf) {
+                this._showLabelTooltip(node);
+            } else {
+                this._hideLabelTooltip();
+            }
+        });
+
+        this.on('mouseleave', () => this._hideLabelTooltip());
     }
 
     updateSelection(selectionName, selectedKeys) {
