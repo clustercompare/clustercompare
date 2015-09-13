@@ -102,6 +102,17 @@ export default class CanvasIcicle extends EventEmitter {
                 // main color
                 context.fillStyle = nodeColor(d);
                 context.fillRect(x, y, w, h);
+
+                // labels
+                if (!d.isLeaf) {
+                    context.save();
+                    context.translate(x + 10, y + VERTICAL_LABEL_PADDING);
+                    context.rotate(Math.PI / 2);
+                    context.font = '"OpenSans" 12px';
+                    context.fillStyle = 'white';
+                    context.fillText(TextUtils.truncate(d.shortLabel, h - VERTICAL_LABEL_PADDING * 2), 0, 0);
+                    context.restore();
+                }
             }
 
             // separating vertical line
