@@ -16,6 +16,7 @@ export function init(viewModel_) {
 	hoverSelection = viewModel.hoverSelection;
 	trees = viewModel.model.trees;
 	model = viewModel.model;
+	update({selectedLeaves: new Set(), selectedLeaveKeys: new Set()});
 }
 
 export function update(data) {

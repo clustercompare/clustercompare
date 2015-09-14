@@ -49,5 +49,17 @@
                 </li>
             {{/each}}
         </ul>
+    {{else}}
+        <ol>
+            <li>Select a software project to inspect at the top left.</li>
+            <li>Choose which clusterings you want to compare at the top right. You can rearrange them by dragging the headings.</li>
+            <li>Select classes by clicking on nodes. Ctrl-click to add classes to or remove them from the selection.</li>
+            <li>Details about the selection and similar clusters will be shown here.</li>
+        </ol>
+
+        <p>The node's background color indicates whether there is a similar node in one of the
+        secondary hierarchies (or in the primary hierarchy, respectively).</p>
+
+        <p class="small">&copy; Jan Melcher, 2015.</p>
     {{/if}}
 </div>
