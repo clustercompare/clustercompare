@@ -16,7 +16,7 @@ export function init(viewModel_) {
 	hoverSelection = viewModel.hoverSelection;
 	trees = viewModel.model.trees;
 	model = viewModel.model;
-	update({selectedLeaves: new Set(), selectedLeaveKeys: new Set()});
+	update({selectedLeaves: new Set(), selectedLeafKeys: new Set()});
 }
 
 export function update(data) {
@@ -29,7 +29,7 @@ export function update(data) {
 			continue;
 		}
 
-		let info = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(data.selectedLeaveKeys, tree.root);
+		let info = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(data.selectedLeafKeys, tree.root);
 		if (info.similarity > 0) {
 			similarityInfos.push(info);
 		}
@@ -46,7 +46,7 @@ export function update(data) {
 			clusteringColor: ColorGenerator.colorForClustering(info.node.root.clustering),
 			intersection: info.intersection,
 			totalCount: info.totalCount,
-			clusterSize: info.node.leaveKeys.size
+			clusterSize: info.node.leafKeys.size
 		}))
 	};
 

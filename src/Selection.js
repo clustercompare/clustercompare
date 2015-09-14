@@ -47,7 +47,7 @@ export default class Selection extends EventEmitter {
 			this.selectKeys(new Set());
 		} else {
 			this._selectClustering(options.selectClustering ? object.root : null);
-			this.selectKeys(object.leaveKeys);
+			this.selectKeys(object.leafKeys);
 		}
 	}
 
@@ -56,7 +56,7 @@ export default class Selection extends EventEmitter {
 			return;
 		}
 
-		this.selectKeys(Sets.merge(this.selectedKeys, node.leaveKeys));
+		this.selectKeys(Sets.merge(this.selectedKeys, node.leafKeys));
 	}
 
 	removeFromSelection(node) {
@@ -64,7 +64,7 @@ export default class Selection extends EventEmitter {
 			return;
 		}
 
-		this.selectKeys(Sets.subtract(this.selectedKeys, node.leaveKeys));
+		this.selectKeys(Sets.subtract(this.selectedKeys, node.leafKeys));
 	}
 
 	get selectedKeys() {
@@ -76,6 +76,6 @@ export default class Selection extends EventEmitter {
 	}
 
 	isSelected(node) {
-		return Sets.containsAll(this.selectedKeys, node.leaveKeys);
+		return Sets.containsAll(this.selectedKeys, node.leafKeys);
 	}
 }

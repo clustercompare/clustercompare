@@ -16,7 +16,7 @@ export default class Model extends EventEmitter {
 		this._algorithms = this._clusterings.instanceKeys;
 		this._nodeKeyMap = new Map();
 		this._nodeFactory = new NodeFactory();
-		this._allLeaveKeys = new Set();
+		this._allLeafKeys = new Set();
 		this._load();
 	}
 
@@ -42,7 +42,7 @@ export default class Model extends EventEmitter {
 			tree.root = this._nodeFactory.createNodeRecursively(tree.root);
 			tree.root.clustering = name;
 			tree.root.project = this._project;
-			Sets.mergeInto(this._allLeaveKeys, tree.root.leaveKeys);
+			Sets.mergeInto(this._allLeafKeys, tree.root.leafKeys);
 			this._collectNodes(tree.root);
 			success(tree);
 		});
@@ -95,8 +95,8 @@ export default class Model extends EventEmitter {
 		return this._trees.filter(tree => tree.couplingConcept == 'packages')[0];
 	}
 
-	get leaveKeys() {
-		return this._allLeaveKeys;
+	get leafKeys() {
+		return this._allLeafKeys;
 	}
 
 	mapKeysToNodes(keys) {

@@ -146,18 +146,18 @@ export default class Node {
 	/**
 	 * Gets a set the keys of leaf nodes
 	 */
-	get leaveKeys() {
-		if (!this._leaveKeys) {
-			this._leaveKeys = this._generateLeaveKeySet();
+	get leafKeys() {
+		if (!this._leafKeys) {
+			this._leafKeys = this._generateLeafKeySet();
 		}
-		return this._leaveKeys;
+		return this._leafKeys;
 	}
 
-	_generateLeaveKeySet() {
+	_generateLeafKeySet() {
 		var result = new Set();
 		for (var child of this.children) {
-			for (var leaveKey of child.leaveKeys) {
-				result.add(leaveKey);
+			for (var leafKey of child.leafKeys) {
+				result.add(leafKey);
 			}
 		}
 		return result;
@@ -234,6 +234,7 @@ export default class Node {
 	 * Gets the maximum similarity of this node to the given other node or any of its descendants
 	 */
 	getMaxSimilarity(otherNode) {
+<<<<<<< b238de7a6c3bd110a364e14f473752f0f4825ce7
 		return this.getMaxSimilarityInfo(otherNode).similarity;
 	}
 
@@ -243,6 +244,9 @@ export default class Node {
 	 */
 	getMaxSimilarityInfo(otherNode) {
 		return NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(this.leaveKeys, otherNode);
+=======
+		return NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(this.leafKeys, otherNode).similarity;
+>>>>>>> Fix typo leaveKeys -> leafKeys
 	}
 
 	bary(pi1Fn) {

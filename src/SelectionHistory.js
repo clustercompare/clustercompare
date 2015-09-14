@@ -3,9 +3,9 @@ import pako from 'pako';
 import EventEmitter from 'node-event-emitter';
 
 export default class SelectionHistory extends EventEmitter {
-	constructor(leaveKeys) {
+	constructor(leafKeys) {
 		super();
-		this.leaveKeys = Sets.sorted(leaveKeys);
+		this.leafKeys = Sets.sorted(leafKeys);
 		window.addEventListener('hashchange', this._onHashChange.bind(this));
 	}
 
@@ -29,9 +29,9 @@ export default class SelectionHistory extends EventEmitter {
 		if (!keys.size) {
 			return '';
 		}
-		var bytes = new Uint8Array(this.leaveKeys.size);
+		var bytes = new Uint8Array(this.leafKeys.size);
 		var index = 0;
-		for (var key of this.leaveKeys) {
+		for (var key of this.leafKeys) {
 			bytes[index] = keys.has(key) ? 1 : 0;
 			index++;
 		}
@@ -48,13 +48,13 @@ export default class SelectionHistory extends EventEmitter {
 			return c.charCodeAt(0);
 		}));
 		var bytes = pako.inflate(compressed);
-		if (bytes.length < this.leaveKeys.size) {
-			console.log('code too short (is ' + bytes.length + ', but expected ' + this.leaveKeys.size);
+		if (bytes.length < this.leafKeys.size) {
+			console.log('code too short (is ' + bytes.length + ', but expected ' + this.leafKeys.size);
 			return new Set();
 		}
 		var keys = new Set();
 		var index = 0;
-		for (var key of this.leaveKeys) {
+		for (var key of this.leafKeys) {
 			if (bytes[index]) {
 				keys.add(key);
 			}

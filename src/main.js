@@ -13,7 +13,7 @@ var viewModel = new ViewModel();
 var model = viewModel.model;
 window.model = model;
 viewModel.on('ready', function () {
-	var selectionHistory = new SelectionHistory(model.leaveKeys);
+	var selectionHistory = new SelectionHistory(model.leafKeys);
 
 	SelectionPane.init(viewModel);
 	var vizContainer = new VizContainer(viewModel, '#icicles');
@@ -26,7 +26,7 @@ viewModel.on('ready', function () {
 		selectionHistory.push(viewModel.mainSelection.selectedKeys);
 		SelectionPane.update({
 			selectedLeaves: model.mapKeysToNodes(viewModel.mainSelection.selectedKeys),
-			selectedLeaveKeys: viewModel.mainSelection.selectedKeys
+			selectedLeafKeys: viewModel.mainSelection.selectedKeys
 		});
 	});
 

@@ -17,7 +17,7 @@ export default class Class extends Node {
 		return '';
 	}
 
-	_generateLeaveKeySet() {
+	_generateLeafKeySet() {
 		return new Set([this.key]);
 	}
 }
