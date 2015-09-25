@@ -5,7 +5,7 @@ export default class VizContainer {
 	_element;
 	_viewModel;
 	_items;
-	_itemsByKey = [];
+	_itemsByKey = {};
 
 	constructor(viewModel, containerSelector) {
 		this._viewModel = viewModel;
@@ -24,6 +24,7 @@ export default class VizContainer {
 	_reload() {
 		this._element.children().detach(); // remove, but preserve event handlers
 		this._items = this._viewModel.selectedClusterings.items.map(key => this._getOrCreateItem(key));
+		delete this._itemsByKey.packages; // need to recalculate
 		this._items.unshift(this._getOrCreateItem('packages'));
 		for (let item of this._items) {
 			this._element.append(item.element);
