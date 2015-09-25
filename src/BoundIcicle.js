@@ -2,7 +2,7 @@ import Icicle from './CanvasIcicle';
 
 export default class BoundIcicle extends Icicle {
 	constructor(tree, containerSelector, viewModel) {
-		super(tree, containerSelector, BoundIcicle._getValueFunction(tree, viewModel.model));
+		super(tree, containerSelector, BoundIcicle._getValueFunction(tree, viewModel));
 		this._viewModel = viewModel;
 		this._model = viewModel.model;
 		this._initEvents();
@@ -32,10 +32,15 @@ export default class BoundIcicle extends Icicle {
 			this.updateSelection('hover', this._viewModel.hoverSelection.selectedKeys));
 	}
 
-	static _getValueFunction(tree, model) {
+	static _getValueFunction(tree, viewModel) {
+		var model = viewModel.model;
 		if (tree.couplingConcept == 'packages') {
+			if (viewModel.selectedClusterings.items.length == 0) {
+				return node => 0;
+			}
+
 			return node => Math.max.apply(null,
-					model.couplingTrees.map(tree => node.getMaxSimilarity(tree.root)));
+					 viewModel.selectedClusterings.items.map(key => model.getTree(key)).map(tree => node.getMaxSimilarity(tree.root)));
 		}
 
 		var packagesTree = model.packagesTree;
