@@ -5,6 +5,10 @@ import * as SelectionPane from './SelectionPane.js';
 import * as ClusteringSelector from './ClusteringSelector.js';
 import $ from 'jquery';
 
+/*
+ * This module patches the UI and model parts together
+ */
+
 var viewModel = new ViewModel();
 var model = viewModel.model;
 window.model = model;

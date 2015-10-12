@@ -4,8 +4,13 @@ import $ from 'jquery';
 import * as TextUtils from './TextUtils';
 import * as Sets from './Sets';
 
+// Set this to greater values to render icicles with higher resolutions so that zooming in
+// will not pixelate the images as quick
 const RESOLUTION = 1;
 
+/**
+ * An implementation of the icicle plot visualization with the Canvas API
+ */
 export default class CanvasIcicle extends EventEmitter {
     constructor(tree, containerSelector, valueFunction) {
         super();
@@ -17,12 +22,17 @@ export default class CanvasIcicle extends EventEmitter {
         var INNER_NODE_WIDTH = 25;
         var ROOT_NODE_WIDTH = 5;
         var LEAF_WIDTH = 15;
-        // the deepest level is guaranteed to only contain leaves
-        var depth = tree.root.height;
-        var width = INNER_NODE_WIDTH * (depth - 2) + LEAF_WIDTH + ROOT_NODE_WIDTH;
-        var height = 500;
+
         var VERTICAL_LABEL_PADDING = 3;
         var TOOLTIP_HEIGHT = 20;
+
+        var depth = tree.root.height;
+        // the deepest level is guaranteed to only contain leaves, so we can use LEAF_WIDTH instead
+        // of INNER_NODE_WIDTH for the last column
+        var width = INNER_NODE_WIDTH * (depth - 2) + LEAF_WIDTH + ROOT_NODE_WIDTH;
+
+        // initial height, will be replaced by actual canvas height on resize event
+        var height = 500;
 
         // these scales are only used for inner nodes, so map positions of first and last inner node
         var x = d3.scale.linear()
@@ -137,6 +147,9 @@ export default class CanvasIcicle extends EventEmitter {
             }
         };
 
+        /**
+         * Should be called when the canvas is resized
+         */
         this.updateHeight = function() {
             height = canvas.clientHeight;
             y.range([0, height]);
@@ -209,7 +222,7 @@ export default class CanvasIcicle extends EventEmitter {
             if (this._labelTooltip) {
                 $(this._labelTooltip).hide();
             }
-        }
+        };
 
         window.addEventListener('resize', () => this.updateHeight(), true);
         setTimeout(() => this.updateHeight(), 0); // height may only be available at next tick
@@ -225,6 +238,11 @@ export default class CanvasIcicle extends EventEmitter {
         this.on('mouseleave', () => this._hideLabelTooltip());
     }
 
+    /**
+     * Overrides the leaf node list of a given selection (e.g. hover or main)
+     * @param selectionName
+     * @param selectedKeys
+     */
     updateSelection(selectionName, selectedKeys) {
         let previousSelection = this.previousSelections[selectionName];
         if (!previousSelection) {

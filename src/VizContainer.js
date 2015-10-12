@@ -1,6 +1,9 @@
 import VizItem from './VizItem';
 import $ from 'jquery';
 
+/**
+ * A collection of VizItems; allows reordering and creates or removes items when ViewModel changes
+ */
 export default class VizContainer {
 	_element;
 	_viewModel;

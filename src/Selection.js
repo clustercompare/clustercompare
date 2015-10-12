@@ -3,6 +3,9 @@ import * as Sets from './Sets';
 
 const DEBOUNCE_DELAY = 10;
 
+/**
+ * A selection, may be main or hover selection
+ */
 export default class Selection extends EventEmitter {
 	_changeTimeout = null;
 

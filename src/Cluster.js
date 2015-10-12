@@ -1,6 +1,9 @@
 import InnerNode from './InnerNode';
 import * as StringUtils from './StringUtils';
 
+/**
+ * A cluster node, i.e., the inner node of a secondary hierarchy
+ */
 export default class Cluster extends InnerNode {
 	get label() {
 		return "Cluster " + this.completeKeyBase26;

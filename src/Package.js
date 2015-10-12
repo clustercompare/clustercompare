@@ -1,6 +1,9 @@
 import InnerNode from './InnerNode';
 import * as StringUtils from './StringUtils';
 
+/**
+ * An inner node of the primary hierarchy
+ */
 export default class Package extends InnerNode {
 	get label() {
 		return this.data.qualifiedName;

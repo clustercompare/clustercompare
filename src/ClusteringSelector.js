@@ -1,6 +1,10 @@
 import $ from 'jquery';
 import template from './templates/clustering-selection.hbs';
 
+/*
+ * This module manages the UI component of clustering selection that can be shown in the sidebar
+ */
+
 var visible = false;
 var viewModel;
 var pane;

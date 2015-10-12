@@ -10,6 +10,9 @@ export default class NodeFactory {
 		this._nodesByKey = new Map();
 	}
 
+	/**
+	 * Creates instances of the correct classes of all the nodes in the given tree
+	 */
 	createNodeRecursively(nodeData, parent = null) {
 		nodeData = TreeUtils.unpackOnlyChild(nodeData);
 		var clazz = parent ? NodeFactory.determineNodeClass(nodeData) : RootNode;

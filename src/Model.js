@@ -4,6 +4,9 @@ import * as Sets from './Sets';
 import Clusterings from './Clusterings';
 import * as StringUtils from './StringUtils';
 
+/*
+ * Provides access to all clusterings and their nodes
+ */
 export default class Model extends EventEmitter {
 	_trees = [];
 	constructor() {

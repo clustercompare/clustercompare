@@ -20,14 +20,26 @@ for (let groupKey in data) {
 }
 
 export default class Clusterings {
+    /**
+     * Gets the all keys, like SD.Agg, as array of strings
+     * @returns {Array}
+     */
     get instanceKeys() {
         return _instances.map(i => i.key);
     }
 
+    /**
+     * Gets the metadata of all clusterings
+     * @returns {Array}
+     */
     get instances() {
         return _instances;
     }
 
+    /**
+     * Gets the metadata of clusterings grouped by "group", i.e., SD or FO
+     * @returns {Array}
+     */
     get groups() {
         return _groups;
     }

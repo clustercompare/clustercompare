@@ -1,5 +1,8 @@
 import Node from './Node';
 
+/**
+ * A leaf node
+ */
 export default class Class extends Node {
 	get key() {
 		return this.data.qualifiedName.replace(/\./g, '_');
@@ -10,7 +13,8 @@ export default class Class extends Node {
 	}
 
 	get shortLabel() {
-		return '';//this.getLabel().substr(this.getLabel().lastIndexOf('.') + 1);
+		// There is never enough space to display class labels
+		return '';
 	}
 
 	_generateLeaveKeySet() {

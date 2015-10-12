@@ -3,6 +3,9 @@ import EventEmitter from 'node-event-emitter';
 import Model from './Model';
 import ObservableList from './ObservableList';
 
+/**
+ * Contains the model reference as well as information about the current view state
+ */
 export default class ViewModel extends EventEmitter {
 	_mainSelection = new Selection();
 	_hoverSelection = new Selection();

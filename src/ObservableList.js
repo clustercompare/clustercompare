@@ -1,6 +1,9 @@
 import EventEmitter from 'node-event-emitter';
 import { moveInArray } from './ArrayUtils';
 
+/**
+ * A list that fires events when it changes
+ */
 export default class ObservableList extends EventEmitter {
     _items = [];
     _eventsDeferred = false;

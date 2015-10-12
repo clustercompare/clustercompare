@@ -1,4 +1,11 @@
 // source: https://stackoverflow.com/questions/5306680/move-an-array-element-from-one-array-position-to-another
+
+/**
+ * Moves one element to a different position within an array
+ * @param array the array to modify
+ * @param from source index
+ * @param to target index
+ */
 export function moveInArray(array, from, to) {
     if (to >= array.length) {
         var k = to - array.length;

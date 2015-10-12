@@ -1,5 +1,9 @@
+// note: use the new CanvasIcicle implementation which provides better performance
 import Icicle from './CanvasIcicle';
 
+/**
+ * An icicle plot visualization that is bound bidirectionally to the model
+ */
 export default class BoundIcicle extends Icicle {
 	constructor(tree, containerSelector, viewModel) {
 		super(tree, containerSelector, BoundIcicle._getValueFunction(tree, viewModel));

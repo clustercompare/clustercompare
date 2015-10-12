@@ -2,6 +2,9 @@ import EventEmitter from 'node-event-emitter';
 import d3 from 'd3'
 import * as TextUtils from './TextUtils';
 
+/**
+ * An implementation of the icicle plot visualization using SVG elements (slower than CanvasIcicle)
+ */
 export default class Icicle extends EventEmitter {
 	constructor(tree, containerSelector, valueFunction) {
 		super();
