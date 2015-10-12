@@ -1,6 +1,7 @@
 import * as Utils from './Utils';
 import * as Sets from './Sets';
 import * as NodeComparison from './NodeComparison';
+import {average} from './ArrayUtils';
 
 export default class Node {
 	constructor(data, parent = null) {
@@ -202,16 +203,4 @@ export default class Node {
 			child.recursiveHierarchySort(otherRoot);
 		}
 	}
-}
-
-function average(arr) {
-	let sum = 0;
-	let count = 0;
-	for (var val of arr) {
-		if (val !== null) {
-			sum += val;
-			count++;
-		}
-	}
-	return sum / count;
 }
