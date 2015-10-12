@@ -4,6 +4,8 @@ import $ from 'jquery';
 import * as TextUtils from './TextUtils';
 import * as Sets from './Sets';
 
+const RESOLUTION = 1;
+
 export default class CanvasIcicle extends EventEmitter {
     constructor(tree, containerSelector, valueFunction) {
         super();
@@ -102,32 +104,35 @@ export default class CanvasIcicle extends EventEmitter {
             let w = nodeW(d) - 1 /* vertical spacing */;
             let h = nodeH(d);
             let y2 = y + h;
-            let yRounded = Math.round(y);
-            let y2Rounded = Math.round(y2);
-            let hRounded = y2Rounded - yRounded;
+            let xAligned = Math.round(x * RESOLUTION);
+            let yAligned = Math.round(y * RESOLUTION);
+            let y2Aligned = Math.round(y2 * RESOLUTION);
+            let hAligned = y2Aligned - yAligned;
+            let wAligned = Math.round(w * RESOLUTION);
 
             // main color
             context.fillStyle = nodeColor(d);
-            context.fillRect(x, yRounded, w, hRounded);
+            context.fillRect(xAligned, yAligned, wAligned, hAligned);
 
             // labels
             if (!d.isLeaf) {
                 context.save();
-                context.translate(x + 10, y + VERTICAL_LABEL_PADDING);
+                context.translate(xAligned + 10 * RESOLUTION, yAligned + VERTICAL_LABEL_PADDING * RESOLUTION);
                 context.rotate(Math.PI / 2);
-                context.font = '"OpenSans" 12px';
+                context.font = (12 * RESOLUTION) + 'px "Open Sans"';
                 context.fillStyle = 'white';
+                // TextUtils.truncate uses constant 12px, so do not multiply with RESOLUTION here
                 context.fillText(TextUtils.truncate(d.shortLabel, h - VERTICAL_LABEL_PADDING * 2), 0, 0);
                 context.restore();
             }
 
             // inset shadow at bottom
-            if (!d.isLeaf && hRounded > 2) {
+            if (!d.isLeaf && hAligned > 2) {
                 context.fillStyle = gradient;
-                let gradientHeight = Math.min(5, hRounded);
+                let gradientHeight = Math.min(5 * RESOLUTION, hAligned);
                 context.save();
-                context.translate(x, y2Rounded - gradientHeight);
-                context.fillRect(0, 0, w, gradientHeight);
+                context.translate(xAligned, (y2Aligned - gradientHeight));
+                context.fillRect(0, 0, wAligned, gradientHeight);
                 context.restore();
             }
         };
@@ -135,9 +140,9 @@ export default class CanvasIcicle extends EventEmitter {
         this.updateHeight = function() {
             height = canvas.clientHeight;
             y.range([0, height]);
-            canvas.height = height;
-            canvas.width = width;
-            context.clearRect(0, 0, width, height);
+            canvas.height = RESOLUTION * height;
+            canvas.width = RESOLUTION * width;
+            context.clearRect(0, 0, width * RESOLUTION, height * RESOLUTION);
 
             for (let d of elements) {
                 this._drawNode(d);
