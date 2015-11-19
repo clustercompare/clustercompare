@@ -234,7 +234,15 @@ export default class Node {
 	 * Gets the maximum similarity of this node to the given other node or any of its descendants
 	 */
 	getMaxSimilarity(otherNode) {
-		return NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(this.leaveKeys, otherNode).similarity;
+		return this.getMaxSimilarityInfo(otherNode).similarity;
+	}
+
+	/**
+	 * Gets the maximum similarity of this node to the given other node or any of its descendants
+	 * @return { similarity, node, totalCount, intersection }
+	 */
+	getMaxSimilarityInfo(otherNode) {
+		return NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(this.leaveKeys, otherNode);
 	}
 
 	bary(pi1Fn) {

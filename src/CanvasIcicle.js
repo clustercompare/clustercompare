@@ -6,7 +6,7 @@ import * as Sets from './Sets';
 
 // Set this to greater values to render icicles with higher resolutions so that zooming in
 // will not pixelate the images as quick
-const RESOLUTION = 1;
+const RESOLUTION = 2;
 
 /**
  * An implementation of the icicle plot visualization with the Canvas API
@@ -25,6 +25,8 @@ export default class CanvasIcicle extends EventEmitter {
 
         var VERTICAL_LABEL_PADDING = 3;
         var TOOLTIP_HEIGHT = 20;
+
+        const SIDE_LINE_WIDTH = 2;
 
         var depth = tree.root.height;
         // the deepest level is guaranteed to only contain leaves, so we can use LEAF_WIDTH instead
@@ -105,7 +107,7 @@ export default class CanvasIcicle extends EventEmitter {
                 let colors = [['#FAEB9E', '#f3cd0d'], ['#4040c0', '#1a1a4d']];
                 return colors[d.selections.main ? 1 : 0][d.selections.hover ? 1 : 0];
             }
-            return makeColor(self.getValue(d));
+            return makeColor(self.getValue(d).intensity);
         }
 
         this._drawNode = function(d, options) {
@@ -114,11 +116,20 @@ export default class CanvasIcicle extends EventEmitter {
             let w = nodeW(d) - 1 /* vertical spacing */;
             let h = nodeH(d);
             let y2 = y + h;
+            let x2 = x + w;
             let xAligned = Math.round(x * RESOLUTION);
             let yAligned = Math.round(y * RESOLUTION);
             let y2Aligned = Math.round(y2 * RESOLUTION);
+            let x2Aligned = Math.round(x2 * RESOLUTION);
+
+            let sideColor = self.getValue(d).sideColor;
+            let hasSideBar = sideColor && !d.isLeaf && !d.isRoot;
+            if (hasSideBar) {
+                x2Aligned -= (SIDE_LINE_WIDTH + 1) * RESOLUTION;
+            }
+
             let hAligned = y2Aligned - yAligned;
-            let wAligned = Math.round(w * RESOLUTION);
+            let wAligned = x2Aligned - xAligned;
 
             // main color
             context.fillStyle = nodeColor(d);
@@ -144,6 +155,12 @@ export default class CanvasIcicle extends EventEmitter {
                 context.translate(xAligned, (y2Aligned - gradientHeight));
                 context.fillRect(0, 0, wAligned, gradientHeight);
                 context.restore();
+            }
+
+            if (hasSideBar) {
+                // colored side bar
+                context.fillStyle = sideColor;
+                context.fillRect(x2Aligned + 1 * RESOLUTION, yAligned, SIDE_LINE_WIDTH * RESOLUTION, hAligned);
             }
         };
 
@@ -271,6 +288,11 @@ export default class CanvasIcicle extends EventEmitter {
             return this._valueCache.get(node);
         }
         var value = this.valueFunction(node);
+        if (typeof value !== 'object') {
+            value = {
+                intensity: value
+            }
+        }
         this._valueCache.set(node, value);
         return value;
     }

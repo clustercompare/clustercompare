@@ -1,5 +1,6 @@
 // note: use the new CanvasIcicle implementation which provides better performance
 import Icicle from './CanvasIcicle';
+import * as ColorGenerator from './ColorGenerator';
 
 /**
  * An icicle plot visualization that is bound bidirectionally to the model
@@ -43,8 +44,21 @@ export default class BoundIcicle extends Icicle {
 				return node => 0;
 			}
 
-			return node => Math.max.apply(null,
-					 viewModel.selectedClusterings.items.map(key => model.getTree(key)).map(tree => node.getMaxSimilarity(tree.root)));
+			return node => {
+				let maxSimilarity = null;
+				let value;
+				for (let tree of viewModel.selectedClusterings.items.map(key => model.getTree(key))) {
+					let similarity = node.getMaxSimilarity(tree.root);
+					if (maxSimilarity == null || similarity > maxSimilarity) {
+						maxSimilarity = similarity;
+						value = {
+							intensity: similarity,
+							sideColor: ColorGenerator.colorForClustering(tree.root.clustering)
+						};
+					}
+				}
+				return value;
+			}
 		}
 
 		var packagesTree = model.packagesTree;
