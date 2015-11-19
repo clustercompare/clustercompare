@@ -227,7 +227,13 @@ export default class CanvasIcicle extends EventEmitter {
                 this._labelTooltip.setAttribute('class', 'label-tooltip');
                 $(this._labelTooltip).insertAfter(this.canvas);
             }
-            this._labelTooltip.textContent = node.label;
+            let tooltipHTML = this.getValue(node).tooltipHTML;
+            if (tooltipHTML) {
+                this._labelTooltip.innerHTML = tooltipHTML;
+            } else {
+                this._labelTooltip.textContent = node.label;
+            }
+
             var canvasOffset = $(canvas).offset();
             this._labelTooltip.style.left = canvasOffset.left + nodeX(node) + nodeW(node) + 'px';
             this._labelTooltip.style.top = canvasOffset.top + nodeY(node) - TOOLTIP_HEIGHT / 2 + 'px';

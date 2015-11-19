@@ -1,6 +1,7 @@
 // note: use the new CanvasIcicle implementation which provides better performance
 import Icicle from './CanvasIcicle';
 import * as ColorGenerator from './ColorGenerator';
+import $ from 'jquery';
 
 /**
  * An icicle plot visualization that is bound bidirectionally to the model
@@ -53,8 +54,15 @@ export default class BoundIcicle extends Icicle {
 						maxSimilarity = similarity;
 						value = {
 							intensity: similarity,
-							sideColor: ColorGenerator.colorForClustering(tree.root.clustering)
+							sideColor: ColorGenerator.colorForClustering(tree.root.clustering),
 						};
+						value.tooltipHTML =
+							$('<span>').append(
+								$('<span>').text(node.label),
+								$('<br>'),
+								$('<span>').css('color', value.sideColor).text(tree.root.clustering),
+								$('<span>').css('opacity', '50%').text(', ' + Math.round(similarity * 100) + '%')
+							).html();
 					}
 				}
 				return value;
