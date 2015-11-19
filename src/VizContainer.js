@@ -27,7 +27,6 @@ export default class VizContainer {
 	_reload() {
 		this._element.children().detach(); // remove, but preserve event handlers
 		this._items = this._viewModel.selectedClusterings.items.map(key => this._getOrCreateItem(key));
-		delete this._itemsByKey.packages; // need to recalculate
 		this._items.unshift(this._getOrCreateItem('packages'));
 		for (let item of this._items) {
 			this._element.append(item.element);
@@ -35,11 +34,13 @@ export default class VizContainer {
 	}
 
 	_getOrCreateItem(key) {
-		if (key in this._itemsByKey) {
-			return this._itemsByKey[key];
+		let cacheKey = this._getCacheKey(key);
+		if (cacheKey in this._itemsByKey) {
+			return this._itemsByKey[cacheKey];
 		}
 		let item = new VizItem(this._viewModel.model.getTree(key), this._element[0], this._viewModel,
 			{ enableDragging: key != 'packages'});
+
 		item.on("drag", e => {
 			this._viewModel.selectedClusterings.beginUpdate();
 			var hoveredItem = this._findItemAtPos(e.centerX, item);
@@ -54,7 +55,7 @@ export default class VizContainer {
 		item.on("drop", e => {
 			this._viewModel.selectedClusterings.endUpdate();
 		});
-		this._itemsByKey[key] = item;
+		this._itemsByKey[cacheKey] = item;
 		return item;
 	}
 
@@ -70,5 +71,12 @@ export default class VizContainer {
 				return item;
 			}
 		}
+	}
+
+	_getCacheKey(itemKey) {
+		if (itemKey == 'packages') {
+			return 'packages:' + this._viewModel.selectedClusterings.items.map(c => c.key).sort().join(',');
+		}
+		return itemKey;
 	}
 }
