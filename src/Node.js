@@ -20,6 +20,10 @@ export default class Node {
 		return this._children;
 	}
 
+	get hasChildren() {
+		return this._children.length > 0;
+	}
+
 	replaceChildren(arr) {
 		this._children.length = 0;
 		for (let child of arr) {
@@ -63,6 +67,21 @@ export default class Node {
 
 	get isRoot() {
 		return !this.parent;
+	}
+
+	get descendantsAndThis() {
+		return [this].concat(this.descendants);
+	}
+
+	get descendants() {
+		if (!this.hasChildren) {
+			return [];
+		}
+		return Array.concat.apply(null, this.children.map(node => node.descendantsAndThis));
+	}
+
+	get innerNodes() {
+		return this.descendants.filter(node => !node.isLeaf);
 	}
 
 	/**

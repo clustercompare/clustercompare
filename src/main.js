@@ -1,6 +1,7 @@
 import VizContainer from './VizContainer';
 import ViewModel from './ViewModel.js';
 import SelectionHistory from './SelectionHistory.js';
+import Analyzer from './Analyzer.js';
 import * as SelectionPane from './SelectionPane.js';
 import * as ClusteringSelector from './ClusteringSelector.js';
 import $ from 'jquery';
@@ -12,6 +13,9 @@ import $ from 'jquery';
 var viewModel = new ViewModel();
 var model = viewModel.model;
 window.model = model;
+window.viewModel = viewModel;
+window.analyzer = new Analyzer(model);
+
 viewModel.on('ready', function () {
 	var selectionHistory = new SelectionHistory(model.leafKeys);
 

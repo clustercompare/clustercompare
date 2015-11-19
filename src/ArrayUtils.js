@@ -27,3 +27,44 @@ export function average(arr) {
     }
     return sum / count;
 }
+
+export function maxByValue(array, valueProvider) {
+    let maxValue = null;
+    let maxItem = null;
+    for (let item of array) {
+        let value = valueProvider(item);
+        if (maxValue == null || value > maxValue) {
+            maxValue = value;
+            maxItem = item;
+        }
+    }
+    return maxItem;
+}
+
+export function groupBy(array, keyFn) {
+    let map = {};
+    for (let item of array) {
+        let key = keyFn(item);
+        if (!(key in map)) {
+            map[key] = [];
+        }
+        map[key].push(key);
+    }
+    return map;
+}
+
+export function aggregate(array, fn) {
+    let value = null;
+    for (item of array) {
+        value = fn(item, value);
+    }
+    return value;
+}
+
+export function mapValues(obj, fn) {
+    for (let key in obj) {
+        obj[key] = fn(obj[key]);
+    }
+    return obj;
+}
+
