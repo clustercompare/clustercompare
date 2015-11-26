@@ -47,25 +47,33 @@ export default class BoundIcicle extends Icicle {
 
 			return node => {
 				let maxSimilarity = null;
-				let value;
+				let value = null;
+				let bestTree = null;
 				for (let tree of viewModel.selectedClusterings.items.map(key => model.getTree(key))) {
 					let similarity = node.getMaxSimilarity(tree.root);
 					if (maxSimilarity == null || similarity > maxSimilarity) {
 						maxSimilarity = similarity;
-						value = {
-							intensity: similarity,
-							sideColor: ColorGenerator.colorForClustering(tree.root.clustering),
-						};
-						value.tooltipHTML =
-							$('<span>').append(
-								$('<span>').text(node.label),
-								$('<br>'),
-								$('<span>').css('color', value.sideColor).text(tree.root.clustering),
-								$('<span>').css('opacity', '50%').text(', ' + Math.round(similarity * 100) + '%')
-							).html();
+						bestTree = tree;
 					}
 				}
-				return value;
+				if (bestTree == null) {
+					return 0;
+				}
+				if (node.isLeaf) {
+					return maxSimilarity;
+				}
+
+				let clusteringColor = ColorGenerator.colorForClustering(tree.root.clustering);
+				return {
+					intensity: maxSimilarity,
+					sideColor: clusteringColor,
+					tooltipHTML: $('<span>').append(
+						$('<span>').text(node.label),
+						$('<br>'),
+						$('<span>').css('color', clusteringColor).text(bestTree.root.clustering),
+						$('<span>').css('opacity', '50%').text(', ' + Math.round(maxSimilarity * 100) + '%')
+					).html()
+				};
 			}
 		}
 

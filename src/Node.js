@@ -163,7 +163,7 @@ export default class Node {
 	}
 
 	/**
-	 * Gets a set the keys of leaf nodes
+	 * Gets a set of the keys of leaf nodes
 	 */
 	get leafKeys() {
 		if (!this._leafKeys) {
