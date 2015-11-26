@@ -152,51 +152,6 @@ body, html {
 	box-sizing: border-box;
 }
 
-.icicle svg {
-	/* avoid gaps between rects; there are also no curves to antialias */
-	shape-rendering: crispEdges;
-}
-
-@leaf-color: #FAEB9E;
-@selection-color: rgb(64, 64, 192);
-@highlight-darkening: 30%;
-
-.icicle .main-rect {
-	&.root {
-		fill: #000080;
-	}
-
-	&.leaf {
-		fill: @leaf-color;
-
-		&.selected-hover {
-			fill: darken(@leaf-color, @highlight-darkening);
-		}
-
-		&.selected-main {
-			fill: @selection-color;
-		}
-
-		&.selected-main.selected-hover {
-			fill: darken(@selection-color, @highlight-darkening);
-		}
-	}
-}
-
-.icicle .highlight-rect {
-	fill: transparent;
-	border-right: none;
-}
-
-.icicle .highlight-rect:hover {
-	fill: black;
-}
-
-.node-text {
-	font-size: 12px;
-	fill: white;
-}
-
 .label-tooltip {
   position: fixed;
   background: rgba(0,0,0,0.9);
