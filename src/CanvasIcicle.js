@@ -102,7 +102,7 @@ export default class CanvasIcicle extends EventEmitter {
 
         function nodeColor(d) {
             if (d.isRoot) {
-                return '#000080';
+                return 'black';
             }
             if (d.isLeaf) {
                 let colors = [['#FAEB9E', '#f3cd0d'], ['#4040c0', '#1a1a4d']];
