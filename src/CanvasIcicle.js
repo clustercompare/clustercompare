@@ -26,7 +26,8 @@ export default class CanvasIcicle extends EventEmitter {
         var VERTICAL_LABEL_PADDING = 3;
         var TOOLTIP_HEIGHT = 20;
 
-        const SIDE_LINE_WIDTH = 2;
+        const SIDE_LINE_WIDTH = 4;
+        const LABEL_LEFT_OFFSET = 7;
 
         var depth = tree.root.height;
         // the deepest level is guaranteed to only contain leaves, so we can use LEAF_WIDTH instead
@@ -138,7 +139,7 @@ export default class CanvasIcicle extends EventEmitter {
             // labels
             if (!d.isLeaf) {
                 context.save();
-                context.translate(xAligned + 10 * RESOLUTION, yAligned + VERTICAL_LABEL_PADDING * RESOLUTION);
+                context.translate(xAligned + LABEL_LEFT_OFFSET * RESOLUTION, yAligned + VERTICAL_LABEL_PADDING * RESOLUTION);
                 context.rotate(Math.PI / 2);
                 context.font = (12 * RESOLUTION) + 'px "Open Sans"';
                 context.fillStyle = 'white';
