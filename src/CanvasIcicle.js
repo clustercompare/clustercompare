@@ -105,7 +105,7 @@ export default class CanvasIcicle extends EventEmitter {
                 return 'black';
             }
             if (d.isLeaf) {
-                let colors = [['#FAEB9E', '#f3cd0d'], ['#4040c0', '#1a1a4d']];
+                let colors = [['#FAEB9E', '#f3cd0d'], ['#a3a3e1', '#7373d0']];
                 return colors[d.selections.main ? 1 : 0][d.selections.hover ? 1 : 0];
             }
             return makeColor(self.getValue(d).intensity);
