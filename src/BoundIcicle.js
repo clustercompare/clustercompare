@@ -39,45 +39,31 @@ export default class BoundIcicle extends Icicle {
 	}
 
 	static _getValueFunction(tree, viewModel) {
-		var model = viewModel.model;
-		if (tree.couplingConcept == 'packages') {
-			if (viewModel.selectedClusterings.items.length == 0) {
-				return node => 0;
+		return node => {
+			let info = viewModel.similarityProvider.getSimilarityInfo(node);
+			let result = {
+				intensity: info.similarity
+			};
+			if (node.root.isPrimaryHierarchy && info.node) {
+				result.sideColor = ColorGenerator.colorForClustering(info.node.root.clustering);
+				result.tooltipHTML = $('<span>').append(
+					$('<span>').text(node.label),
+					$('<br>'),
+					$('<span>').text('Most similar to '),
+					$('<span>').css({color: result.sideColor, 'font-weight': 'bold'}).text(info.node.root.clustering),
+					$('<span>').text(' » ' + info.node.label),
+					$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%')
+				).html();
+			} else if (!node.root.isPrimaryHierarchy && info.isWinner) {
+				result.sideColor = ColorGenerator.colorForClustering(node.root.clustering);
+				result.tooltipHTML = $('<span>').append(
+					$('<span>').text(node.label),
+					$('<br>'),
+					$('<span>').text('Most similar to ' + info.node.label),
+					$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%')
+				).html();
 			}
-
-			return node => {
-				let maxSimilarity = null;
-				let value = null;
-				let bestTree = null;
-				for (let tree of viewModel.selectedClusterings.items.map(key => model.getTree(key))) {
-					let similarity = node.getMaxSimilarity(tree.root);
-					if (maxSimilarity == null || similarity > maxSimilarity) {
-						maxSimilarity = similarity;
-						bestTree = tree;
-					}
-				}
-				if (bestTree == null) {
-					return 0;
-				}
-				if (node.isLeaf) {
-					return maxSimilarity;
-				}
-
-				let clusteringColor = ColorGenerator.colorForClustering(tree.root.clustering);
-				return {
-					intensity: maxSimilarity,
-					sideColor: clusteringColor,
-					tooltipHTML: $('<span>').append(
-						$('<span>').text(node.label),
-						$('<br>'),
-						$('<span>').css('color', clusteringColor).text(bestTree.root.clustering),
-						$('<span>').css('opacity', '50%').text(', ' + Math.round(maxSimilarity * 100) + '%')
-					).html()
-				};
-			}
-		}
-
-		var packagesTree = model.packagesTree;
-		return node => node.getMaxSimilarity(packagesTree.root);
+			return result;
+		};
 	}
 }

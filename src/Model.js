@@ -9,6 +9,8 @@ import * as StringUtils from './StringUtils';
  */
 export default class Model extends EventEmitter {
 	_trees = [];
+	_isReady = false;
+
 	constructor() {
 		super();
 		this._project = location.search ? location.search.substring(1) : 'PMD';
@@ -41,6 +43,7 @@ export default class Model extends EventEmitter {
 			}
 			tree.root = this._nodeFactory.createNodeRecursively(tree.root);
 			tree.root.clustering = name;
+			tree.root.isPrimaryHierarchy = name == 'packages';
 			tree.root.project = this._project;
 			Sets.mergeInto(this._allLeafKeys, tree.root.leafKeys);
 			this._collectNodes(tree.root);
@@ -72,6 +75,7 @@ export default class Model extends EventEmitter {
 			return StringUtils.compare(a, b);
 		}
 		this._trees.sort((a, b) => compare(a.couplingConcept, b.couplingConcept));
+		this._isReady = true;
 		this.emit('ready');
 	}
 
@@ -113,5 +117,9 @@ export default class Model extends EventEmitter {
 
 	get clusterings() {
 		return this._clusterings;
+	}
+
+	get isReady() {
+		return this._isReady;
 	}
 }
