@@ -19,6 +19,11 @@ export function getMaxSimilarityInfoOfLeaveSetToNode(leaveSet, node) {
 		return info;
 	}
 
+	// no similarity to leaf nodes
+	if (node.isLeaf) {
+		return info;
+	}
+
 	// similarity of root nodes is never interesting
 	if (!node.isRoot) {
 		var totalCount = Sets.merge(leaveSet, node.leafKeys).size;
