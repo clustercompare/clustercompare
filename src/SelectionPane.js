@@ -10,6 +10,8 @@ var trees;
 var model;
 var viewModel;
 
+const SIMILAR_CLUSTERS_THRESHOLD = 1/3;
+
 export function init(viewModel_) {
 	viewModel = viewModel_;
 	mainSelection = viewModel.mainSelection;
@@ -28,19 +30,21 @@ export function update(data) {
 		if (tree.couplingConcept != 'packages' && !viewModel.selectedClusterings.contains(tree.couplingConcept)) {
 			continue;
 		}
-		let infos = NodeComparison.getSimilaritiesAboveThresholdOfLeaveSetToNode(data.selectedLeafKeys, tree.root, 1 / 3);
+		let infos = NodeComparison.getTopSimilaritiesOfLeaveSetToNode(data.selectedLeafKeys, tree.root, Math.ceil(SIMILAR_CLUSTERS_THRESHOLD));
 		if (infos.length) {
 			similarityInfoGroups.push({
 				bestSimilarity: infos[0].similarity,
-				items: infos.map(info => ({
-					clustering: tree.couplingConcept == 'packages' ? '' : tree.couplingConcept,
-					clusteringColor: ColorGenerator.colorForClustering(tree.couplingConcept),
-					similarity: info.similarity,
-					node: info.node,
-					percent: Math.round(info.similarity * 100),
-					intersection: info.intersection,
-					totalCount: info.totalCount,
-					clusterSize: info.node.leafKeys.size
+				items: infos
+					.filter(info => info == infos[0] || info.similarity >= SIMILAR_CLUSTERS_THRESHOLD)
+					.map(info => ({
+						clustering: tree.couplingConcept == 'packages' ? '' : tree.couplingConcept,
+						clusteringColor: ColorGenerator.colorForClustering(tree.couplingConcept),
+						similarity: info.similarity,
+						node: info.node,
+						percent: Math.round(info.similarity * 100),
+						intersection: info.intersection,
+						totalCount: info.totalCount,
+						clusterSize: info.node.leafKeys.size
 				}))
 			});
 		}

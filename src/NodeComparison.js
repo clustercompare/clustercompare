@@ -18,12 +18,6 @@ export function getTopSimilaritiesOfLeaveSetToNode(leafSet, node, limit) {
 	return queue.items;
 }
 
-export function getSimilaritiesAboveThresholdOfLeaveSetToNode(leafSet, node, threshold) {
-	let items = getTopSimilaritiesOfLeaveSetToNode(leafSet, node, Math.ceil(1 / threshold));
-	items = items.filter(item => item.similarity >= threshold);
-	return items;
-}
-
 function getTopSimilaritiesOfLeaveSetToNodeInternal(leafSet, node, queue) {
 	var intersection = Sets.intersect(leafSet, node.leafKeys).size;
 	if (!intersection) {
