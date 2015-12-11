@@ -40,7 +40,7 @@ export function update(data) {
 					percent: Math.round(info.similarity * 100),
 					intersection: info.intersection,
 					totalCount: info.totalCount,
-					clusterSize: info.node.leaveKeys.size
+					clusterSize: info.node.leafKeys.size
 				}))
 			});
 		}

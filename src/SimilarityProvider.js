@@ -43,7 +43,7 @@ export default class SimilarityProvider {
 		for (let node of clusteringRoot.descendantsAndThis) {
 			// constant leaf set of clustering node, walks through complete packages tree
 			let similarityInfo = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(
-				node.leaveKeys, this._packagesRoot);
+				node.leafKeys, this._packagesRoot);
 			result.similarityInfoByNodeKey[node.key] = similarityInfo;
 
 			// collect by package node

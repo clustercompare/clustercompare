@@ -249,25 +249,6 @@ export default class Node {
 		return this._nodes;
 	}
 
-	/**
-	 * Gets the maximum similarity of this node to the given other node or any of its descendants
-	 */
-	getMaxSimilarity(otherNode) {
-<<<<<<< b238de7a6c3bd110a364e14f473752f0f4825ce7
-		return this.getMaxSimilarityInfo(otherNode).similarity;
-	}
-
-	/**
-	 * Gets the maximum similarity of this node to the given other node or any of its descendants
-	 * @return { similarity, node, totalCount, intersection }
-	 */
-	getMaxSimilarityInfo(otherNode) {
-		return NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(this.leaveKeys, otherNode);
-=======
-		return NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(this.leafKeys, otherNode).similarity;
->>>>>>> Fix typo leaveKeys -> leafKeys
-	}
-
 	bary(pi1Fn) {
 		return average(Array.from(this.leaves).map(c => pi1Fn(c)));
 	}
