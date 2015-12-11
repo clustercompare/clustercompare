@@ -122,4 +122,14 @@ export default class Model extends EventEmitter {
 	get isReady() {
 		return this._isReady;
 	}
+
+	loadMatrix(name, callback) {
+		d3.json("data/" + this._project + "/" + name + ".matrix.json", (error, matrix) => {
+			if (error) {
+				console.log(error);
+				return;
+			}
+			callback(matrix);
+		});
+	}
 }

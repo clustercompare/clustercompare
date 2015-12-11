@@ -98,6 +98,7 @@ body, html {
 }
 
 @viz-item-heading-height: 27px;
+@viz-item-toolbar-height: 20px;
 
 .viz-item {
     margin-right: 10px;
@@ -108,7 +109,7 @@ body, html {
 	background: white;
 	height: 100%;
 	box-sizing: border-box;
-	padding-top: @viz-item-heading-height;
+	padding-top: @viz-item-heading-height + @viz-item-toolbar-height;
 
 	&.hover {
 		box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
@@ -135,21 +136,44 @@ body, html {
 .viz-item h3 {
 	padding: 5px;
 	background: @light-color;
-	margin-top: -@viz-item-heading-height;
+	margin-top: -@viz-item-heading-height - @viz-item-toolbar-height;
 	height: @viz-item-heading-height;
 	box-sizing: border-box;
 	text-align: center;
   cursor: default;
 }
 
+.viz-item .toolbar button {
+	width: 100%;
+	border: none;
+	background: #eee;
+	height: @viz-item-toolbar-height;
+	box-sizing: border-box;
+	text-align: left;
+}
+
+.viz-item.with-matrix .matrix-toggle-button:before {
+	content: '✓';
+	padding-right: 3px;
+	display: inline-block;
+}
+
 .viz-item.draggable h3 {
   cursor: move;
 }
 
-.icicle {
+.icicle,
+.matrix {
 	padding: 5px;
 	height: 100%;
 	box-sizing: border-box;
+	display: inline-block;
+}
+
+
+.matrix canvas {
+	image-rendering: -moz-crisp-edges;
+	image-rendering: pixelated;
 }
 
 .label-tooltip {

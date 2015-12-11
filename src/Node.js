@@ -192,6 +192,13 @@ export default class Node {
 		return this._leaves;
 	}
 
+	get leavesInOrder() {
+		if (!this._leavesInOrder) {
+			this._leavesInOrder = this._generateLeafArray();
+		}
+		return this._leavesInOrder;
+	}
+
 	_generateLeafSet() {
 		var result = new Set();
 		if (this.isLeaf) {
@@ -200,6 +207,19 @@ export default class Node {
 		for (var child of this.children) {
 			for (var leaf of child.leaves) {
 				result.add(leaf);
+			}
+		}
+		return result;
+	}
+
+	_generateLeafArray() {
+		var result = [];
+		if (this.isLeaf) {
+			result.push(this);
+		}
+		for (var child of this.children) {
+			for (var leaf of child.leavesInOrder) {
+				result.push(leaf);
 			}
 		}
 		return result;
