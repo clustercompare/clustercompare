@@ -30,23 +30,26 @@
                 <span class="cluster-size" title="Size of cluster"></span>
             </li>
             {{#each clusters}}
-                <li class="cluster-item" data-node="{{node.key}}">
-                    <span class="percentage-indicator">
-                        <span class="tiny-barchart">
-                            <span class="bar" style="width: {{percent}}%;"></span>
-                            <span class="label">{{percent}}%</span>
+                {{#each items}}
+                    <li class="cluster-item" data-node="{{node.key}}">
+                        <span class="percentage-indicator">
+                            <span class="tiny-barchart">
+                                <span class="bar" style="width: {{percent}}%;"></span>
+                                <span class="label">{{percent}}%</span>
+                            </span>
                         </span>
-                    </span>
-                    <span class="intersection-size"><span>{{intersection}}</span></span>
-                    <span class="union-size"><span>{{totalCount}}</span></span>
-                    <span class="node-title">
-                        {{#if clustering}}<span style="font-weight: bold; color: {{clusteringColor}}">{{clustering}}</span> &raquo; {{/if}}
-                        {{node.label}}
-                    </span>
-                    <span class="cluster-size">
-                        {{clusterSize}}
-                    </span>
-                </li>
+                        <span class="intersection-size"><span>{{intersection}}</span></span>
+                        <span class="union-size"><span>{{totalCount}}</span></span>
+                        <span class="node-title">
+                            {{#if clustering}}<span style="font-weight: bold; color: {{clusteringColor}}">{{clustering}}</span> &raquo; {{/if}}
+                            {{node.label}}
+                        </span>
+                        <span class="cluster-size">
+                            {{clusterSize}}
+                        </span>
+                    </li>
+                {{/each}}
+                <li class="group-divider"></li>
             {{/each}}
         </ul>
     {{else}}

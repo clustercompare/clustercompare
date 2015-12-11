@@ -23,31 +23,36 @@ export function update(data) {
 	let classes = Array.from(data.selectedLeaves);
 	classes.sort((a, b) => a.label < b.label);
 
-	let similarityInfos = [];
+	let similarityInfoGroups = [];
 	for (let tree of trees) {
 		if (tree.couplingConcept != 'packages' && !viewModel.selectedClusterings.contains(tree.couplingConcept)) {
 			continue;
 		}
-
-		let info = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(data.selectedLeafKeys, tree.root);
-		if (info.similarity > 0) {
-			similarityInfos.push(info);
+		let infos = NodeComparison.getSimilaritiesAboveThresholdOfLeaveSetToNode(data.selectedLeafKeys, tree.root, 1 / 3);
+		if (infos.length) {
+			similarityInfoGroups.push({
+				bestSimilarity: infos[0].similarity,
+				items: infos.map(info => ({
+					clustering: tree.couplingConcept == 'packages' ? '' : tree.couplingConcept,
+					clusteringColor: ColorGenerator.colorForClustering(tree.couplingConcept),
+					similarity: info.similarity,
+					node: info.node,
+					percent: Math.round(info.similarity * 100),
+					intersection: info.intersection,
+					totalCount: info.totalCount,
+					clusterSize: info.node.leaveKeys.size
+				}))
+			});
 		}
 	}
-	similarityInfos.sort((a, b) => b.similarity - a.similarity); // sort reverse
+
+	// sort reversely by first entry per group
+	similarityInfoGroups.sort((a, b) => b.bestSimilarity - a.bestSimilarity);
 
 	let viewData = {
 		selection: classes,
 		singleSelection: classes.length == 1 ? classes[0] : null,
-		clusters: similarityInfos.map(info => ({
-			node: info.node,
-			percent: Math.round(info.similarity * 100),
-			clustering: info.node.root.clustering == 'packages' ? '' : info.node.root.clustering,
-			clusteringColor: ColorGenerator.colorForClustering(info.node.root.clustering),
-			intersection: info.intersection,
-			totalCount: info.totalCount,
-			clusterSize: info.node.leafKeys.size
-		}))
+		clusters: similarityInfoGroups
 	};
 
 	let pane = $('#selection-pane');
