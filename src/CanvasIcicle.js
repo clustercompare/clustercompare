@@ -47,7 +47,7 @@ export default class CanvasIcicle extends EventEmitter {
 
         var partition = d3.layout.partition()
             .children(d => d._children)
-            .value(d => d.sortOrder)
+            .value(d => 1)
             .sort((a,b) => a.sortOrder - b.sortOrder);
         var elements = partition(tree.root);
         this.leafElementByKey = {};
