@@ -287,5 +287,6 @@ export default class Node {
 		for (let child of this.children) {
 			child.recursiveHierarchySort(otherRoot);
 		}
+		this.children.sort((a, b) => a.sortOrder - b.sortOrder);
 	}
 }
