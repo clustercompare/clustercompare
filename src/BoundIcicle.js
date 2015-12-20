@@ -54,13 +54,16 @@ export default class BoundIcicle extends Icicle {
 					$('<span>').text(' » ' + info.node.label),
 					$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%')
 				).html();
-			} else if (!node.root.isPrimaryHierarchy && info.isWinner) {
-				result.sideColor = ColorGenerator.colorForClustering(node.root.clustering);
+			} else if (!node.root.isPrimaryHierarchy && info.node) {
+				if (info.isWinner) {
+					result.sideColor = ColorGenerator.colorForClustering(node.root.clustering);
+				}
 				result.tooltipHTML = $('<span>').append(
 					$('<span>').text(node.label),
 					$('<br>'),
 					$('<span>').text('Most similar to ' + info.node.label),
-					$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%')
+					$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%'),
+					$('<span>').text(' (is winner cluster)').toggle(info.isWinner)
 				).html();
 			}
 			return result;
