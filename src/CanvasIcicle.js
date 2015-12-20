@@ -22,12 +22,16 @@ export default class CanvasIcicle extends EventEmitter {
         var INNER_NODE_WIDTH = 25;
         var ROOT_NODE_WIDTH = 5;
         var LEAF_WIDTH = 15;
+        const FONT_SIZE = 12;
 
         var VERTICAL_LABEL_PADDING = 3;
         var TOOLTIP_HEIGHT = 20;
 
         const SIDE_LINE_WIDTH = 4;
         const LABEL_LEFT_OFFSET = 7;
+
+        const PIE_CHART_MARGIN = 4;
+        const PIE_CHART_RADIUS = (INNER_NODE_WIDTH - SIDE_LINE_WIDTH) / 2 - PIE_CHART_MARGIN;
 
         var depth = tree.root.height;
         // the deepest level is guaranteed to only contain leaves, so we can use LEAF_WIDTH instead
@@ -123,7 +127,8 @@ export default class CanvasIcicle extends EventEmitter {
             let y2Aligned = Math.round(y2 * RESOLUTION);
             let x2Aligned = Math.round(x2 * RESOLUTION);
 
-            let sideColor = self.getValue(d).sideColor;
+            let value = self.getValue(d);
+            let sideColor = value.sideColor;
             let hasSideBar = sideColor && !d.isLeaf && !d.isRoot;
             if (hasSideBar) {
                 x2Aligned -= (SIDE_LINE_WIDTH + 1) * RESOLUTION;
@@ -141,7 +146,7 @@ export default class CanvasIcicle extends EventEmitter {
                 context.save();
                 context.translate(xAligned + LABEL_LEFT_OFFSET * RESOLUTION, yAligned + VERTICAL_LABEL_PADDING * RESOLUTION);
                 context.rotate(Math.PI / 2);
-                context.font = (12 * RESOLUTION) + 'px "Open Sans"';
+                context.font = (FONT_SIZE * RESOLUTION) + 'px "Open Sans"';
                 context.fillStyle = 'white';
                 // TextUtils.truncate uses constant 12px, so do not multiply with RESOLUTION here
                 context.fillText(TextUtils.truncate(d.shortLabel, h - VERTICAL_LABEL_PADDING * 2), 0, 0);
@@ -163,7 +168,26 @@ export default class CanvasIcicle extends EventEmitter {
                 context.fillStyle = sideColor;
                 context.fillRect(x2Aligned + 1 * RESOLUTION, yAligned, SIDE_LINE_WIDTH * RESOLUTION, hAligned);
             }
+
+            // pie charts
+            if (typeof value.pieChartValue != 'undefined' && h > (PIE_CHART_MARGIN + PIE_CHART_RADIUS + VERTICAL_LABEL_PADDING) * 2 + FONT_SIZE) {
+                let pieX = Math.round(xAligned + wAligned / 2);
+                let pieY = y2Aligned - (PIE_CHART_MARGIN + PIE_CHART_RADIUS) * RESOLUTION;
+                context.fillStyle = 'green';
+                drawArc(pieX, pieY, PIE_CHART_RADIUS * RESOLUTION, 0, value.pieChartValue);
+                context.fillStyle = 'red';
+                drawArc(pieX, pieY, PIE_CHART_RADIUS * RESOLUTION, value.pieChartValue, 1);
+            }
         };
+
+        function drawArc(x, y, radius, start, end) {
+            let transformAngle = a => (a - 0.25) * Math.PI * 2;
+            context.beginPath();
+            context.moveTo(x, y);
+            context.arc(x, y, radius, transformAngle(start), transformAngle(end));
+            context.lineTo(x, y);
+            context.fill();
+        }
 
         /**
          * Should be called when the canvas is resized
