@@ -46,7 +46,7 @@ export default class MatrixView {
 				let offset = y * this.size * 4 + x * 4;
 				for (let i = 0; i < 3; i++) {
 					let value = this.matrix.values[this._mapping[y]][this._mapping[x]];
-					imageData.data[offset + i] = value * 255;
+					imageData.data[offset + i] = (1 - value) * 255;
 				}
 				imageData.data[offset + 3] = 255;
 			}
