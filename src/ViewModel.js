@@ -17,7 +17,7 @@ export default class ViewModel extends EventEmitter {
 	constructor() {
 		super();
 		this._model.on('ready', () => this.emit('ready'));
-		this._selectedClusterings.items = [ 'SD.Agg', 'SD.Use', 'SD.Inh', 'FO.UseI', 'FO.UseE', 'CC.I', 'CO.Bin', 'EC.Conf', 'SS.LSI' ];
+		this._selectedClusterings.items = [ 'SD.Inh', 'SD.Agg', 'SD.Use', 'FO.InhE', 'FO.InhI', 'FO.AggI', 'FO.UseI', 'EC.Sup', 'EC.Conf', 'CC.I', 'SS.Tfidf' ];
 
 		let updateClusterings = () => {
 		};
