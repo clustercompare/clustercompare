@@ -169,8 +169,10 @@ export default class CanvasIcicle extends EventEmitter {
                 context.fillRect(x2Aligned + 1 * RESOLUTION, yAligned, SIDE_LINE_WIDTH * RESOLUTION, hAligned);
             }
 
+            let hasSpaceForPieChart = h > (PIE_CHART_MARGIN + PIE_CHART_RADIUS + VERTICAL_LABEL_PADDING) * 2 + FONT_SIZE;
+            hasSpaceForPieChart &= !d.isRoot && !d.isLeaf;
             // pie charts
-            if (typeof value.pieChartValue != 'undefined' && h > (PIE_CHART_MARGIN + PIE_CHART_RADIUS + VERTICAL_LABEL_PADDING) * 2 + FONT_SIZE) {
+            if (hasSpaceForPieChart && typeof value.pieChartValue != 'undefined') {
                 let pieX = Math.round(xAligned + wAligned / 2);
                 let pieY = y2Aligned - (PIE_CHART_MARGIN + PIE_CHART_RADIUS) * RESOLUTION;
                 context.fillStyle = 'green';
