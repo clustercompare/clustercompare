@@ -145,7 +145,11 @@ export default class CanvasIcicle extends EventEmitter {
             if (!d.isLeaf) {
                 context.save();
                 context.translate(xAligned + LABEL_LEFT_OFFSET * RESOLUTION, yAligned + VERTICAL_LABEL_PADDING * RESOLUTION);
-                context.rotate(Math.PI / 2);
+                if (d.shortLabel.length > 1) {
+                    context.rotate(Math.PI / 2);
+                } else {
+                    context.translate(0, FONT_SIZE * RESOLUTION);
+                }
                 context.font = (FONT_SIZE * RESOLUTION) + 'px "Open Sans"';
                 context.fillStyle = 'white';
                 // TextUtils.truncate uses constant 12px, so do not multiply with RESOLUTION here
