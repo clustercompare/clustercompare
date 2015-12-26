@@ -60,8 +60,8 @@ export default class BoundIcicle extends Icicle {
 				}
 				let additions = info.totalCount - info.node.leaves.size;
 				let removals = info.node.leaves.size - info.intersection;
-				let additionFraction = additions / (additions + removals);
-				result.pieChartValue = additionFraction;
+				result.pieChartValuePositive = additions / info.totalCount;
+				result.pieChartValueNegative = removals / info.totalCount;
 
 				result.tooltipHTML = $('<span>').append(
 					$('<span>').text(node.label),
@@ -69,7 +69,7 @@ export default class BoundIcicle extends Icicle {
 					$('<span>').text('Most similar to ' + info.node.label),
 					$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%'),
 					$('<span>').text(' (is winner cluster)').toggle(info.isWinner),
-					$('<span>').text(' ' + Math.round(additionFraction * 100) + '% additions')
+					$('<span>').text(', ' + additions + ' additions, ' + removals + ' removals')
 				).html();
 			}
 			return result;

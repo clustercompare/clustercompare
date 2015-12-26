@@ -176,18 +176,18 @@ export default class CanvasIcicle extends EventEmitter {
             let hasSpaceForPieChart = h > (PIE_CHART_MARGIN + PIE_CHART_RADIUS + VERTICAL_LABEL_PADDING) * 2 + FONT_SIZE;
             hasSpaceForPieChart &= !d.isRoot && !d.isLeaf;
             // pie charts
-            if (hasSpaceForPieChart && typeof value.pieChartValue != 'undefined') {
+            if (hasSpaceForPieChart && typeof value.pieChartValuePositive != 'undefined') {
                 let pieX = Math.round(xAligned + wAligned / 2);
                 let pieY = y2Aligned - (PIE_CHART_MARGIN + PIE_CHART_RADIUS) * RESOLUTION;
                 context.fillStyle = 'green';
-                drawArc(pieX, pieY, PIE_CHART_RADIUS * RESOLUTION, 0, value.pieChartValue);
+                drawArc(pieX, pieY, PIE_CHART_RADIUS * RESOLUTION, 0, value.pieChartValuePositive / 2);
                 context.fillStyle = 'red';
-                drawArc(pieX, pieY, PIE_CHART_RADIUS * RESOLUTION, value.pieChartValue, 1);
+                drawArc(pieX, pieY, PIE_CHART_RADIUS * RESOLUTION, -value.pieChartValueNegative / 2, 0);
             }
         };
 
         function drawArc(x, y, radius, start, end) {
-            let transformAngle = a => (a - 0.25) * Math.PI * 2;
+            let transformAngle = a => (a - 0.5) * Math.PI * 2;
             context.beginPath();
             context.moveTo(x, y);
             context.arc(x, y, radius, transformAngle(start), transformAngle(end));
