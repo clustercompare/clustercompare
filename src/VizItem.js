@@ -22,12 +22,16 @@ export default class VizItem extends EventEmitter {
 		var color = ColorGenerator.colorForClustering(tree.couplingConcept);
 		this._element.css('border-color', color);
 		this._heading = $('<h3>').text(tree.couplingConcept).css('background-color', color);
-		this._toolbar = $('<div>').addClass('toolbar').append(
-			$('<button>').addClass('matrix-toggle-button').text('Matrix').click(() => this.toggleMatrix())
-		);
-		this._element.append(this._heading, this._toolbar);
+		this._element.append(this._heading);
 		var icicleContainer = $('<div>').addClass('icicle').appendTo(this._element);
 		this._icicle = new BoundIcicle(tree, icicleContainer[0], viewModel);
+		this._toolbar = $('<div>').addClass('toolbar').append(
+			$('<button>')
+				.addClass('matrix-toggle-button')
+				.text('Matrix').click(() => this.toggleMatrix())
+				.toggle(!tree.root.isPrimaryHierarchy)
+		);
+		this._element.append(this._toolbar);
 
 		viewModel.hoverSelection.on('changeclustering', () => {
 			this._element.toggleClass('hover', viewModel.hoverSelection.selectedClustering == tree.root)
@@ -111,7 +115,7 @@ export default class VizItem extends EventEmitter {
 	toggleMatrix() {
 		this._matrixVisible = !this._matrixVisible;
 		if (this._matrixVisible && !this._matrixContainer) {
-			this._matrixContainer = $('<div>').addClass('matrix').appendTo(this._element);
+			this._matrixContainer = $('<div>').addClass('matrix').insertBefore(this._toolbar);
 			viewModel.model.loadMatrix(this._tree.couplingConcept, matrix =>
 				this._matrixView = new MatrixView(matrix, this._tree, this._matrixContainer[0]));
 		}

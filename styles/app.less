@@ -146,10 +146,10 @@ body, html {
 .viz-item .toolbar button {
 	width: 100%;
 	border: none;
-	background: #eee;
 	height: @viz-item-toolbar-height;
 	box-sizing: border-box;
 	text-align: left;
+    background: transparent;
 }
 
 .viz-item.with-matrix .matrix-toggle-button:before {
@@ -170,6 +170,9 @@ body, html {
 	display: inline-block;
 }
 
+.matrix:empty:after {
+  content: 'Loading ...';
+}
 
 .matrix canvas {
 	image-rendering: -moz-crisp-edges;
