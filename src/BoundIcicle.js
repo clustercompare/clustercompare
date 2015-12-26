@@ -2,6 +2,7 @@
 import Icicle from './CanvasIcicle';
 import * as ColorGenerator from './ColorGenerator';
 import $ from 'jquery';
+import renderPieChart from './PieChartRenderer.js';
 
 /**
  * An icicle plot visualization that is bound bidirectionally to the model
@@ -46,14 +47,14 @@ export default class BoundIcicle extends Icicle {
 			};
 			if (node.root.isPrimaryHierarchy && info.node) {
 				result.sideColor = ColorGenerator.colorForClustering(info.node.root.clustering);
-				result.tooltipHTML = $('<span>').append(
+				result.tooltipFN = () => { return $('<span>').append(
 					$('<span>').text(node.label),
 					$('<br>'),
 					$('<span>').text('Most similar to '),
 					$('<span>').css({color: result.sideColor, 'font-weight': 'bold'}).text(info.node.root.clustering),
 					$('<span>').text(' » ' + info.node.label),
 					$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%')
-				).html();
+				)};
 			} else if (!node.root.isPrimaryHierarchy && info.node) {
 				if (info.isWinner) {
 					result.sideColor = ColorGenerator.colorForClustering(node.root.clustering);
@@ -63,14 +64,20 @@ export default class BoundIcicle extends Icicle {
 				result.pieChartValuePositive = additions / info.totalCount;
 				result.pieChartValueNegative = removals / info.totalCount;
 
-				result.tooltipHTML = $('<span>').append(
-					$('<span>').text(node.label),
-					$('<br>'),
-					$('<span>').text('Most similar to ' + info.node.label),
-					$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%'),
-					$('<span>').text(' (is winner cluster)').toggle(info.isWinner),
-					$('<span>').text(', ' + additions + ' additions, ' + removals + ' removals')
-				).html();
+				result.tooltipFn = () => {
+					let pieRadius = 8;
+					let canvas = $('<canvas>').attr('width', pieRadius * 2).attr('height', pieRadius * 2);
+					renderPieChart(canvas[0].getContext('2d'), pieRadius, pieRadius, pieRadius, result);
+					return $('<span>').append(
+						$('<span>').text(node.label),
+						$('<br>'),
+						$('<span>').text('Most similar to ' + info.node.label),
+						$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%'),
+						$('<span>').text(' (is winner cluster)').toggle(info.isWinner),
+						$('<div>'), // line break
+						canvas,
+						$('<span>').text(additions + ' additions, ' + removals + ' removals'),
+				)};
 			}
 			return result;
 		};

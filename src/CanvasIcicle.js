@@ -3,6 +3,7 @@ import d3 from 'd3';
 import $ from 'jquery';
 import * as TextUtils from './TextUtils';
 import * as Sets from './Sets';
+import renderPieChart from './PieChartRenderer.js';
 
 // Set this to greater values to render icicles with higher resolutions so that zooming in
 // will not pixelate the images as quick
@@ -179,21 +180,10 @@ export default class CanvasIcicle extends EventEmitter {
             if (hasSpaceForPieChart && typeof value.pieChartValuePositive != 'undefined') {
                 let pieX = Math.round(xAligned + wAligned / 2);
                 let pieY = y2Aligned - (PIE_CHART_MARGIN + PIE_CHART_RADIUS) * RESOLUTION;
-                context.fillStyle = 'green';
-                drawArc(pieX, pieY, PIE_CHART_RADIUS * RESOLUTION, 0, value.pieChartValuePositive / 2);
-                context.fillStyle = 'red';
-                drawArc(pieX, pieY, PIE_CHART_RADIUS * RESOLUTION, -value.pieChartValueNegative / 2, 0);
+                renderPieChart(context, pieX, pieY, PIE_CHART_RADIUS * RESOLUTION, value);
             }
         };
 
-        function drawArc(x, y, radius, start, end) {
-            let transformAngle = a => (a - 0.5) * Math.PI * 2;
-            context.beginPath();
-            context.moveTo(x, y);
-            context.arc(x, y, radius, transformAngle(start), transformAngle(end));
-            context.lineTo(x, y);
-            context.fill();
-        }
 
         /**
          * Should be called when the canvas is resized
@@ -258,9 +248,9 @@ export default class CanvasIcicle extends EventEmitter {
                 this._labelTooltip.setAttribute('class', 'label-tooltip');
                 $(this._labelTooltip).insertAfter(this.canvas);
             }
-            let tooltipHTML = this.getValue(node).tooltipHTML;
-            if (tooltipHTML) {
-                this._labelTooltip.innerHTML = tooltipHTML;
+            let tooltipFn = this.getValue(node).tooltipFn;
+            if (tooltipFn) {
+                $(this._labelTooltip).empty().append(tooltipFn());
             } else {
                 this._labelTooltip.textContent = node.label;
             }
