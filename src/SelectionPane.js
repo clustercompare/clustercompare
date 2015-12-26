@@ -30,7 +30,7 @@ export function update(data) {
 		if (tree.couplingConcept != 'packages' && !viewModel.selectedClusterings.contains(tree.couplingConcept)) {
 			continue;
 		}
-		let infos = NodeComparison.getTopSimilaritiesOfLeaveSetToNode(data.selectedLeafKeys, tree.root, Math.ceil(SIMILAR_CLUSTERS_THRESHOLD));
+		let infos = NodeComparison.getTopSimilaritiesOfLeaveSetToNode(data.selectedLeafKeys, tree.root, Math.ceil(1 / SIMILAR_CLUSTERS_THRESHOLD));
 		if (infos.length) {
 			similarityInfoGroups.push({
 				bestSimilarity: infos[0].similarity,
