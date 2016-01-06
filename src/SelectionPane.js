@@ -54,7 +54,11 @@ export function update(data) {
 	similarityInfoGroups.sort((a, b) => b.bestSimilarity - a.bestSimilarity);
 
 	let viewData = {
-		selection: classes,
+		selection: classes.map(clazz => {
+			let result = Object.create(clazz);
+			result.trimmedLabel = result.label.substring(model.commonClassNamePrefixLength);
+			return result;
+		}),
 		singleSelection: classes.length == 1 ? classes[0] : null,
 		clusters: similarityInfoGroups
 	};

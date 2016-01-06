@@ -132,4 +132,25 @@ export default class Model extends EventEmitter {
 			callback(matrix);
 		});
 	}
+
+	get commonClassNamePrefixLength() {
+		if (this._commonClassNamePrefixLength === undefined)  {
+			let commonPrefix = null;
+			for (let className of this.packagesTree.root.leavesInOrder.map(l => l.data.qualifiedName)) {
+				if (commonPrefix === null) {
+					commonPrefix = className;
+				} else if (commonPrefix.indexOf(className) != 0) {
+					// need to shorten
+					for (let i = 0; i < commonPrefix.length; i++) {
+						if (className[i] != commonPrefix[i]) {
+							commonPrefix = commonPrefix.substr(0, i);
+							break;
+						}
+					}
+				}
+			}
+			this._commonClassNamePrefixLength = commonPrefix.length;
+		}
+		return this._commonClassNamePrefixLength;
+	}
 }
