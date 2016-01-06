@@ -65,7 +65,7 @@ export default class BoundIcicle extends Icicle {
 				result.pieChartValueNegative = removals / info.totalCount;
 
 				result.tooltipFn = () => {
-					let pieRadius = 8;
+					let pieRadius = 12;
 					let canvas = $('<canvas>').attr('width', pieRadius * 2).attr('height', pieRadius * 2);
 					renderPieChart(canvas[0].getContext('2d'), pieRadius, pieRadius, pieRadius, result);
 					return $('<span>').append(

@@ -31,7 +31,7 @@ export default class CanvasIcicle extends EventEmitter {
         const SIDE_LINE_WIDTH = 4;
         const LABEL_LEFT_OFFSET = 7;
 
-        const PIE_CHART_MARGIN = 4;
+        const PIE_CHART_MARGIN = 2;
         const PIE_CHART_RADIUS = (INNER_NODE_WIDTH - SIDE_LINE_WIDTH) / 2 - PIE_CHART_MARGIN;
 
         var depth = tree.root.height;
