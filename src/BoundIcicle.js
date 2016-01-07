@@ -47,7 +47,7 @@ export default class BoundIcicle extends Icicle {
 			};
 			if (node.root.isPrimaryHierarchy && info.node) {
 				result.sideColor = ColorGenerator.colorForClustering(info.node.root.clustering);
-				result.tooltipFN = () => { return $('<span>').append(
+				result.tooltipFn = () => { return $('<span>').append(
 					$('<span>').text(node.label),
 					$('<br>'),
 					$('<span>').text('Most similar to '),
