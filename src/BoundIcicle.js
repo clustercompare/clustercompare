@@ -68,7 +68,7 @@ export default class BoundIcicle extends Icicle {
 					let pieRadius = 12;
 					let canvas = $('<canvas>').attr('width', pieRadius * 2).attr('height', pieRadius * 2);
 					renderPieChart(canvas[0].getContext('2d'), pieRadius, pieRadius, pieRadius, result);
-					return $('<span>').append(
+					return $('<span>').addClass('extended-tooltip').append(
 						$('<span>').text(node.label),
 						$('<br>'),
 						$('<span>').text('Most similar to ' + info.node.label),
@@ -76,7 +76,7 @@ export default class BoundIcicle extends Icicle {
 						$('<span>').text(' (is winner cluster)').toggle(info.isWinner),
 						$('<div>'), // line break
 						canvas,
-						$('<span>').text(additions + ' additions, ' + removals + ' removals'),
+						$('<span>').text(additions + ' additions, ' + removals + ' removals')
 				)};
 			}
 			return result;
