@@ -47,8 +47,8 @@ export default class BoundIcicle extends Icicle {
 			};
 			if (node.root.isPrimaryHierarchy && info.node) {
 				result.sideColor = ColorGenerator.colorForClustering(info.node.root.clustering);
-				result.tooltipFn = () => { return $('<span>').append(
-					$('<span>').text(node.label),
+				result.tooltipFn = () => { return $('<span>').addClass('extended-tooltip').append(
+					$('<span>').addClass('node-name').text(node.label),
 					$('<br>'),
 					$('<span>').text('Most similar to '),
 					$('<span>').css({color: result.sideColor, 'font-weight': 'bold'}).text(info.node.root.clustering),
@@ -69,12 +69,12 @@ export default class BoundIcicle extends Icicle {
 					let canvas = $('<canvas>').attr('width', pieRadius * 2).attr('height', pieRadius * 2);
 					renderPieChart(canvas[0].getContext('2d'), pieRadius, pieRadius, pieRadius, result);
 					return $('<span>').addClass('extended-tooltip').append(
-						$('<span>').text(node.label),
+						$('<span>').addClass('node-name').text(node.label),
 						$('<br>'),
 						$('<span>').text('Most similar to ' + info.node.label),
 						$('<span>').css('opacity', '50%').text(', ' + Math.round(info.similarity * 100) + '%'),
 						$('<span>').text(' (is winner cluster)').toggle(info.isWinner),
-						$('<div>'), // line break
+						$('<br>'),
 						canvas,
 						$('<span>').text(additions + ' additions, ' + removals + ' removals')
 				)};

@@ -489,13 +489,21 @@ li, p {
   }
 }
 
-.extended-tooltip > span,
-.extended-tooltip > canvas {
-	vertical-align: middle;
-	display: inline-block;
+.extended-tooltip {
+	> span,
+	> canvas {
+		vertical-align: middle;
+		display: inline-block;
+	}
+
+	> canvas {
+		margin-top: 5px;
+		margin-right: 5px;
+	}
+
+	.node-name {
+		font-weight: bold;
+		margin-bottom: 3px;
+	}
 }
 
-.extended-tooltip > canvas {
-	margin-top: 5px;
-	margin-right: 5px;
-}
