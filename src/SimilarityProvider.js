@@ -107,6 +107,10 @@ export default class SimilarityProvider {
 	}
 
 	getSimilarityInfo(node) {
+		if (node.isLeaf) {
+			return { similarity: 0 };
+		}
+
 		if (node.root.isPrimaryHierarchy) {
 			return this._getPackagesAnalysisResult().similarityInfoByNodeKey[node.key];
 		}
