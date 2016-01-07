@@ -72,10 +72,8 @@ export default class SimilarityProvider {
 
 		for (let packageNode of this._packagesRoot.descendantsAndThis) {
 			let currentInfo = { node: null, similarity: null };
-			let clusteringResultOfWinner = null;
 			for (let clusteringRoot of this._clusteringRoots) {
-				let clusteringResult = this._getAnalysisResult(clusteringRoot);
-				let similarityInfo = clusteringResult.similarityInfoByPackageNodeKey[packageNode.key];
+				let similarityInfo = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(packageNode.leafKeys, clusteringRoot);
 				if (!similarityInfo || !similarityInfo.node) {
 					continue;
 				}
@@ -85,7 +83,6 @@ export default class SimilarityProvider {
 				}
 
 				currentInfo = similarityInfo;
-				clusteringResultOfWinner = clusteringResult;
 			}
 			result.similarityInfoByNodeKey[packageNode.key] = currentInfo;
 			if (currentInfo.node) {
