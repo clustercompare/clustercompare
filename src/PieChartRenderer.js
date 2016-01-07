@@ -11,6 +11,11 @@ export default function renderPieChart(context, x, y, radius, value) {
 	context.beginPath();
 	drawArc(context, x, y, radius, -value.pieChartValueNegative / 2, 0);
 	context.fill();
+
+	context.strokeStyle = 'black';
+	context.beginPath();
+	drawArc(context, x, y, radius, 0, 1);
+	context.stroke();
 }
 
 function drawArc(context, x, y, radius, start, end) {
