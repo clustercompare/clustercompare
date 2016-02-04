@@ -11,9 +11,9 @@ export default class Model extends EventEmitter {
 	_trees = [];
 	_isReady = false;
 
-	constructor() {
+	constructor(project) {
 		super();
-		this._project = location.search ? location.search.substring(1) : 'PMD';
+		this._project = project || (location.search ? location.search.substring(1) : 'PMD');
 		this._clusterings = new Clusterings();
 		this._algorithms = this._clusterings.instanceKeys;
 		this._nodeKeyMap = new Map();
@@ -152,5 +152,9 @@ export default class Model extends EventEmitter {
 			this._commonClassNamePrefixLength = commonPrefix.length;
 		}
 		return this._commonClassNamePrefixLength;
+	}
+
+	get project() {
+		return this._project;
 	}
 }
