@@ -20,12 +20,21 @@ export default class Analyzer {
 		this.loadAllProjects(models => {
 			let table = '';
 			let index = 0;
+			let sums = [];
 			for (let model of models) {
 				console.log('Analyzing project ' + (index + 1) + ' of ' + models.length + ' (' + model.project + ')...');
-				table += new Analyzer(model).getClusteringWinsAsLatexTable();
 				index++;
+
+				let percentages = new Analyzer(model).getClusteringWinPercentages();
+				for (let i = 0; i < percentages.length; i++) {
+					sums[i] = (sums[i] || 0) + percentages[i];
+				}
+				table += this.formatLatexTableRow(percentages, model.project, a => a);
 			}
-			console.log(table);
+
+			let averages = sums.map(a => a / models.length);
+			let footer = this.formatLatexTableRow(averages, 'avg', a => '\\textbf{' + a + '}');
+			console.log(table + '\\midrule\n' + footer);
 		})
 	}
 
@@ -45,7 +54,7 @@ export default class Analyzer {
 		});
 	}
 
-	getClusteringWinsAsLatexTable() {
+	getClusteringWinPercentages() {
 		let keys = [
 			'SD.Inh',
 			'SD.Agg',
@@ -61,11 +70,19 @@ export default class Analyzer {
 			'CO.Bin',
 			'CO.Prop',
 			'CC.I', +
-			'CC.II',
+				'CC.II',
 			'SS.Tfidf',
 			'SS.LSI'
 		];
 
+		let map = this.countClusteringWins();
+		let packageCount = this.model.packagesTree.root.innerNodes.length;
+		return keys
+			.map(key => map[key] || 0)
+			.map(wins => wins / packageCount );
+	}
+
+	formatLatexTableRow(percentages, name, cellWrapper) {
 		function color(percentage) {
 			let thresholds = [ 0.125, 0.25, 0.5];
 			for (let i = thresholds.length - 1; i >= 0; i--) {
@@ -78,14 +95,11 @@ export default class Analyzer {
 
 		let formatValue = percentage => percentage == 0 ? '-' : Math.round(percentage * 100) + '\\%';
 
-		let map = this.countClusteringWins();
-		let packageCount = this.model.packagesTree.root.innerNodes.length;
-		let cells = keys
-			.map(key => map[key] || 0)
-			.map(wins => wins / packageCount )
-			.map(percentage => '\\cellcolor{c' + color(percentage) + '}' + formatValue(percentage))
-			.join(' & ');
+		let cells = percentages
+				.map(percentage => '\\cellcolor{c' + color(percentage) + '}' + formatValue(percentage))
+				.map(cellWrapper)
+				.join(' & ');
 
-		return this.model.project + ' & ' + cells + ' \\\\\n';
+		return cellWrapper(name) + ' & ' + cells + ' \\\\\n';
 	}
 }
