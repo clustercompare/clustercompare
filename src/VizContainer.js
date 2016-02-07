@@ -13,8 +13,9 @@ export default class VizContainer {
 	constructor(viewModel, containerSelector) {
 		this._viewModel = viewModel;
 		this._element = $('<div>').addClass('viz-container').appendTo($(containerSelector));
+		viewModel.selectedClusterings.on('change', () => this._analyzeIfNecessary());
+		this._analyzeIfNecessary();
 		viewModel.similarityProvider.on('analyzed', () => this._reload());
-		//this._reload();
 
 		$(containerSelector).click(function (e) {
 			if (e.ctrlKey) {
@@ -30,6 +31,24 @@ export default class VizContainer {
 		this._items.unshift(this._getOrCreateItem('packages'));
 		for (let item of this._items) {
 			this._element.append(item.element);
+		}
+	}
+
+	_analyzeIfNecessary() {
+		let necessary = false;
+		for (let clustering of this._viewModel.selectedClusterings.items) {
+			if (!this._itemsByKey[clustering]) {
+				necessary = true;
+			}
+		}
+		if (!this._itemsByKey[this._getCacheKey('packages')]) {
+			necessary = true;
+		}
+		if (necessary) {
+			this._viewModel.similarityProvider.scheduleAnalysis();
+		} else {
+			// all data available
+			this._reload();
 		}
 	}
 

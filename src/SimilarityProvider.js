@@ -8,6 +8,7 @@ export default class SimilarityProvider extends EventEmitter {
 	_packagesAnalysisResult = null;
 	_analyzed = false;
 	_analyzing = false;
+	_analysisScheduled = false;
 	_model;
 
 	constructor(model) {
@@ -18,13 +19,25 @@ export default class SimilarityProvider extends EventEmitter {
 	set packagesRoot(packagesRoot) {
 		this._packagesRoot = packagesRoot;
 		this._analyzed = false;
-		this._analyze();
+		this._analyzeIfScheduled();
 	}
 
 	set clusteringRoots(clusteringRoots) {
 		this._clusteringRoots = clusteringRoots;
 		this._analyzed = false;
+		this._analyzeIfScheduled();
+	}
+
+	scheduleAnalysis() {
+		this._analysisScheduled = true;
+		// try if it is possible right now
 		this._analyze();
+	}
+
+	_analyzeIfScheduled() {
+		if (this._analysisScheduled) {
+			this._analyze();
+		}
 	}
 
 	_analyze() {
@@ -36,6 +49,7 @@ export default class SimilarityProvider extends EventEmitter {
 		}
 		this.emit('analyzing');
 		this._analyzing = true;
+		this._analysisScheduled = false;
 
 		let worker = new Worker('assets/worker.js');
 		worker.addEventListener('message', e => {
@@ -47,6 +61,7 @@ export default class SimilarityProvider extends EventEmitter {
 					this.emit('analyzed');
 					this._analyzed = true;
 					this._analyzing = false;
+					this._analyzeIfScheduled();
 					break;
 			}
 		});
