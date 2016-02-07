@@ -14,6 +14,7 @@ export default class Node {
 		this._children = [];
 
 		this._id = Utils.generateID();
+		this.constructorName = this.constructor.name;
 	}
 
 	get children() {

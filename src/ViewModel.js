@@ -11,13 +11,14 @@ export default class ViewModel extends EventEmitter {
 	_mainSelection = new Selection();
 	_hoverSelection = new Selection();
 	_selectedClusterings = new ObservableList();
-	_similarityProvider = new SimilarityProvider();
+	_similarityProvider;
 	_model = new Model();
 
 	constructor() {
 		super();
 		this._model.on('ready', () => this.emit('ready'));
 		this._selectedClusterings.items = [ 'SD.Inh', 'SD.Agg', 'SD.Use', 'FO.InhE', 'FO.InhI', 'FO.AggI', 'FO.UseI', 'EC.Sup', 'EC.Conf', 'CC.I', 'SS.Tfidf' ];
+		this._similarityProvider = new SimilarityProvider(this._model);
 
 		let updateClusterings = () => {
 		};

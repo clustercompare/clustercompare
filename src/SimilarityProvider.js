@@ -1,118 +1,103 @@
 import * as NodeComparison from './NodeComparison';
+import EventEmitter from 'node-event-emitter';
 
-export default class SimilarityProvider {
+export default class SimilarityProvider extends EventEmitter {
 	_packagesRoot = null;
+	_clusteringRoots;
 	_analysisResultByClusteringKey = {};
 	_packagesAnalysisResult = null;
-	_clusteringRoots;
-	_winnerKeys = [];
 	_analyzed = false;
+	_analyzing = false;
+	_model;
+
+	constructor(model) {
+		super();
+		this._model = model;
+	}
 
 	set packagesRoot(packagesRoot) {
 		this._packagesRoot = packagesRoot;
 		this._analyzed = false;
+		this._analyze();
 	}
 
 	set clusteringRoots(clusteringRoots) {
 		this._clusteringRoots = clusteringRoots;
 		this._analyzed = false;
+		this._analyze();
 	}
 
 	_analyze() {
-		if (this._analyzed) {
+		if (this._analyzed || this._analyzing) {
 			return;
 		}
-		// need to set this here because during analysis, the variable is checked
-		this._analyzed = true;
-
-		for (let clusteringRoot of this._clusteringRoots) {
-			if (!(clusteringRoot.clustering in this._analysisResultByClusteringKey)) {
-				this._analysisResultByClusteringKey[clusteringRoot.clustering] =
-					this._analyzeClustering(clusteringRoot);
-			}
+		if (!this._packagesRoot || !this._clusteringRoots) {
+			return;
 		}
-		this._packagesAnalysisResult = this._analyzePackages();
-	}
+		this._analyzing = true;
 
-	_analyzeClustering(clusteringRoot) {
-		console.log('analyze ' + clusteringRoot.clustering);
-		let result = {
-			similarityInfoByNodeKey: {},
-			similarityInfoByPackageNodeKey: {}
-		};
-		for (let node of clusteringRoot.descendantsAndThis) {
-			// constant leaf set of clustering node, walks through complete packages tree
-			let similarityInfo = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(
-				node.leafKeys, this._packagesRoot);
-			result.similarityInfoByNodeKey[node.key] = similarityInfo;
-
-			// collect by package node
-			if (!similarityInfo.node) {
-				continue;
+		let worker = new Worker('assets/worker.js');
+		worker.addEventListener('message', e => {
+			let data = e.data;
+			switch (data.type) {
+				case 'results':
+					this._analysisResultByClusteringKey = data.results.analysisResultByClusteringKey;
+					this._packagesAnalysisResult = data.results.packagesAnalysisResult;
+					this.emit('analyzed');
+					this._analyzed = true;
+					this._analyzing = false;
+					break;
 			}
-			let existingPackageEntry = result.similarityInfoByPackageNodeKey[similarityInfo.node.key];
-			if (existingPackageEntry && existingPackageEntry.similarity >= similarityInfo.similarity) {
-				// there is already a package in the clustering tree that matches the package better
-				continue;
-			}
-
-			// store the other direction: packages node points to clustering node
-			let mirroredSimilarityInfo = Object.create(similarityInfo);
-			mirroredSimilarityInfo.node = node;
-			result.similarityInfoByPackageNodeKey[similarityInfo.node.key] = mirroredSimilarityInfo;
-		}
-		return result;
-	}
-
-	_analyzePackages() {
-		let result = {
-			similarityInfoByNodeKey: {},
-			winnerIDs: {}
-		};
-
-		for (let packageNode of this._packagesRoot.descendantsAndThis) {
-			let currentInfo = { node: null, similarity: null };
-			for (let clusteringRoot of this._clusteringRoots) {
-				let similarityInfo = NodeComparison.getMaxSimilarityInfoOfLeaveSetToNode(packageNode.leafKeys, clusteringRoot);
-				if (!similarityInfo || !similarityInfo.node) {
-					continue;
-				}
-
-				if (currentInfo.similarity >= similarityInfo.similarity) {
-					continue;
-				}
-
-				currentInfo = similarityInfo;
-			}
-			result.similarityInfoByNodeKey[packageNode.key] = currentInfo;
-			if (currentInfo.node) {
-				// back reference for similarity node
-				result.winnerIDs[currentInfo.node.id] = true;
-			}
-		}
-		return result;
+		});
+		worker.postMessage({
+			command: 'analyze',
+			packagesRoot: this._packagesRoot,
+			clusteringRoots: this._clusteringRoots
+		});
 	}
 
 	_getAnalysisResult(clusteringRoot) {
 		this._analyze();
+		if (!this._analyzed) {
+			return null;
+		}
 		return this._analysisResultByClusteringKey[clusteringRoot.clustering];
 	}
 
 	_getPackagesAnalysisResult() {
 		this._analyze();
+		if (!this._analyzed) {
+			return null;
+		}
 		return this._packagesAnalysisResult;
 	}
 
 	getSimilarityInfo(node) {
+		let info = this.getSimilarityInfo0(node);
+		if (info && info.node) {
+			info.node = this._model.getNodeByKey(node.key);
+		}
+		return info;
+	}
+
+	getSimilarityInfo0(node) {
 		if (node.isLeaf) {
 			return { similarity: 0 };
 		}
 
 		if (node.root.isPrimaryHierarchy) {
-			return this._getPackagesAnalysisResult().similarityInfoByNodeKey[node.key];
+			let result = this._getPackagesAnalysisResult();
+			if (!result) {
+				return null;
+			}
+			return result.similarityInfoByNodeKey[node.key];
 		}
 
-		let info = this._getAnalysisResult(node.root).similarityInfoByNodeKey[node.key];
+		let result = this._getAnalysisResult(node.root);
+		if (!result) {
+			return null;
+		}
+		let info = result.similarityInfoByNodeKey[node.key];
 		info = Object.create(info);
 		info.isWinner =  node.id in this._getPackagesAnalysisResult().winnerIDs;
 		return info;

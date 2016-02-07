@@ -42,6 +42,9 @@ export default class BoundIcicle extends Icicle {
 	static _getValueFunction(tree, viewModel) {
 		return node => {
 			let info = viewModel.similarityProvider.getSimilarityInfo(node);
+			if (!info) {
+				return { intensity: 0 };
+			}
 			let result = {
 				intensity: info.similarity
 			};

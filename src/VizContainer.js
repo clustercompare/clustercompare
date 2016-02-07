@@ -13,8 +13,8 @@ export default class VizContainer {
 	constructor(viewModel, containerSelector) {
 		this._viewModel = viewModel;
 		this._element = $('<div>').addClass('viz-container').appendTo($(containerSelector));
-		viewModel.selectedClusterings.on('change', () => this._reload());
-		this._reload();
+		viewModel.similarityProvider.on('analyzed', () => this._reload());
+		//this._reload();
 
 		$(containerSelector).click(function (e) {
 			if (e.ctrlKey) {

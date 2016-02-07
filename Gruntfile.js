@@ -11,6 +11,7 @@ module.exports = function(grunt) {
 			styles: 'styles',
 			bowerComponents: 'bower_components',
 			scriptBundle: '<%= paths.dist %>/assets/bundle.js',
+			workerBundle: '<%= paths.dist %>/assets/worker.js',
 			polyfillBundle: '<%= paths.dist %>/assets/polyfill.js',
 			testBundle: '<%= paths.dist %>/assets/test.js',
 			styleBundle: '<%= paths.dist %>/assets/style.css'
@@ -35,6 +36,11 @@ module.exports = function(grunt) {
 			main: {
 				files: {
 					"<%= paths.scriptBundle %>": "<%= paths.scripts %>/main.js"
+				}
+			},
+			worker: {
+				files: {
+					"<%= paths.workerBundle %>":  "<%= paths.scripts %>/SimilarityProviderWorker.js"
 				}
 			},
 			polyfill: {
@@ -102,7 +108,7 @@ module.exports = function(grunt) {
 			},
 			scripts: {
 				files: ['<%= paths.scripts %>/**'],
-				tasks: ['browserify:main']
+				tasks: ['browserify:main', 'browserify:worker']
 			},
 			styles: {
 				files: ['<%= paths.styles %>/**'],

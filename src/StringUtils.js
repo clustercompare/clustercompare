@@ -25,5 +25,3 @@ export function numberToBase26(number) {
 	let lastLetter = String.fromCharCode('A'.charCodeAt(0) + lastDigit);
 	return repeat('Z', zs) + lastLetter;
 }
-
-window.numberToBase26 = numberToBase26;
