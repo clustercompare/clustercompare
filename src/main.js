@@ -4,6 +4,7 @@ import SelectionHistory from './SelectionHistory.js';
 import Analyzer from './Analyzer.js';
 import * as SelectionPane from './SelectionPane.js';
 import * as ClusteringSelector from './ClusteringSelector.js';
+import * as ProgressIndicator from './ProgressIndicator.js';
 import $ from 'jquery';
 
 /*
@@ -40,6 +41,8 @@ viewModel.on('ready', function () {
 	selectionHistory.init();
 
 	ClusteringSelector.init(viewModel);
+
+	ProgressIndicator.init(viewModel);
 });
 
 // project selection

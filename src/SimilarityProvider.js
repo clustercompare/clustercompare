@@ -34,6 +34,7 @@ export default class SimilarityProvider extends EventEmitter {
 		if (!this._packagesRoot || !this._clusteringRoots) {
 			return;
 		}
+		this.emit('analyzing');
 		this._analyzing = true;
 
 		let worker = new Worker('assets/worker.js');
