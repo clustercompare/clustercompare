@@ -3,6 +3,19 @@ import SimilarityProvider from './SimilarityProvider';
 import Model from './Model.js';
 import $ from 'jquery';
 
+const clusteringKeys = [
+	'SD.Inh',
+	'SD.Agg',
+	'SD.Use',
+	'FO.InhI',
+	'FO.AggI',
+	'FO.UseI',
+	'EC.Sup',
+	'EC.Conf',
+	'CC.I',
+	'SS.Tfidf'
+];
+
 export default class Analyzer {
 	constructor(model) {
 		this.model = model;
@@ -11,7 +24,7 @@ export default class Analyzer {
 	countClusteringWins() {
 		let similarityProvider = new SimilarityProvider();
 		similarityProvider.packagesRoot = this.model.packagesTree.root;
-		similarityProvider.clusteringRoots = this.model.couplingTrees.map(tree => tree.root);
+		similarityProvider.clusteringRoots = clusteringKeys.map(key => this.model.getTree(key).root);
 		let infos = this.model.packagesTree.root.innerNodes.map(packagesNode => similarityProvider.getSimilarityInfo(packagesNode));
 		return ArrayUtils.mapValues(ArrayUtils.groupBy(infos, info => info.node.root.clustering), list => list.length);
 	}
@@ -21,6 +34,7 @@ export default class Analyzer {
 			let table = '';
 			let index = 0;
 			let sums = [];
+			let totalPackageCount = 0;
 			for (let model of models) {
 				console.log('Analyzing project ' + (index + 1) + ' of ' + models.length + ' (' + model.project + ')...');
 				index++;
@@ -29,11 +43,13 @@ export default class Analyzer {
 				for (let i = 0; i < percentages.length; i++) {
 					sums[i] = (sums[i] || 0) + percentages[i];
 				}
-				table += this.formatLatexTableRow(percentages, model.project, a => a);
+				let packageCount = model.packagesTree.root.innerNodes.length;
+				totalPackageCount += packageCount;
+				table += this.formatLatexTableRow(percentages, [ model.project, packageCount ], a => a);
 			}
 
 			let averages = sums.map(a => a / models.length);
-			let footer = this.formatLatexTableRow(averages, 'avg', a => '\\textbf{' + a + '}');
+			let footer = this.formatLatexTableRow(averages, [ 'avg', totalPackageCount ] , a => '\\textbf{' + a + '}');
 			console.log(table + '\\midrule\n' + footer);
 		})
 	}
@@ -55,36 +71,16 @@ export default class Analyzer {
 	}
 
 	getClusteringWinPercentages() {
-		let keys = [
-			'SD.Inh',
-			'SD.Agg',
-			'SD.Use',
-			'FO.InhE',
-			'FO.AggE',
-			'FO.UseE',
-			'FO.InhI',
-			'FO.AggI',
-			'FO.UseI',
-			'EC.Sup',
-			'EC.Conf',
-			'CO.Bin',
-			'CO.Prop',
-			'CC.I', +
-				'CC.II',
-			'SS.Tfidf',
-			'SS.LSI'
-		];
-
 		let map = this.countClusteringWins();
 		let packageCount = this.model.packagesTree.root.innerNodes.length;
-		return keys
+		return clusteringKeys
 			.map(key => map[key] || 0)
 			.map(wins => wins / packageCount );
 	}
 
-	formatLatexTableRow(percentages, name, cellWrapper) {
+	formatLatexTableRow(percentages, prefixCells, cellWrapper) {
 		function color(percentage) {
-			let thresholds = [ 0.125, 0.25, 0.5];
+			let thresholds = [ 0.000000001, 0.1, 0.3];
 			for (let i = thresholds.length - 1; i >= 0; i--) {
 				if (percentage >= thresholds[i]) {
 					return i + 1;
@@ -97,9 +93,12 @@ export default class Analyzer {
 
 		let cells = percentages
 				.map(percentage => '\\cellcolor{c' + color(percentage) + '}' + formatValue(percentage))
-				.map(cellWrapper)
-				.join(' & ');
 
-		return cellWrapper(name) + ' & ' + cells + ' \\\\\n';
+		cells = prefixCells.concat(cells);
+
+		return cells
+			.map(cellWrapper)
+			.join(' & ')
+			+ ' \\\\\n';
 	}
 }
