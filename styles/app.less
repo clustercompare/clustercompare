@@ -26,34 +26,41 @@ body, html {
 	padding: 0 15px;
 }
 
-#clusterings-button {
-	background: none;
-	border: none;
-	color: white;
-	padding: 0 15px;
-	display: inline-block;
-	line-height: 50px;
+.right-toolbar {
 	position: absolute;
 	right: 0;
+	display: inline-block;
 
-	&:hover {
-		background: rgba(255,255,255,0.2);
-		cursor:pointer;
-	}
+	.button,
+	button {
+		background: none;
+		border: none;
+		color: white;
+		padding: 0 15px;
+		display: inline-block;
+		line-height: 50px;
+		text-decoration: none;
+		margin-left: 3px;
 
-	&.active {
-		background: rgba(255,255,255,0.2);
-		&:after {
-			content: '';
-			display: block;
-			position: absolute;
-			width: 0;
-			height: 0;
-			top: 50px;
-			right: 50%;
-			border: 10px solid transparent;
-			border-top-color: lighten(@header-color, 10%);
-			z-index: 20;
+		&:hover {
+			background: rgba(255, 255, 255, 0.2);
+			cursor: pointer;
+		}
+
+		&.active {
+			background: rgba(255, 255, 255, 0.2);
+			&:after {
+				content: '';
+				display: block;
+				position: absolute;
+				width: 0;
+				height: 0;
+				top: 50px;
+				right: 50%;
+				border: 10px solid transparent;
+				border-top-color: lighten(@header-color, 10%);
+				z-index: 20;
+			}
 		}
 	}
 }
