@@ -90,8 +90,9 @@ export default class SimilarityProvider extends EventEmitter {
 
 	getSimilarityInfo(node) {
 		let info = this.getSimilarityInfo0(node);
+		// map the nodes to real Node instances
 		if (info && info.node) {
-			info.node = this._model.getNodeByKey(node.key);
+			info.node = this._model.getNodeByID(info.node._id);
 		}
 		return info;
 	}

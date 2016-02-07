@@ -17,6 +17,7 @@ export default class Model extends EventEmitter {
 		this._clusterings = new Clusterings();
 		this._algorithms = this._clusterings.instanceKeys;
 		this._nodeKeyMap = new Map();
+		this._nodeIDMap = new Map();
 		this._nodeFactory = new NodeFactory();
 		this._allLeafKeys = new Set();
 		this._load();
@@ -53,6 +54,7 @@ export default class Model extends EventEmitter {
 
 	_collectNodes(node) {
 		this._nodeKeyMap.set(node.key, node);
+		this._nodeIDMap.set(node.id, node);
 		for (var child of node.children) {
 			this._collectNodes(child);
 		}
@@ -113,6 +115,10 @@ export default class Model extends EventEmitter {
 
 	getNodeByKey(key) {
 		return this._nodeKeyMap.get(key);
+	}
+
+	getNodeByID(id) {
+		return this._nodeIDMap.get(id);
 	}
 
 	get clusterings() {
