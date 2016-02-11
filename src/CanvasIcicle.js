@@ -4,10 +4,7 @@ import $ from 'jquery';
 import * as TextUtils from './TextUtils';
 import * as Sets from './Sets';
 import renderPieChart from './PieChartRenderer.js';
-
-// Set this to greater values to render icicles with higher resolutions so that zooming in
-// will not pixelate the images as quick
-const RESOLUTION = 2;
+import { RESOLUTION } from './config';
 
 /**
  * An implementation of the icicle plot visualization with the Canvas API

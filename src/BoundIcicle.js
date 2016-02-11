@@ -3,6 +3,7 @@ import Icicle from './CanvasIcicle';
 import * as ColorGenerator from './ColorGenerator';
 import $ from 'jquery';
 import renderPieChart from './PieChartRenderer.js';
+import { RESOLUTION } from './config';
 
 /**
  * An icicle plot visualization that is bound bidirectionally to the model
@@ -69,8 +70,9 @@ export default class BoundIcicle extends Icicle {
 
 				result.tooltipFn = () => {
 					let pieRadius = 12;
-					let canvas = $('<canvas>').attr('width', pieRadius * 2).attr('height', pieRadius * 2);
-					renderPieChart(canvas[0].getContext('2d'), pieRadius, pieRadius, pieRadius, result);
+					let canvas = $('<canvas>').attr('width', pieRadius * 2 * RESOLUTION).attr('height', pieRadius * 2 * RESOLUTION)
+						.css({width: pieRadius * 2 + 'px', height: pieRadius * 2 + 'px'});
+					renderPieChart(canvas[0].getContext('2d'), pieRadius * RESOLUTION, pieRadius * RESOLUTION, pieRadius * RESOLUTION, result);
 					return $('<span>').addClass('extended-tooltip').append(
 						$('<span>').addClass('node-name').text(node.label),
 						$('<br>'),
