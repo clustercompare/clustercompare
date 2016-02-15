@@ -17,7 +17,7 @@ export default class ViewModel extends EventEmitter {
 	constructor() {
 		super();
 		this._model.on('ready', () => this.emit('ready'));
-		this._selectedClusterings.items = [ 'SD.Inh', 'SD.Agg', 'SD.Use', 'FO.InhE', 'FO.InhI', 'FO.AggI', 'FO.UseI', 'EC.Sup', 'EC.Conf', 'CC.I', 'SS.Tfidf' ];
+		this._selectedClusterings.items = [ 'SD.Inh', 'SD.Agg', 'SD.Use', 'FO.InhI', 'FO.AggI', 'FO.UseI', 'EC.Sup', 'EC.Conf', 'CC.I', 'SS.Tfidf' ];
 		this._similarityProvider = new SimilarityProvider(this._model);
 
 		let updateClusterings = () => {
