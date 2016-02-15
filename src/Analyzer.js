@@ -29,9 +29,10 @@ export default class Analyzer {
 	}
 
 	countClusteringWins() {
-		let similarityProvider = new SimilarityProvider();
-		similarityProvider.packagesRoot = this.model.packagesTree.root;
-		similarityProvider.clusteringRoots = clusteringKeys.map(key => this.model.getTree(key).root);
+		let similarityProvider = this.model.similarityProvider;
+		if (!this.model.similarityProvider._analyzed) {
+			throw new Error('not analyzed');
+		}
 		let infos = this.model.packagesTree.root.innerNodes.map(packagesNode => similarityProvider.getSimilarityInfo(packagesNode));
 		return ArrayUtils.mapValues(ArrayUtils.groupBy(infos, info => info.node.root.clustering), list => list.length);
 	}
@@ -66,14 +67,20 @@ export default class Analyzer {
 			projects = projects.projects.map(project => project.id);
 			let models = projects.map(project => new Model(project));
 			let readyCount = 0;
-			for (let model of models) {
+			models.forEach(model => {
 				model.on('ready', () => {
-					readyCount++;
-					if (readyCount == projects.length) {
-						callback(models);
-					}
+					model.similarityProvider = new SimilarityProvider(model);
+					model.similarityProvider.packagesRoot = model.packagesTree.root;
+					model.similarityProvider.clusteringRoots = clusteringKeys.map(key => model.getTree(key).root);
+					model.similarityProvider.scheduleAnalysis();
+					model.similarityProvider.on('analyzed', () => {
+						readyCount++;
+						if (readyCount == projects.length) {
+							callback(models);
+						}
+					});
 				})
-			}
+			});
 		});
 	}
 

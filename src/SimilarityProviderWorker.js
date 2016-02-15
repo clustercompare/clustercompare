@@ -125,7 +125,6 @@ function restorePrototypes(node) {
 }
 
 function getConstructor(name) {
-	console.log(name);
 	switch (name) {
 		case 'Node':
 			return Node;

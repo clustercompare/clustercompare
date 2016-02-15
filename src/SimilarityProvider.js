@@ -58,9 +58,9 @@ export default class SimilarityProvider extends EventEmitter {
 				case 'results':
 					this._analysisResultByClusteringKey = data.results.analysisResultByClusteringKey;
 					this._packagesAnalysisResult = data.results.packagesAnalysisResult;
-					this.emit('analyzed');
 					this._analyzed = true;
 					this._analyzing = false;
+					this.emit('analyzed');
 					this._analyzeIfScheduled();
 					break;
 			}
