@@ -94,7 +94,7 @@ export default class VizContainer {
 
 	_getCacheKey(itemKey) {
 		if (itemKey == 'packages') {
-			return 'packages:' + this._viewModel.selectedClusterings.items.sort().join(',');
+			return 'packages:' + this._viewModel.selectedClusterings.items.slice().sort().join(',');
 		}
 		return itemKey;
 	}
