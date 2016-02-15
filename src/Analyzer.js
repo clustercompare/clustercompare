@@ -7,13 +7,20 @@ const clusteringKeys = [
 	'SD.Inh',
 	'SD.Agg',
 	'SD.Use',
+	'FO.InhE',
+	'FO.AggE',
+	'FO.UseE',
 	'FO.InhI',
 	'FO.AggI',
 	'FO.UseI',
 	'EC.Sup',
 	'EC.Conf',
+	'CO.Bin',
+	'CO.Prop',
 	'CC.I',
-	'SS.Tfidf'
+	'CC.II',
+	'SS.Tfidf',
+	'SS.LSI'
 ];
 
 export default class Analyzer {
